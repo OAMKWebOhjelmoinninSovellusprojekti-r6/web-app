@@ -1,0 +1,21 @@
+{
+  "name": "server-app",
+  "version": "1.0.0",
+  "description": "Server application for food ordering service.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "server",
+    "rest",
+    "api",
+    "node",
+    "express"
+  ],
+  "author": "Ryhmä 6",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.3"
+  }
+}
