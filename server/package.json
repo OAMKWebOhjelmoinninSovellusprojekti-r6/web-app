@@ -16,6 +16,9 @@
   "author": "Ryhmä 6",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.3"
+    "argon2": "^0.28.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "mysql": "^2.18.1"
   }
 }
