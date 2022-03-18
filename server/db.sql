@@ -49,10 +49,13 @@ CREATE TABLE `order_history` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `total` float NOT NULL,
   `restaurant_id` int unsigned NOT NULL,
+  `user_id` int unsigned NOT NULL,
   PRIMARY KEY (`idorder_history`),
   UNIQUE KEY `idorder_history_UNIQUE` (`idorder_history`),
   KEY `fk_order_history_restaurant_id_idx` (`restaurant_id`),
-  CONSTRAINT `fk_order_history_restaurant_id` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurant` (`idrestaurant`)
+  KEY `fk_order_history_user_id_idx` (`user_id`),
+  CONSTRAINT `fk_order_history_restaurant_id` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurant` (`idrestaurant`),
+  CONSTRAINT `fk_order_history_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`iduser`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -70,6 +73,7 @@ CREATE TABLE `order_history_item` (
   `price` float NOT NULL,
   `category` varchar(45) DEFAULT NULL,
   `order_history_id` int unsigned NOT NULL,
+  `quantity` int DEFAULT NULL,
   PRIMARY KEY (`idorder`),
   UNIQUE KEY `idorder_history_item_UNIQUE` (`idorder`),
   KEY `ffk_order_history_item_order_history_id_idx` (`order_history_id`),
@@ -127,10 +131,14 @@ DROP TABLE IF EXISTS `shopping_cart_item`;
 CREATE TABLE `shopping_cart_item` (
   `idshopping_cart_item` int unsigned NOT NULL,
   `item_id` int unsigned NOT NULL,
+  `shopping_cart_id` int unsigned NOT NULL,
+  `quantity` int unsigned DEFAULT NULL,
   PRIMARY KEY (`idshopping_cart_item`),
   UNIQUE KEY `idshopping_cart_item_UNIQUE` (`idshopping_cart_item`),
   KEY `fk_shopping_cart_item_item_id_idx` (`item_id`),
-  CONSTRAINT `fk_shopping_cart_item_item_id` FOREIGN KEY (`item_id`) REFERENCES `item` (`iditem`)
+  KEY `fk_shopping_cart_item_shopping_cart_id_idx` (`shopping_cart_id`),
+  CONSTRAINT `fk_shopping_cart_item_item_id` FOREIGN KEY (`item_id`) REFERENCES `item` (`iditem`),
+  CONSTRAINT `fk_shopping_cart_item_shopping_cart_id` FOREIGN KEY (`shopping_cart_id`) REFERENCES `shopping_cart` (`idshopping_cart`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -155,7 +163,7 @@ CREATE TABLE `user` (
   PRIMARY KEY (`iduser`),
   UNIQUE KEY `iduser_UNIQUE` (`iduser`),
   UNIQUE KEY `username_UNIQUE` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -167,4 +175,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-03-17 18:56:33
+-- Dump completed on 2022-03-18 20:40:44
