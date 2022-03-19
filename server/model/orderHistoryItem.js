@@ -55,11 +55,13 @@ module.exports = {
                     \`description\`,\
                     \`price\`,\
                     \`category\`,\ 
-                    \`order_history_id\`\               
+                    \`order_history_id\`,\
+                    \`quantity\`\               
                 ) SELECT \`item\`.\`name\`,\
                  \`item\`.\`description\`,\
                  \`item\`.\`price\`,\
                 \`item\`.\`category\`,\ 
+                \`item\`.\`quantity\`,\ 
                 ${historyId} FROM \`item\`  WHERE \`iditem\` IN (${itemIds})`
             );
             
