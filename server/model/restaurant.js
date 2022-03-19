@@ -182,6 +182,8 @@ module.exports = {
         if(RestaurantData.user_iduser != null) {
             updateTerms.push(`\`user_iduser\`=${restaurantData.user_iduser}`);
         }
+
+        updateString = `UPDATE \`restaurant\` SET ${updateTerms.join(', ')} WHERE \`idrestaurant\`=${restaurantId}`
         try {
             // Update database Row
             const updateQuery = await db.query(
