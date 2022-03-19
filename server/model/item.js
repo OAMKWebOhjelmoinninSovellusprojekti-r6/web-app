@@ -1,41 +1,37 @@
 const db = require("../config/db.js");
-const argon2 = require("argon2");
 
 module.exports = {
-    async get(userId){
-        /**
+    async get(itemId){
+        /*
          * Example success response from database query
          * [
                 RowDataPacket {
-                    iduser: 1,
-                    username: 'hv',
-                    password: '$argon2i$v=19$m=4096,t=3,p=1$chadVlqBXSxLLe6swjvS0g$IPcjHzg28OgmfERFk5O669TxlDLNRynsZeZFd2GM1XQ',
-                    firstname: 'henruy',
-                    lastname: 'vais',
-                    address: 'tie1',
-                    phone: '040123123',
-                    is_owner: 1,
-                    token: null,
-                    token_refresh: null
+                    iditem: 1,
+                    name: 'superpizza',
+                    description: 'kebabmajoneesi',
+                    price: '7',
+                    image_path: 'serveri.com/kuva1',
+                    category: 'roska',
+                    restaurant_id: 1,
                 }
             ]
          */
         // Default values for return Object
         var data = {
             'status': 400,
-            userInfo: null
+            itemInfo: null
         }
         try {
-            // Get user row from database
+            // Get item info from database
             const getQuery = await db.query(
-                `SELECT * FROM \`user\` WHERE \`iduser\`=${userId}`
+                `SELECT * FROM \`item\` WHERE \`iditem\`=${itemId}`
             );
             console.log(getQuery);
             // If affectedRows == 1 || >= 1, query was succesful
-            // This should always return === 1 since only one user row are inserted, >= 1 is used only for debugging purposes
+            // This should always return === 1 since only one item row is inserted, >= 1 is used only for debugging purposes
             if(getQuery.length >= 1){
-                // Get user info from query result
-                data.userInfo = getQuery[0];
+                // Get item info from query result
+                data.itemInfo = getQuery[0];
                 // Set HTTP status code == success
                 data.status = 200;
             }
@@ -48,7 +44,7 @@ module.exports = {
         return data;
     },
 
-    async create(userData){
+    async create(itemData){
         /**
          *  Example response from database insert query:
          * {
@@ -65,38 +61,34 @@ module.exports = {
         // Default values for return Object
         var data = {
             'status': 400,
-            'userId': null
+            'itemId': null
         }
         try {
-            // TODO Create query here that checks if username already exists
 
-            // Encrypt plaintext password with argon2 hashing algorithm
-            const encryptedPassword = await argon2.hash(userData.password);
             // Insert row into database
             const createQuery = await db.query(
-                `INSERT INTO \`user\`(\
-                    \`username\`,\
-                    \`password\`,\
-                    \`firstname\`,\
-                    \`lastname\`,\
-                    \`address\`,\
-                    \`phone\`,\
-                    \`is_owner\`\
+                `INSERT INTO \`item\`(\
+                    \`name\`,\
+                    \`description\`,\
+                    \`price\`,\
+                    \`image_path\`,\
+                    \`category\`,\
+                    \`restaurant_id\`\
                 ) VALUES (\
-                    '${userData.username}',\
-                    '${encryptedPassword}',\
-                    '${userData.firstname}',\
-                    '${userData.lastname}',\
-                    '${userData.address}',\
-                    '${userData.phone}',\
-                    ${userData.is_owner}\
+                    '${itemData.name}',\
+                    '${itemData.description}',\
+                    '${itemData.price}',\
+                    '${itemData.image_path}',\
+                    '${itemData.category}',\
+                     ${itemData.restaurant_id}\
+
                 )`
             );
             // If affectedRows == 1 || >= 1, query was succesful
-            // This should always return === 1 since only one user row are inserted, >= 1 is used only for debugging purposes
+            // This should always return === 1 since only one item row is inserted, >= 1 is used only for debugging purposes
             if(createQuery.affectedRows >= 1){
-                // Get returned row's auto increment key (user id)
-                data.userId = createQuery.insertId;
+                // Get returned row's auto increment key (iditem)
+                data.itemId = createQuery.insertId;
                 // Set HTTP status code == success
                 data.status = 200;
             }
@@ -109,7 +101,7 @@ module.exports = {
         return data;
     },
 
-    async delete(userId){
+    async delete(Id){
         /**
          * Example success response from delete query
          * {
@@ -130,11 +122,11 @@ module.exports = {
         try {
             // Delete row from database
             const deleteQuery = await db.query(
-                `DELETE FROM \`user\` WHERE \`iduser\`=${userId}`
+                `DELETE FROM \`item\` WHERE \`iditem\`=${itemId}`
             );
             console.log(deleteQuery);
             // If affectedRows == 1 || >= 1, query was succesful
-            // This should always return === 1 since only one user row are inserted, >= 1 is used only for debugging purposes
+            // This should always return === 1 since only one item row is inserted, >= 1 is used only for debugging purposes
             if(deleteQuery.affectedRows >= 1){
                 // Set HTTP status code == success
                 data.status = 200;
@@ -148,7 +140,7 @@ module.exports = {
         return data;
     },
     
-    async modify(userId, userData){
+    async modify(itemId, itemData){
         /**
          * Example success response from update query
          * OkPacket {
@@ -169,27 +161,27 @@ module.exports = {
 
         // Build query string
         updateTerms = [];
-        if(userData.password != null){
-            // TODO Create argon2 hash here from plain text password.
-            // Password comparison should be done before this function
+      
+        if(itemData.name != null){
+            updateTerms.push(`\`name\`='${itemData.iditem}'`);
         }
-        if(userData.firstname != null){
-            updateTerms.push(`\`firstname\`='${userData.firstname}'`);
+        if(itemData.description != null){
+            updateTerms.push(`\`description\`='${itemData.description}'`);
         }
-        if(userData.lastname != null){
-            updateTerms.push(`\`lastname\`='${userData.lastname}'`);
+        if(itemData.price != null){
+            updateTerms.push(`\`price\`='${itemData.price}'`);
         }
-        if(userData.address != null){
-            updateTerms.push(`\`address\`='${userData.address}'`);
+        if(itemData.image_path != null){
+            updateTerms.push(`\`image_path\`='${itemData.image_path}'`);
         }
-        if(userData.phone != null){
-            updateTerms.push(`\`phone\`='${userData.phone}'`);
+        if(itemData.category != null){
+            updateTerms.push(`\`category\`=${itemData.category}`);
         }
-        if(userData.isOwner != null){
-            updateTerms.push(`\`is_owner\`=${userData.isOwner}`);
+        if(itemData.restaurant_id != null){
+            updateTerms.push(`\`restaurant_id\`=${itemData.restaurant_id}`);
         }
-        // Create raw SQL from userData values
-        updateString = `UPDATE \`user\` SET ${updateTerms.join(', ')} WHERE \`iduser\`=${userId}`
+        // Create raw SQL from itemData values
+        updateString = `UPDATE \`item\` SET ${updateTerms.join(', ')} WHERE \`iditem\`=${itemId}`
 
         try {
             // Update database row
@@ -197,7 +189,7 @@ module.exports = {
                 updateString
             );
             // If affectedRows == 1 || >= 1, query was succesful
-            // This should always return === 1 since only one user row are inserted, >= 1 is used only for debugging purposes
+            // This should always return === 1 since only one item row is inserted, >= 1 is used only for debugging purposes
             if(updateQuery.affectedRows >= 1){
                 // Set HTTP status code == success
                 data.status = 200;
