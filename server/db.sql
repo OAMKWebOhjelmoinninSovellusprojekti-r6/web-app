@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `item`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `item` (
-  `iditem` int unsigned NOT NULL,
+  `iditem` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   `description` varchar(45) NOT NULL,
   `price` float NOT NULL,
@@ -45,7 +45,7 @@ DROP TABLE IF EXISTS `order_history`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `order_history` (
-  `idorder_history` int unsigned NOT NULL,
+  `idorder_history` int unsigned NOT NULL AUTO_INCREMENT,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `total` float NOT NULL,
   `restaurant_id` int unsigned NOT NULL,
@@ -67,7 +67,7 @@ DROP TABLE IF EXISTS `order_history_item`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `order_history_item` (
-  `idorder` int unsigned NOT NULL,
+  `idorder` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(45) DEFAULT NULL,
   `description` varchar(45) DEFAULT NULL,
   `price` float NOT NULL,
@@ -89,7 +89,7 @@ DROP TABLE IF EXISTS `restaurant`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `restaurant` (
-  `idrestaurant` int unsigned NOT NULL,
+  `idrestaurant` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   `address` varchar(45) DEFAULT NULL,
   `opening_hours` varchar(45) DEFAULT NULL,
@@ -112,7 +112,7 @@ DROP TABLE IF EXISTS `shopping_cart`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `shopping_cart` (
-  `idshopping_cart` int unsigned NOT NULL,
+  `idshopping_cart` int unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int unsigned NOT NULL,
   PRIMARY KEY (`idshopping_cart`),
   UNIQUE KEY `idshopping_cart_UNIQUE` (`idshopping_cart`),
@@ -129,7 +129,7 @@ DROP TABLE IF EXISTS `shopping_cart_item`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `shopping_cart_item` (
-  `idshopping_cart_item` int unsigned NOT NULL,
+  `idshopping_cart_item` int unsigned NOT NULL AUTO_INCREMENT,
   `item_id` int unsigned NOT NULL,
   `shopping_cart_id` int unsigned NOT NULL,
   `quantity` int unsigned DEFAULT NULL,
