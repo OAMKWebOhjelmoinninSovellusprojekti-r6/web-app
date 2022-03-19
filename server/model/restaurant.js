@@ -161,25 +161,25 @@ module.exports = {
         }
         // Build query string
         updateTerms = [];
-        if(RestaurantData.name != null) {
+        if(restaurantData.name != null) {
             updateTerms.push(`\`name\`='${restaurantData.name}'`);
         }
-        if(RestaurantData.address != null) {
+        if(restaurantData.address != null) {
             updateTerms.push(`\`address\`='${restaurantData.address}'`);
         }
-        if(RestaurantData.opening_hours != null) {
+        if(restaurantData.opening_hours != null) {
             updateTerms.push(`\`opening_hours\`='${restaurantData.opening_hours}'`);
         }
-        if(RestaurantData.image_path != null) {
+        if(restaurantData.image_path != null) {
             updateTerms.push(`\`image_path\`='${restaurantData.image_path}'`);
         }
-        if(RestaurantData.restaurant_type != null) {
+        if(restaurantData.restaurant_type != null) {
             updateTerms.push(`\`restaurant_type\`=${restaurantData.restaurant_type}`);
         }
-        if(RestaurantData.price_level != null) {
+        if(restaurantData.price_level != null) {
             updateTerms.push(`\`price_level\`=${restaurantData.price_level}`);
         }
-        if(RestaurantData.user_iduser != null) {
+        if(restaurantData.user_iduser != null) {
             updateTerms.push(`\`user_iduser\`=${restaurantData.user_iduser}`);
         }
 
