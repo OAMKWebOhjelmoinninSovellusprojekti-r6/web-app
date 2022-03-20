@@ -1,0 +1,583 @@
+openapi: 3.1.0
+info:
+  title: foodOrdering
+  version: '1.0'
+  summary: FoodOrdering API
+  description: ''
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /user:
+    post:
+      summary: Create New User
+      operationId: post-user
+      responses:
+        '200':
+          description: User Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userCreateResponse'
+              examples:
+                New User Bob Fellow:
+                  value:
+                    id: 12
+                    firstName: Bob
+                    lastName: Fellow
+                    email: bob.fellow@gmail.com
+                    dateOfBirth: '1996-08-24'
+                    emailVerified: false
+                    createDate: '2020-11-18'
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Missing Required Information
+        '500':
+          description: Internal Server Error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userCreate'
+            examples:
+              Create User Bob Fellow:
+                value:
+                  firstName: Bob
+                  lastName: Fellow
+                  email: bob.fellow@gmail.com
+                  dateOfBirth: '1996-08-24'
+          application/xml:
+            schema:
+              type: object
+              properties: {}
+        description: Post the necessary fields for the API to create a new user.
+      description: Create a new user.
+    get:
+      summary: ''
+      operationId: get-user
+    put:
+      security:
+        bearerAuth: []
+      summary: ''
+      operationId: put-user
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userPut'
+    delete:
+      summary: ''
+      operationId: delete-user
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+      parameters: []
+      security:
+        - bearer: []
+  /restaurant:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/restaurantGetResponse'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      operationId: get-restaurant
+      parameters:
+        - schema:
+            type: integer
+          in: query
+          name: id
+      security: []
+    post:
+      summary: ''
+      operationId: post-restaurant
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+      security:
+        - bearer: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/restaurantPost'
+    put:
+      summary: ''
+      operationId: put-restaurant
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+      security:
+        - bearer: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/restaurantPut'
+    parameters: []
+    delete:
+      summary: ''
+      operationId: delete-restaurant-id
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                restaurantId:
+                  type: integer
+      security:
+        - bearer: []
+  /item:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+      operationId: get-item
+      parameters:
+        - schema:
+            type: integer
+          in: query
+          name: restaurantId
+          required: true
+        - schema:
+            type: integer
+          in: query
+          name: itemId
+      security: []
+    post:
+      summary: ''
+      operationId: post-item
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/itemPost'
+      security:
+        - bearer: []
+    put:
+      summary: ''
+      operationId: put-item
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/itemPut'
+      security:
+        - bearer: []
+    delete:
+      summary: ''
+      operationId: delete-item
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+      security:
+        - bearer: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                itemId:
+                  type: integer
+              required:
+                - itemId
+  /history:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/historyGetResponse'
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+      operationId: get-history
+      security:
+        - bearer: []
+      parameters:
+        - schema:
+            type: integer
+          in: query
+          name: orderId
+  /cart:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cartGetResponse'
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+      operationId: get-cart
+      security:
+        - bearer: []
+      parameters: []
+    post:
+      summary: ''
+      operationId: post-cart
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/cartPost'
+      security:
+        - bearer: []
+    put:
+      summary: ''
+      operationId: put-cart
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+      security:
+        - bearer: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/cartPut'
+    delete:
+      summary: ''
+      operationId: delete-cart
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+      security:
+        - bearer: []
+components:
+  schemas:
+    userPost:
+      title: User
+      type: object
+      description: ''
+      examples:
+        - id: 142
+          firstName: Alice
+          lastName: Smith
+          email: alice.smith@gmail.com
+          dateOfBirth: '1997-10-31'
+          emailVerified: true
+          signUpDate: '2019-08-24'
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        address:
+          type: string
+        phone:
+          type: string
+        is_owner:
+          type: boolean
+      required:
+        - username
+        - password
+        - firstname
+        - lastname
+        - address
+        - phone
+        - is_owner
+    restaurantPost:
+      title: restaurant
+      type: object
+      description: ''
+      properties:
+        name:
+          type: string
+        address:
+          type: string
+        opening_hours:
+          type: string
+        image:
+          type: string
+          format: binary
+        restaurant_type:
+          type: integer
+        price_level:
+          type: integer
+      required:
+        - name
+        - address
+        - opening_hours
+        - image
+        - restaurant_type
+        - price_level
+    userPut:
+      title: userPut
+      type: object
+      properties:
+        password:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        address:
+          type: string
+        phone:
+          type: string
+    restaurantGetResponse:
+      title: restaurantGetResponse
+      type: object
+      properties:
+        name:
+          type: string
+        address:
+          type: string
+        opening_hours:
+          type: string
+        image_url:
+          type: string
+        restaurant_type:
+          type: integer
+        price_level:
+          type: integer
+    restaurantPut:
+      title: restaurantPut
+      type: object
+      properties:
+        name:
+          type: string
+        address:
+          type: string
+        openingHours:
+          type: string
+        image:
+          type: string
+        restaurantType:
+          type: integer
+        priceLevel:
+          type: integer
+    itemPost:
+      title: item
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        image:
+          type: string
+          format: binary
+        category:
+          type: string
+        restaurantId:
+          type: integer
+          exclusiveMinimum: 0
+      required:
+        - name
+        - description
+        - price
+        - image
+        - category
+        - restaurantId
+    itemPut:
+      title: itemPut
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        image:
+          type: string
+          format: binary
+        category:
+          type: string
+        restaurantId:
+          type: integer
+          minimum: 0
+    historyGetResponse:
+      title: historyGetResponse
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        total:
+          type: number
+        restaurants:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              items:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    description:
+                      type: string
+                    price:
+                      type: number
+                    category:
+                      type: string
+                    quantity:
+                      type: string
+    cartPost:
+      title: cartPost
+      type: object
+      properties:
+        itemId:
+          type: integer
+          minimum: 0
+        quantity:
+          type: integer
+          minimum: 0
+    cartPut:
+      title: cartPut
+      type: object
+      properties:
+        shoppingCartItemId:
+          type: integer
+        change:
+          type: integer
+          enum:
+            - -1
+            - 1
+    cartGetResponse:
+      title: cartGetResponse
+      type: object
+      properties:
+        total:
+          type: number
+          format: float
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              description:
+                type: string
+              price:
+                type: number
+                format: float
+              image_url:
+                type: string
+              category:
+                type: string
+              quantity:
+                type: integer
+              restaurant:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+  securitySchemes:
+    bearer:
+      name: bearer
+      type: apiKey
+      in: header
+
