@@ -27,7 +27,7 @@ module.exports = {
             const getQuery = await db.query(
                 `SELECT * FROM \`restaurant\` WHERE \`idrestaurant\`=${restaurantId}`
             );
-            console.log(getQuery);
+        //console.log(getQuery);
             // If affectedRows == 1 || >= 1, query was succesful
             // This should always return === 1 since only one restaurant row are inserted, >= 1 is used only for debugging purposes
             if(getQuery.length >= 1) {

@@ -16,7 +16,7 @@ async function query(sql){
   return new Promise((resolve, reject)=>{
     pool.query(sql,  (error, elements)=>{
       // Release connection from database so it doesnt stay open for nothing
-      pool.end();
+      //pool.end();
         if(error){
             return reject(error);
         }
