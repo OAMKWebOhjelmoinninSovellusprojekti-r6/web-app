@@ -2,24 +2,9 @@ const express = require('express');
 const router = express.Router();
 const restaurantModel = require('../model/restaurant');
 
-restaurantData = {
-    name: "burgerjoint",
-    address: "alley 7",
-    opening_hours: "9.00-23.00",
-    image_path: "https://imagelocation.jpg",
-    restaurant_type: 3,
-    price_level: 2,
-    user_iduser: 2
-}
-
 // GET method route
 router.get('/:restaurantId?', (req, res) => {
-    // Function to send the request to the restaurant 'get' model executed when called
-    const getRestaurants = async () => {
-        const data = await restaurantModel.get(req.params.restaurantId);
-        console.log("response", data);
-        return data;
-    };
+
     console.log(typeof req.params.restaurantId);
     try {
         // Transform the value to Integer
@@ -29,11 +14,12 @@ router.get('/:restaurantId?', (req, res) => {
         if(req.params.restaurantId === undefined || isNaN(req.params.restaurantId)) {
             throw new Error();
         }
-        //Calls the getRestaurant function, r represents the responsedata from the database
-        getRestaurants().then(r => {
-            // If query was succesful send the received data, otherwise send the provided status code
+        // Send request data
+        const data = restaurantModel.get(req.params.restaurantId);
+        data.then(r => {
             if (r.status === 200) {
                 res.send(r);
+                console.log(r)
             } else {
                 res.sendStatus(r.status);
             }
@@ -61,12 +47,6 @@ router.post('/', (req, res) => {
         user_iduser: 2
       }
 */   
-    // Function to send the request to the restaurant 'create' model executed when called
-    const addRestaurant = async () => {
-        const data = await restaurantModel.create(req.body);
-        console.log("created", data);
-        return data;
-    };
     console.log(typeof req.body.restaurant_type);
     try {
         // Check for correct type values, if incorrect throw to error handler
@@ -81,8 +61,9 @@ router.post('/', (req, res) => {
         {
             throw new Error();
         };
-        // Calls the addRestaurant function, r represents the response data from the database
-        addRestaurant().then(r => {
+        // Send request data
+        const data = restaurantModel.create(req.body);
+        data.then(r => {
             // If query was succesful send the received data, otherwise send the provided status code
             if (r.status === 200) {
                 console.log(r);
@@ -112,14 +93,9 @@ router.put('/:restaurantId', (req, res) => {
         user_iduser: 2
       }
 */   
-    // Function to send the request to the restaurant 'modify' model executed when called
-    const modifyRestaurant = async () => {
-        let data = await restaurantModel.modify(req.params.restaurantId, req.body);
-        console.log("Modified", data);
-        return data;
-    }
     console.log("typeof", typeof req.body.address);
     try {
+        // Check for correct type values, if incorrect throw to error handler
         if((typeof req.body.name !== 'string' && req.body.name != undefined)
             ||(typeof req.body.address != 'string' && req.body.address != undefined)
             ||(typeof req.body.opening_hours != 'string' && req.body.opening_hours != undefined)
@@ -131,8 +107,9 @@ router.put('/:restaurantId', (req, res) => {
         ) {
             throw new Error();
         }
-        // Calls the modifyRestaurant function, r represents the response data from the database
-        modifyRestaurant().then(r => {
+        // Send request data
+        const data = restaurantModel.modify(req.params.restaurantId, req.body);
+        data.then(r => {
             // If query was succesful send the received data, otherwise send the provided status code
             if (r.status === 200) {
                 console.log(r);
@@ -151,12 +128,6 @@ router.put('/:restaurantId', (req, res) => {
 // DELETE method route
 router.delete('/:restaurantId?', (req, res) => {
 
-    // Function to send the request to the restaurant 'delete' model executed when called
-    const deleteRestaurant = async () => {
-        let data = await restaurantModel.delete(req.params.restaurantId);
-        console.log("deleted", data);
-        return data;
-    }
     console.log(typeof req.params.restaurantId);
     try {
         // Transform the value to Integer
@@ -166,8 +137,9 @@ router.delete('/:restaurantId?', (req, res) => {
         if(req.params.restaurantId === undefined || isNaN(req.params.restaurantId)) {
             throw new Error();
         }
-        // Calls the deleteRestaurant function, r represents the responsedata from the database
-        deleteRestaurant().then(r => {
+        // Send the request data
+        const data = restaurantModel.delete(req.params.restaurantId);
+        data.then(r => {
             // If query was succesful send the received data, otherwise send the provided status code
             if (r.status === 200) {
                 res.sendStatus(r.status);
