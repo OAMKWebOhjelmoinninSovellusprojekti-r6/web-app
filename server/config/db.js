@@ -1,4 +1,4 @@
-require('dotenv').config(); // TODO This should be moved on top of index.js in future, no need to have this multiple times in application
+
 const mysql = require('mysql');
 
 // Define database connection parameters
@@ -16,7 +16,7 @@ async function query(sql){
   return new Promise((resolve, reject)=>{
     pool.query(sql,  (error, elements)=>{
       // Release connection from database so it doesnt stay open for nothing
-      pool.end();
+      //pool.end();
         if(error){
             return reject(error);
         }
