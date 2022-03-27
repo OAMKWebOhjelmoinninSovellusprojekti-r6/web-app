@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "cors": "^2.8.5"
+  },
+  "name": "web-app",
+  "description": "Web application for ordering food. Implemented with React and Node.",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OAMKWebOhjelmoinninSovellusprojekti-r6/web-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OAMKWebOhjelmoinninSovellusprojekti-r6/web-app/issues"
+  },
+  "homepage": "https://github.com/OAMKWebOhjelmoinninSovellusprojekti-r6/web-app#readme"
+}
