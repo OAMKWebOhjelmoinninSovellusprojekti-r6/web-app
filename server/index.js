@@ -6,7 +6,7 @@ const cors = require('cors');
 const port = process.env.port;
 
 const restaurantRouter = require('./router/restaurantRouter')
-const historyRouter = require('./routes/history.js');
+const historyRouter = require('./router/history.js');
 
 app.use(cors());
 app.use(bodyParser.json());
