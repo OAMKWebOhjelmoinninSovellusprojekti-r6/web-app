@@ -101,7 +101,7 @@ module.exports = {
         return data;
     },
 
-    async delete(Id){
+    async delete(itemId){
         /**
          * Example success response from delete query
          * {
