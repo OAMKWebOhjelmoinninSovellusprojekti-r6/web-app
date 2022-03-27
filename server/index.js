@@ -3,15 +3,17 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const app = express();
 const cors = require('cors');
-const port = process.env.port;
+const port = process.env.PORT;
 
 const restaurantRouter = require('./router/restaurantRouter')
-const historyRouter = require('./router/history.js');
+const historyRouter = require('./router/history');
+const itemRouter = require('./router/itemRouter')
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use('/restaurant', restaurantRouter);
 app.use('/history', historyRouter);
+app.use('/item', itemRouter);
 
 app.get('/', (req, res) => {
   res.send('FoodMachine!');
