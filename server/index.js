@@ -1,9 +1,10 @@
 require('dotenv').config(".env");
+const port = process.env.port || 3000;
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express();
 const cors = require('cors');
-const port = process.env.PORT;
+
 
 const restaurantRouter = require('./router/restaurantRouter')
 const historyRouter = require('./router/history');
@@ -18,7 +19,7 @@ app.use('/item', itemRouter);
 app.get('/', (req, res) => {
   res.send('FoodMachine!');
 });
-app.listen(port || 3000, () => {
+app.listen(port, () => {
   console.log(`Example app listening on port ${port}!`)
 });
 module.exports = app;
