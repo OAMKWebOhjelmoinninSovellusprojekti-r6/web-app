@@ -4,9 +4,11 @@ const bodyParser = require('body-parser')
 const app = express();
 const port = 3000;
 const restaurantRouter = require('./router/restaurantRouter')
+const shoppingCartRouter = require('./router/shoppingCartRouter')
 
 app.use(bodyParser.json());
 app.use('/restaurant', restaurantRouter);
+app.use('/cart', shoppingCartRouter);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
