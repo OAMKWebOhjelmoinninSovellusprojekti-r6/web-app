@@ -12,11 +12,9 @@ const pool = mysql.createPool({
 
 // Every database query in application is created with this function
 // Function takes raw sql query string as parameter. eg. 'SELECT * FROM `user`' and handles request/response with Promise
-async function query(sql){
+async function query(sql, values){
   return new Promise((resolve, reject)=>{
-    pool.query(sql,  (error, elements)=>{
-      // Release connection from database so it doesnt stay open for nothing
-      //pool.end();
+    pool.query(sql, values, (error, elements)=>{
         if(error){
             return reject(error);
         }
