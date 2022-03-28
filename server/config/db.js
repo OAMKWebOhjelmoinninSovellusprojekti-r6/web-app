@@ -1,4 +1,4 @@
-require('dotenv').config(); // TODO This should be moved on top of index.js in future, no need to have this multiple times in application
+
 const mysql = require('mysql');
 
 // Define database connection parameters
