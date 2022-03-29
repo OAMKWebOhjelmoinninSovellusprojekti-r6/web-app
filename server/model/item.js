@@ -101,7 +101,7 @@ module.exports = {
         return data;
     },
 
-    async delete(Id){
+    async delete(itemId){
         /**
          * Example success response from delete query
          * {
@@ -163,7 +163,7 @@ module.exports = {
         updateTerms = [];
       
         if(itemData.name != null){
-            updateTerms.push(`\`name\`='${itemData.iditem}'`);
+            updateTerms.push(`\`name\`='${itemData.name}'`);
         }
         if(itemData.description != null){
             updateTerms.push(`\`description\`='${itemData.description}'`);
