@@ -4,8 +4,8 @@
   "description": "Server application for food ordering service.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
-    "start": "nodemon ./bin/www",
+    "test": "mocha",
+    "start": "nodemon ./bin/www"
   },
   "keywords": [
     "server",
