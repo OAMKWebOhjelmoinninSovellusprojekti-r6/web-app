@@ -7,12 +7,14 @@ const cors = require('cors');
 
 
 const restaurantRouter = require('./router/restaurantRouter')
+const shoppingCartRouter = require('./router/shoppingCartRouter')
 const historyRouter = require('./router/history');
 const itemRouter = require('./router/itemRouter')
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use('/restaurant', restaurantRouter);
+app.use('/cart', shoppingCartRouter);
 app.use('/history', historyRouter);
 app.use('/item', itemRouter);
 
