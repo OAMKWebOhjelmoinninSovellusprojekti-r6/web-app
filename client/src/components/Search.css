@@ -1,0 +1,10 @@
+.search {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+    margin-top:20px;
+  }
+  .search > input{
+    font-size: 16px;
+  }
