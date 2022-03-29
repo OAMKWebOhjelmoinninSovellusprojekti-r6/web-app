@@ -1,7 +1,22 @@
 const db = require("../config/db.js");
 
 module.exports = {
-    async get(orderId){
+    async get(userId, orderId){
+         /**
+        * Example success response from database query
+        * [
+             RowDataPacket {
+             timestamp: 2022-03-22T21:59:08.000Z,
+             total: 15,
+             idrestaurant: 6,
+            name: 'Tattikeitto',
+            description: 'Alkupalat',
+             price: 15,
+            category: 'fastfood',
+            quantity: 2
+  }
+]
+   */ 
         // Default values for return Object
         let data = {
             'status': 400,
@@ -10,7 +25,7 @@ module.exports = {
         try {
             // Get order row from database
             const getQuery = await db.query(
-                `SELECT * FROM \`order_history_item\` WHERE \`order_history_id\`=${orderId}`
+                `SELECT \`timestamp\`,\ \`total\`,\ \`restaurant\`.\`idrestaurant\`,\ \`restaurant\`.\`name\`,\ \`order_history_item\`.\`name\`,\ \`order_history_item\`.\`description\`,\ \`order_history_item\`.\`price\`,\ \`order_history_item\`.\`category\`,\ \`order_history_item\`.\`quantity\` FROM \`order_history\` INNER JOIN \`restaurant\` ON \`order_history\`.\`restaurant_id\` =\ \`restaurant\`.\`idrestaurant\` INNER JOIN \`order_history_item\` ON \`order_history\`.\`idorder_history\` = \`order_history_item\`.\`order_history_id\` WHERE \`user_id\` = ${userId} AND \`idorder_history\` =${orderId} `
             );
             console.log(getQuery);
             // If affectedRows == 1 || >= 1, query was succesful
@@ -20,6 +35,7 @@ module.exports = {
                 data.orderInfo = getQuery;
                 // Set HTTP status code == success
                 data.status = 200;
+                
             }
         } catch (err){
             // Debug error in case where try/catch fails
@@ -27,6 +43,7 @@ module.exports = {
             // Set HTTP status code == Internal server error
             data.status == 500;
         }
+        //console.log(data.status);
         return data;
     },
 
@@ -61,8 +78,9 @@ module.exports = {
                  \`item\`.\`description\`,\
                  \`item\`.\`price\`,\
                 \`item\`.\`category\`,\ 
+                ${historyId},\
                 \`item\`.\`quantity\`,\ 
-                ${historyId} FROM \`item\`  WHERE \`iditem\` IN (${itemIds})`
+                 FROM \`item\`  WHERE \`iditem\` IN (${itemIds})`
             );
             
             // If affectedRows == 1 || >= 1, query was succesful
