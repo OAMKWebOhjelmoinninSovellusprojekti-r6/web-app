@@ -1,0 +1,25 @@
+.adjCenter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.itemBox {
+	display: flex;
+	border: solid 2px;
+	justify-content: space-around;
+}
+
+.itemName {
+    font-weight: bold;
+}
+.quantityBox {
+	display: flex;
+	width: 60px;
+	justify-content: space-around;
+}
+
+.quantityButtons {
+    display: flex;
+    flex-direction: column;
+}

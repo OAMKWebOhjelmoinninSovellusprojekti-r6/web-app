@@ -1,0 +1,8 @@
+.itemContainer {
+	display: flex;
+	flex-direction: column;
+	width: 30%;
+	margin-left: 160px;
+	margin-top: 20px;
+    gap: 20px;
+}
