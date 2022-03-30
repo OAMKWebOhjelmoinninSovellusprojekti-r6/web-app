@@ -1,7 +1,7 @@
 const db = require("../config/db.js");
 
 module.exports = {
-    async get(itemId){
+    async get(restaurantId){
         /*
          * Example success response from database query
          * [
@@ -24,7 +24,7 @@ module.exports = {
         try {
             // Get item info from database
             const getQuery = await db.query(
-                `SELECT * FROM \`item\` WHERE \`iditem\`=${itemId}`
+                `SELECT * FROM \`item\` WHERE \`restaurant_id\`=${restaurantId}`
             );
             console.log(getQuery);
             // If affectedRows == 1 || >= 1, query was succesful
