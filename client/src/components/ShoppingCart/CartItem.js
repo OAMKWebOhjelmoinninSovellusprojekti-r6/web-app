@@ -1,7 +1,7 @@
 import React from 'react'
 import './CartItem.css'
 
-export default function ( {name, quantity} ) {
+export default function ( {idItem, name, quantity, deleteItem} ) {
     console.log(name);
   return (
     <div className='itemBox'>
@@ -18,7 +18,7 @@ export default function ( {name, quantity} ) {
             </div>
         </div>
         <div className='adjCenter'>
-            <button>Remove</button>
+            <button onClick={() => deleteItem(idItem)}>Remove</button>
         </div>
     </div>
   )

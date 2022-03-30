@@ -20,6 +20,8 @@
 }
 
 .quantityButtons {
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	margin: 4px 0px;
 }

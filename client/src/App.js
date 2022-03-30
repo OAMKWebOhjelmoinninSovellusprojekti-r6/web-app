@@ -13,7 +13,8 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [restaurants, setRestaurants] = useState([]);
   const [cartItems, setCartItems] = useState([]);
-  const [cartId, setCartId] = useState(1);
+  //const [cartId, setCartId] = useState(1);
+  const [deletedItem, setDeletedItem] = useState('');
 /*
   useEffect(() => {
     //get restaurants data
@@ -26,15 +27,40 @@ function App() {
   }, [] );
   */
   useEffect(() => {
-    // Get shoppingcart items
-    const getCartItems = async () => {
+    // GET shoppingcart items
+    const getCartItems = async (cartId) => {
       const results = await axios.get(`http://localhost:3001/cart/${cartId}`);
-      setCartItems(results.data);
+      setCartItems(results.data.shoppingCartInfo);
+      console.log("GET results", results.data.shoppingCartInfo);
     }
-    getCartItems();
-    console.log("cartitems", cartItems);
+    let cartId = 1;
+    getCartItems(cartId);
   }, []);
 
+  useEffect(() => {
+    // DELETE item from cart
+    console.log("use", deletedItem);
+    const deleteItem = async () => {
+      const results = await axios.delete(`http://localhost:3001/cart/${deletedItem}`);
+      console.log("deleted");
+    }
+    if (deletedItem !== '') {
+    deleteItem();
+    }
+
+  }, [deletedItem])
+  
+  // DELETE item from client side and trigger useEffect for server item delete request
+  const deleteItem = (index) => {
+    console.log("delete item Index", index);
+    console.log("delete Cart", cartItems);
+    let clone = [...cartItems];
+    let itemId = clone.findIndex(c => c.idItem === index);
+    clone.splice(itemId, 1);
+    setCartItems(clone);
+    setDeletedItem(index);
+  }
+  console.log("cartitems", cartItems);
 //for searching menuitems and restaurants
 const handleSearchChange = (event) => {
   setSearchTerm(event.target.value);
@@ -46,7 +72,7 @@ const handleSearchChange = (event) => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route  path="/restaurant" element={<Search searchValue = {searchTerm} onSearchChange ={handleSearchChange}/>} />
-        <Route path="/cart" element={<Cart cartItems = {cartItems}/>} />
+        <Route path="/cart" element={<Cart cartItems = {cartItems} deleteItem = {deleteItem}/>} />
         <Route  />
      </Routes>
   </BrowserRouter>
