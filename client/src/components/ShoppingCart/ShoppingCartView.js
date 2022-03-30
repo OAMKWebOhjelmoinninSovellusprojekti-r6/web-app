@@ -2,7 +2,7 @@ import React from 'react'
 import CartItem from './CartItem'
 import './ShoppingCartView.css'
 
-export default function ShoppingCartView( {cartItems, deleteItem} ) {
+export default function ShoppingCartView( {cartItems, deleteItem, changeQuantity} ) {
     console.log(cartItems);
   return (
     <div className="itemContainer">
@@ -13,6 +13,7 @@ export default function ShoppingCartView( {cartItems, deleteItem} ) {
                     name={c.itemName}
                     quantity={c.quantity}
                     deleteItem={deleteItem}
+                    changeQuantity={changeQuantity}
                 />  
             )
         }
