@@ -1,16 +1,19 @@
 import React from 'react'
 import './CartItem.css'
 
-export default function ( {idItem, name, quantity, deleteItem, changeQuantity} ) {
-    console.log(name);
+export default function( {idItem, name, price, quantity, deleteItem, changeQuantity} ) {
+    let currencySign = '€'
   return (
     <div className='itemBox'>
         <div className='itemName adjCenter'>
             {name}
         </div>
+        <div className='adjCenter'>
+            {price}{currencySign}
+        </div>
         <div className='quantityBox'>
             <div className='adjCenter'>
-                {quantity}
+                {'x'}{quantity}
             </div>
             <div className='quantityButtons'>
                 <button onClick={() => changeQuantity(idItem, quantity + 1)}>+</button>

@@ -1,8 +1,9 @@
-import React from 'react'
-import axios from 'axios'
+import React from 'react';
+import axios from 'axios';
 import { useState, useEffect }  from 'react';
-import CartItem from './CartItem'
-import './ShoppingCartView.css'
+import CartItem from './CartItem';
+import Total from './Total';
+import './ShoppingCartView.css';
 
 export default function ShoppingCartView() {
 
@@ -10,6 +11,7 @@ export default function ShoppingCartView() {
   const [deletedItem, setDeletedItem] = useState('');
   const [quantity, setModifiedItemQuantity] = useState('');
   const [modifiedItemId, setModifiedItemId] = useState('');
+  const [itemTotalSum, setItemTotalSum] = useState([]);
 
   useEffect(() => {
     // GET shoppingcart items
@@ -47,6 +49,20 @@ export default function ShoppingCartView() {
       modItem();
     }
   }, [quantity]);
+
+  // Count total sum of items in the shoppingcart
+  useEffect(() => {
+    console.log("HERE WE ARE");
+    var tempArray =  [];
+    let itemSum = 0;
+    for(let i = 0; i < cartItems.length; i++) {
+      itemSum = cartItems[i].price * cartItems[i].quantity;
+      tempArray.push(itemSum);
+      console.log(tempArray);
+    }
+    setItemTotalSum(tempArray);
+    console.log("TOTALSUM", itemTotalSum);
+  }, [deletedItem, quantity]);
   
   // DELETE item from client side and trigger useEffect for server item delete request
   const deleteItem = (index) => {
@@ -76,18 +92,31 @@ export default function ShoppingCartView() {
     }
   }
   return (
-    <div className="itemContainer">
+    <div className="mainContainer">
+      <div className="itemContainer">
         {
-            cartItems.map(c => 
-                <CartItem key={c.idItem}
-                    idItem={c.idItem}
-                    name={c.itemName}
-                    quantity={c.quantity}
-                    deleteItem={deleteItem}
-                    changeQuantity={changeQuantity}
-                />  
-            )
+          cartItems.map(c => 
+            <CartItem key={c.idItem}
+              idItem={c.idItem}
+              price={c.price}
+              name={c.itemName}
+              quantity={c.quantity}
+              deleteItem={deleteItem}
+              changeQuantity={changeQuantity}
+            />  
+          )
         }
+      </div>
+      <div className="itemContainer">
+        {
+          itemTotalSum.map(totalSum =>
+            <Total 
+              itemTotal={totalSum}
+            />  
+          )
+        }
+      </div>
+        
     </div>
   )
 }
