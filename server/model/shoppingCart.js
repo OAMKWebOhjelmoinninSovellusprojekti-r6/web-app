@@ -9,7 +9,7 @@ module.exports = {
         try {
             // Get all the items in shopping cart 
             const getQuery = await db.query(
-                `SELECT item.name AS itemName, description, price, restaurant.image_path, category, quantity, idrestaurant, restaurant.name AS restaurantName
+                `SELECT idshopping_cart_item AS idItem, item.name AS itemName, description, price, restaurant.image_path, category, quantity, idrestaurant, restaurant.name AS restaurantName
                 FROM shopping_cart
                 JOIN shopping_cart_item ON shopping_cart.idshopping_cart = shopping_cart_item.shopping_cart_id
                 JOIN item ON item.iditem = shopping_cart_item.item_id

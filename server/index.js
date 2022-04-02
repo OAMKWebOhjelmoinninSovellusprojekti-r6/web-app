@@ -10,7 +10,7 @@ const restaurantRouter = require('./router/restaurantRouter')
 const userRouter = require('./router/userRouter.js');
 const shoppingCartRouter = require('./router/shoppingCartRouter')
 const historyRouter = require('./router/history');
-const itemRouter = require('./router/itemRouter')
+const itemRouter = require('./router/itemRouter');
 
 app.use(cors());
 app.use(bodyParser.json());
