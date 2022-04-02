@@ -3,9 +3,9 @@ const router = express.Router();
 const item = require('../model/item');
 
 //Get item info by item number
-router.get('/:itemId', async function(req, res){
-    let idItem = parseInt(req.params.itemId);
-    let data = await item.get(idItem);
+router.get('/:restaurantId', async function(req, res){
+    let idRestaurant = parseInt(req.params.restaurantId);
+    let data = await item.get(idRestaurant);
     if(data.status === 500 || data.status === 400) {
         res.send(data.status);
     } else {

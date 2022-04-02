@@ -6,7 +6,6 @@ import Search from './components/Search/Search'
 import Navbar from './components/Navbar/Navbar'
 import Cart from './components/ShoppingCart/ShoppingCartView'
 
-
 function App() {
   
   const [searchTerm, setSearchTerm] = useState("");
@@ -14,8 +13,8 @@ function App() {
   //const [cartId, setCartId] = useState(1);
   const userAddress = 'street 15';
 
+  //get restaurants data
   useEffect(() => {
-    //get restaurants data
     const getData = async () => {
       const results = await axios.get('/restaurant');
       setRestaurants(results.data);
@@ -23,7 +22,6 @@ function App() {
     }
     getData();
   }, [] );
-
 
 //for searching menuitems and restaurants
 const handleSearchChange = (event) => {
