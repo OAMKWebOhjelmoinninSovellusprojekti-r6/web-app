@@ -1,11 +1,12 @@
 import React from 'react';
 import axios from 'axios';
 import { useState, useEffect }  from 'react';
+import { Link } from 'react-router-dom';
 import CartItem from './CartItem';
 import Total from './Total';
 import styles from'./ShoppingCartView.module.css';
 
-export default function ShoppingCartView() {
+export default function ShoppingCartView( {address} ) {
 
   const [cartItems, setCartItems] = useState([]);
   const [deletedItem, setDeletedItem] = useState('');
@@ -94,7 +95,7 @@ export default function ShoppingCartView() {
       setModifiedItemQuantity(quantity);
       setModifiedItemId(idItem);
     } else {
-      alert("To remove item press Remove")
+      alert("To remove item press Remove button")
     }
   }
   return (
@@ -112,7 +113,14 @@ export default function ShoppingCartView() {
             />  
           )
         }
-        <button>text</button>
+        <div className={styles.contentRight}>
+          <div className={styles.deliveryBox}>
+            <div>{'Delivering to: '}{address}</div>
+            <div className={styles.contentRight}>
+              <Link to="/"><button>Pay the order</button></Link>
+            </div>
+          </div>
+        </div>
       </div>
       <div className={styles.rightBox}>
         {

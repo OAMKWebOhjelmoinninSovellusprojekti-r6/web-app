@@ -12,8 +12,8 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [restaurants, setRestaurants] = useState([]);
   //const [cartId, setCartId] = useState(1);
-  
-/*
+  const userAddress = 'street 15';
+
   useEffect(() => {
     //get restaurants data
     const getData = async () => {
@@ -23,7 +23,6 @@ function App() {
     }
     getData();
   }, [] );
-  */
 
 
 //for searching menuitems and restaurants
@@ -36,7 +35,7 @@ const handleSearchChange = (event) => {
   <Navbar/>
       <Routes>
         <Route  path="/restaurant" element={<Search searchValue = {searchTerm} onSearchChange ={handleSearchChange}/>} />
-        <Route path="/cart" element={<Cart />} />
+        <Route path="/cart" element={<Cart address={userAddress}/>} />
         <Route  />
      </Routes>
   </BrowserRouter>

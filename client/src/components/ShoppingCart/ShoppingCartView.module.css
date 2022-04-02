@@ -32,3 +32,15 @@
 	flex-direction: column;
 	gap: 5px;
 }
+
+.contentRight {
+	display: flex;
+	justify-content: end;
+	flex-direction: row;
+}
+
+.deliveryBox {
+	display: flex;
+	gap: 5px;
+	flex-direction: column;
+}
