@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
   res.send('FoodMachine!');
 });
 
-app.listen(port, () => {
+app.listen(port || 3001, () => {
   console.log(`Example app listening on port ${port}!`)
 });
 module.exports = app;
