@@ -1,0 +1,12 @@
+.restaurantView {
+    display: flex;
+}
+
+.menuItem {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    border-right: 2px solid lightgrey;
+    padding: 5px;
+    border-top: 2px solid lightgrey;
+}

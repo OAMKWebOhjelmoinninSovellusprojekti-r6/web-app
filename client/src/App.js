@@ -4,6 +4,7 @@ import { useState, useEffect }  from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import Search from './components/Search'
 import Navbar from './components/Navbar'
+import MenuListView from './components/MenuListView'
 
 function App() {
   
@@ -11,7 +12,7 @@ function App() {
   const [restaurants, setRestaurants] = useState([]);
 
   //get restaurants data
-  useEffect(() => {
+   useEffect(() => {
     const getData = async () => {
       const results = await axios.get('/restaurant');
       setRestaurants(results.data);
@@ -30,7 +31,8 @@ const handleSearchChange = (event) => {
   <Navbar/>
       <Routes> 
         <Route  path="/restaurant" element={<Search searchValue = {searchTerm} onSearchChange ={handleSearchChange}/>}/>
-        <Route  />
+        <Route path="/menu" element={<MenuListView/> } />
+        <Route/>    
      </Routes>
   </BrowserRouter>
   );
