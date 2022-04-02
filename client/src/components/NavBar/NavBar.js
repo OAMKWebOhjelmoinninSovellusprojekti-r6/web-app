@@ -1,11 +1,11 @@
 import React from 'react'
-import './Navbar.css'
+import './NavBar.css'
 import { Link } from 'react-router-dom'
 
 export default function Navbar() {
   return (
     <div className="navBar">
-        <Link to="/restaurant"><div className="navBarItem">Restaurants</div></Link>
+        <Link to="/restaurants"><div className="navBarItem">Restaurants</div></Link>
         <div className="navBarItem">MyProfile</div>
         <div className="navBarItem">ShoppingCart</div>
         <div className="navBarItem">OrderHistory</div>
