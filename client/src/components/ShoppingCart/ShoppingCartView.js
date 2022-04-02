@@ -14,6 +14,7 @@ export default function ShoppingCartView( {address} ) {
   const [modifiedItemId, setModifiedItemId] = useState('');
   const [itemTotalSum, setItemTotalSum] = useState([]);
   const [allItemsTotal, setAllItemsTotal] = useState(0);
+  const [refreshButton, setRefreshButton] = useState(false);
 
   useEffect(() => {
     // GET shoppingcart items
@@ -71,7 +72,7 @@ export default function ShoppingCartView( {address} ) {
     setAllItemsTotal(tempAllItemSum.toFixed(2));
     setItemTotalSum(tempArray);
     console.log("TOTALSUM", itemTotalSum);
-  }, [deletedItem, quantity]);
+  }, [deletedItem, quantity, refreshButton]);
   
   // DELETE item from client side and trigger useEffect for server item delete request
   const deleteItem = (index) => {
@@ -131,10 +132,14 @@ export default function ShoppingCartView( {address} ) {
             />  
           )
         }
-        <div className={styles.itemTotal}>
-          <div>{'All items total'}</div>
-          <div>{allItemsTotal}</div>
-        </div>
+
+        {refreshButton === true ?         
+            <div className={styles.itemTotal}>
+              <div>{'All items total'}</div>
+              <div>{allItemsTotal}</div>
+            </div> 
+          : <div><button onClick={() => setRefreshButton(!refreshButton)}>Show Total</button></div>
+        } 
       </div>
     </div>
   )
