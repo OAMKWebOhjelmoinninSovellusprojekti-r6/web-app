@@ -1,5 +1,5 @@
 import React from 'react';
-import Menu from './Menu'
+import { Menu, Restaurant} from './Menu'
 import axios from 'axios' 
 import { useState, useEffect} from 'react';
 
@@ -28,25 +28,30 @@ export default function MenuListView( {props} ) {
     },[]);
 
     return (
-        <div className="menuContainer">
+        
+ 
+
+ <div className="restaurantView">
             
-                <div>
+            <div className="menu">
                 {items.map(i=>
                 <Menu key={i.iditem} name={i.name} description={i.description}/>)
-                 }
-                 
+                 }  
+                 {items.map(i=>
+                <Menu key={i.iditem} name={i.name} description={i.description}/>)
+                 }        
+                 {items.map(i=>
+                <Menu key={i.iditem} name={i.name} description={i.description}/>)
+                 }     
+                 {items.map(i=>
+                <Menu key={i.iditem} name={i.name} description={i.description}/>)
+                 }                  
             </div>
-            <div>
+            <div className="restaurantInfo">
                 {restaurant.map(r=>
-                <Menu key={r.idrestaurant} name={r.name} opening_hours={r.opening_hours}/>)
+                <Restaurant key={r.idrestaurant} name={r.name} address={r.address}opening_hours={r.opening_hours}/>)
                 }
             </div>
-        </div>
-
-            
+            </div>
             )   
 }
-
-//  {restaurant.map(r=>
-//< Menu key={r.idrestaurant} name={r.name} opening_hours={r.opening_hours}/>)
-//}

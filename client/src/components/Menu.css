@@ -1,12 +1,22 @@
 .restaurantView {
     display: flex;
 }
-
-.menuItem {
+.menu {
     display: flex;
-    flex-direction: column;
     width: 70%;
     border-right: 2px solid lightgrey;
     padding: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
     border-top: 2px solid lightgrey;
+}
+
+.menu.item {
+    justify-content: center;
+    
+}
+
+.restaurantInfo{
+   width: 30%;
+    margin-left: 50px;
 }
