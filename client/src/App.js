@@ -1,36 +1,20 @@
 import './App.css';
 import axios from 'axios'
-import { useState, useEffect }  from 'react';
+import { useState, useEffect, Fragment }  from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
-import Search from './components/Search'
-import Navbar from './components/Navbar'
+import NavBar from './components/NavBar/NavBar'
+import RestaurantListView from './components/Restaurant/RestaurantListView';
 
 function App() {
+
   
-  const [searchTerm, setSearchTerm] = useState("");
-  const [restaurants, setRestaurants] = useState([]);
-
-  //get restaurants data
-  useEffect(() => {
-    const getData = async () => {
-      const results = await axios.get('/restaurant');
-      setRestaurants(results.data);
-      console.log(results.data);
-    }
-    getData();
-},[]); 
-
-//for searching menuitems and restaurants
-const handleSearchChange = (event) => {
-  setSearchTerm(event.target.value);
-}
-
   return (
   <BrowserRouter>
-  <Navbar/>
+  <NavBar/>
       <Routes> 
-        <Route  path="/restaurant" element={<Search searchValue = {searchTerm} onSearchChange ={handleSearchChange}/>}/>
-        <Route  />
+        <Route  path="/restaurants" element={ <RestaurantListView /> } >
+          <Route path=":restaurantId" element= {<div>Here items of a single restaurant</div>} />
+          </Route> 
      </Routes>
   </BrowserRouter>
   );
