@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useState, useEffect }  from 'react';
 import CartItem from './CartItem';
 import Total from './Total';
-import './ShoppingCartView.css';
+import styles from'./ShoppingCartView.module.css';
 
 export default function ShoppingCartView() {
 
@@ -12,6 +12,7 @@ export default function ShoppingCartView() {
   const [quantity, setModifiedItemQuantity] = useState('');
   const [modifiedItemId, setModifiedItemId] = useState('');
   const [itemTotalSum, setItemTotalSum] = useState([]);
+  const [allItemsTotal, setAllItemsTotal] = useState(0);
 
   useEffect(() => {
     // GET shoppingcart items
@@ -50,16 +51,23 @@ export default function ShoppingCartView() {
     }
   }, [quantity]);
 
-  // Count total sum of items in the shoppingcart
+  // Count total sum of items in the shoppingcart and make
+  // new array of objects for the results
   useEffect(() => {
-    console.log("HERE WE ARE");
-    var tempArray =  [];
+    var tempArray =  []
+    var tempObj = {'id': 'empty', 'name': 'empty', 'total': 0};
     let itemSum = 0;
+    let tempAllItemSum = 0;
     for(let i = 0; i < cartItems.length; i++) {
       itemSum = cartItems[i].price * cartItems[i].quantity;
-      tempArray.push(itemSum);
-      console.log(tempArray);
+      tempAllItemSum += itemSum;
+      tempObj.id = cartItems[i].idItem
+      tempObj.name = cartItems[i].itemName;
+      tempObj.total = itemSum.toFixed(2);
+      console.log("tempobj", tempObj);
+      tempArray.push({...tempObj});
     }
+    setAllItemsTotal(tempAllItemSum.toFixed(2));
     setItemTotalSum(tempArray);
     console.log("TOTALSUM", itemTotalSum);
   }, [deletedItem, quantity]);
@@ -80,20 +88,18 @@ export default function ShoppingCartView() {
     let clone = [...cartItems];
     let index = clone.findIndex(c => c.idItem === idItem);
     if(index !== -1 && quantity > 0) {
-      //const data = { "quantity": quantity};
       console.log(clone[index].quantity);
       clone[index].quantity = quantity;
       setCartItems(clone);
       setModifiedItemQuantity(quantity);
       setModifiedItemId(idItem);
-      //console.log(data);
     } else {
       alert("To remove item press Remove")
     }
   }
   return (
-    <div className="mainContainer">
-      <div className="itemContainer">
+    <div className={styles.mainContainer}>
+      <div className={styles.itemContainer}>
         {
           cartItems.map(c => 
             <CartItem key={c.idItem}
@@ -106,17 +112,22 @@ export default function ShoppingCartView() {
             />  
           )
         }
+        <button>text</button>
       </div>
-      <div className="itemContainer">
+      <div className={styles.rightBox}>
         {
-          itemTotalSum.map(totalSum =>
-            <Total 
-              itemTotal={totalSum}
+          itemTotalSum.map(c =>
+            <Total key={c.id}
+              itemTotal={c.total}
+              name={c.name}
             />  
           )
         }
+        <div className={styles.itemTotal}>
+          <div>{'All items total'}</div>
+          <div>{allItemsTotal}</div>
+        </div>
       </div>
-        
     </div>
   )
 }
