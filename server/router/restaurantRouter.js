@@ -3,7 +3,6 @@ const router = express.Router();
 const auth = require('../middleware/auth.js');
 const parser = require('../utils/requestParser.js');
 const restaurantModel = require('../model/restaurant');
-const DBUtils = require('../utils/dbUtils.js');
 const restaurant = require('../model/restaurant');
 
 // GET method route
