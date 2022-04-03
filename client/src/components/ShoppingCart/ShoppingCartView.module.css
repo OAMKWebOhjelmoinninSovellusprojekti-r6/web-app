@@ -1,0 +1,46 @@
+.itemContainer {
+	display: flex;
+	flex-direction: column;
+	width: 30%;
+	margin-left: 160px;
+	margin-top: 20px;
+    gap: 20px;
+}
+
+.mainContainer {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+.rightBox {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: space-around;
+	width: 20%;
+	margin-top: 20px;
+	margin-left: 20px;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	padding-left: 90px;
+	border: solid 1px #e3c7bc;
+}
+
+.itemTotal {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+}
+
+.contentRight {
+	display: flex;
+	justify-content: end;
+	flex-direction: row;
+}
+
+.deliveryBox {
+	display: flex;
+	gap: 5px;
+	flex-direction: column;
+}

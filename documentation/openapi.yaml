@@ -529,9 +529,16 @@ components:
         itemId:
           type: integer
           minimum: 0
+        shoppingCartId:
+          type: integer
+          minimum: 0
         quantity:
           type: integer
           minimum: 0
+      required:
+        - itemId
+        - shoppingCartId
+        - quantity
     cartPut:
       title: cartPut
       type: object
@@ -555,6 +562,8 @@ components:
           items:
             type: object
             properties:
+              itemId:
+                type: integer
               name:
                 type: string
               description:

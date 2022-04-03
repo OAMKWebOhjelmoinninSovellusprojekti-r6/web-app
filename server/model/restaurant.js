@@ -1,204 +1,197 @@
 const db = require("../config/db.js");
+const { testTruncate } = require("./user.js");
 
 module.exports = {
-    async get(restaurantId) {
+    async getAll(){
         /**
-         * Example success response from database query
-         * [
-                RowDataPacket {
-                    idrestaurant: 1,
-                    name: 'restobar',
-                    address: 'street 15',
-                    opening_hours: '9.00-23.00',
-                    image_path: 'https://imagelocation.jpg',
-                    restaurant_type: 1,
-                    price_level: 1,
-                    user_iduser: 1,
-                }
-            ]
+         * Error codes:
+         * 0: Query succesful
+         * 1: No restaurants found
+         * 2: Unknown error
          */
-        // Default values for return Object
-        var data = {
-            'status': 400,
-            restaurantInfo: null
+        let data = {
+            errorCode: 0,
+            success: false,
+            restaurants: []
         }
         try {
-            // Get restaurant row from Database
             const getQuery = await db.query(
-                `SELECT * FROM \`restaurant\` WHERE \`idrestaurant\`=${restaurantId}`
-            );
-        //console.log(getQuery);
-            // If affectedRows == 1 || >= 1, query was succesful
-            // This should always return === 1 since only one restaurant row are inserted, >= 1 is used only for debugging purposes
-            if(getQuery.length >= 1) {
-                // Get restaurant info from query
-                data.restaurantInfo = getQuery[0];
-                // Set HTTP status code == success
-                data.status = 200;
+                'SELECT `idrestaurant` AS "id",`name`,`address`,`opening_hours`,`image_path`,`restaurant_type`,`price_level` FROM `restaurant`'
+            )
+            if(getQuery.length > 0){
+                for(let x=0; x<getQuery.length; x++){
+                    data.restaurants.push(
+                        // Convert rowDataPacket or whatever weird object query is returning to basic Object
+                        Object.assign({}, getQuery[x])
+                    )
+                }
+                data.success = true;
+            } else {
+                data.errorCode = 1;
             }
         } catch (err) {
-            // Debug error in case where try/catch fails
             console.log(err);
-            // Set HTTP status code == Internal Server Error
-            data.status = 500;
+            data.errorCode = 2;
         }
         return data;
     },
 
-    async create(restaurantData) {
+    async getById(restaurantId) {
         /**
-         *  Example response from database insert query:
-         * {
-         *      fieldCount: 0,
-         *      affectedRows: 1,
-         *      insertId: 1,
-         *      serverStatus: 2,
-         *      warningCount: 0,
-         *      message: '',
-         *      protocol41: true,
-         *      changedRows: 0
-         *   }
+         * Error codes:
+         * 0: No errors
+         * 1: Restaurant not found
+         * 2: Unknown error
          */
-        // Default values for return Object
         var data = {
-            'status': 400,
-            'restaurantId': null
+            errorCode: 0,
+            success: false,
+            restaurants: []
         }
         try {
-            // Insert row into Database
+            const getQuery = await db.query(
+                'SELECT `idrestaurant` AS "id",`name`,`address`,`opening_hours`,`image_path`,`restaurant_type`,`price_level` FROM `restaurant` WHERE `idrestaurant`=?',
+                [restaurantId]
+            );
+            if(getQuery.length == 1) {
+                // Convert rowDataPacket or whatever weird object query is returning to basic Object
+                data.restaurantInfo = data.restaurants.push(Object.assign({}, getQuery[0]))
+                data.success = true;
+            } else {
+                data.errorCode = 1;
+            }
+        } catch (err) {
+            console.log(err);
+            data.errorCode = 2;
+        }
+        return data;
+    },
+
+    async create(userId, restaurantData) {
+        /**
+         * Error codes:
+         * 0: Restaurant created succesfully
+         * 1: Restaurant creating failed
+         * 2: Unknown error
+         */
+        let data = {
+            errorCode: 0,
+            success: false,
+            restaurantId: null
+        }
+        try {
             const createQuery = await db.query(
-                `INSERT INTO \`restaurant\`(\
-                    \`name\`,\
-                    \`address\`,\
-                    \`opening_hours\`,\
-                    \`image_path\`,\
-                    \`restaurant_type\`,\
-                    \`price_level\`,\
-                    \`user_iduser\`\
-                ) VALUES (\
-                    '${restaurantData.name}',\
-                    '${restaurantData.address}',\
-                    '${restaurantData.opening_hours}',\
-                    '${restaurantData.image_path}',\
-                    ${restaurantData.restaurant_type},\
-                    ${restaurantData.price_level},\
-                    ${restaurantData.user_iduser}\
-                )`
+                'INSERT INTO `restaurant`(`name`,`address`,`opening_hours`,`image_path`,`restaurant_type`,`price_level`,`user_iduser`) VALUES (?,?,?,?,?,?,?)',
+                [
+                    restaurantData.name,
+                    restaurantData.address,
+                    restaurantData.openingHours,
+                    restaurantData.imagePath,
+                    restaurantData.restaurantType,
+                    restaurantData.priceLevel,
+                    userId
+                ]
             );
-            // If affectedRows == 1 || >= 1, query was succesful
-            // This should always return === 1 since only one restaurant row are inserted, >= 1 is used only for debugging purposes
-            if (createQuery.affectedRows >= 1) {
-                // Get returned row's auto increment key (restaurant id)
+            console.log(createQuery);
+            if (createQuery.affectedRows == 1) {
                 data.restaurantId = createQuery.insertId;
-                // Set HTTP status code == success
-                data.status = 200;
+                data.success = true;
+            } else {
+                data.errorCode = 1;
             }
         } catch (err) {
-            // Debug error in case where try/catch fails
             console.log(err);
-            // Set HTTP status code == Internal Server Error
-            data.status = 500;
+            data.errorCode = 2;
         }
         return data;
     },
 
-    async delete(restaurantId) {
+    async modify(userId, restaurantId, restaurantData) {
         /**
-         * Example success response from delete query
-         * {
-         *      fieldCount: 0,
-         *      affectedRows: 1,
-         *      insertId: 0,
-         *      serverStatus: 2,
-         *      warningCount: 0,
-         *      message: '',
-         *      protocol41: true,
-         *      changedRows: 0
-         * }
+         * Error codes:
+         * 0: Update succesful
+         * 1: Update failed
+         * 2: Unknown error
          */
-        // Default values for return Object
-        var data = {
-            'status': 400
-        }
-        try {
-            // Delete row from Database
-            const deleteQuery = await db.query(
-                `DELETE FROM \`restaurant\` WHERE \`idrestaurant\`=${restaurantId}`
-            );
-            console.log(deleteQuery);
-            // If affectedRows == 1 || >= 1, query was succesful
-            // This should always return === 1 since only one restaurant row are inserted, >= 1 is used only for debugging purposes
-            if(deleteQuery.affectedRows >= 1) {
-                // Set HTTP status code == success
-                data.status = 200;
-            }
-        } catch (err) {
-            // Debug error in case where try/catch fails
-            console.log(err);
-            // Set HTTP status code == Internal Server Error
-            data.status = 500;
-        }
-        return data;
-    },
-
-    async modify(restaurantId, restaurantData) {
-        /**
-         * Example success response from update query
-         * OkPacket {
-                fieldCount: 0,
-                affectedRows: 1,
-                insertId: 0,
-                serverStatus: 2,
-                warningCount: 0,
-                message: '(Rows matched: 1  Changed: 1  Warnings: 0',
-                protocol41: true,
-                changedRows: 1
-            }
-         */
-        // Default values for return Object
-        data = {
-            'status': 400
+        let data = {
+            errorCode: 0,
+            success: false
         }
         // Build query string
         updateTerms = [];
         if(restaurantData.name != null) {
-            updateTerms.push(`\`name\`='${restaurantData.name}'`);
+            updateTerms.push(
+                '`name`="' + restaurantData.name + '"'
+            );
         }
         if(restaurantData.address != null) {
-            updateTerms.push(`\`address\`='${restaurantData.address}'`);
+            updateTerms.push(
+                '`address`="' + restaurantData.address + '"'
+            );
         }
         if(restaurantData.opening_hours != null) {
-            updateTerms.push(`\`opening_hours\`='${restaurantData.opening_hours}'`);
+            updateTerms.push(
+                '`opening_hours`="' + restaurantData.openingHours + '"'
+            );
         }
-        if(restaurantData.image_path != null) {
-            updateTerms.push(`\`image_path\`='${restaurantData.image_path}'`);
+        if(restaurantData.imagePath != null) {
+            updateTerms.push(
+                '`image_path`="' + restaurantData.imagePath + '"'
+            );
         }
         if(restaurantData.restaurant_type != null) {
-            updateTerms.push(`\`restaurant_type\`=${restaurantData.restaurant_type}`);
+            updateTerms.push(
+                '`restaurant_type`=' + restaurantData.restaurantType + ''
+            );
         }
         if(restaurantData.price_level != null) {
-            updateTerms.push(`\`price_level\`=${restaurantData.price_level}`);
-        }
-        if(restaurantData.user_iduser != null) {
-            updateTerms.push(`\`user_iduser\`=${restaurantData.user_iduser}`);
-        }
-
-        updateString = `UPDATE \`restaurant\` SET ${updateTerms.join(', ')} WHERE \`idrestaurant\`=${restaurantId}`
-        try {
-            // Update database Row
-            const updateQuery = await db.query(
-                updateString
+            updateTerms.push(
+                '`price_level`=' + restaurantData.priceLevel + ''
             );
-            // If affectedRows == 1 || >= 1, query was succesful
-            // This should always return === 1 since only one restaurant row are inserted, >= 1 is used only for debugging purposes
-            if(updateQuery.affectedRows >= 1) {
-                data.status = 200;
+        }
+        rawSql = 'UPDATE `restaurant` SET ' + updateTerms.join(', ') + 'WHERE `idrestaurant`=' + restaurantId + ' AND `user_iduser`=' + userId;
+
+        try {
+            const updateQuery = await db.query(
+                rawSql
+            );
+            if(updateQuery.affectedRows == 1) {
+                data.success = true;
+            } else {
+                data.errorCode = 1;
             }
         } catch (err) {
-            // Debug error in case of try/catch fails
             console.log(err);
-            // Set HTTP status code == Internal server error
-            data.status = 500;
+            data.errorCode = 2;
+        }
+        return data;
+    },
+
+    async delete(userId, restaurantId) {
+        /**
+         * Error codes:
+         * 0: Delete succesful
+         * 1:
+         * 2: Unknown error
+         */
+        let data = {
+            errorCode: 0,
+            success: false
+        }
+        try {
+            // Delete row from Database
+            const deleteQuery = await db.query(
+                'DELETE FROM `restaurant` WHERE `idrestaurant`=? AND `user_iduser`=?',
+                [userId, restaurantId]
+            );
+            if(deleteQuery.affectedRows >= 1) {
+                data.success = true;
+            } else {
+                data.errorCode = 1;
+            }
+        } catch (err) {
+            console.log(err);
+            data.errorCode = 2;
         }
         return data;
     }
