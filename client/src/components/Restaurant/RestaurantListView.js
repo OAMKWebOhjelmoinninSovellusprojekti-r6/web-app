@@ -14,9 +14,9 @@ export default function RestaurantListView() {
   //get restaurants data
   useEffect(() => {
    const getData = async () => {
-     const results = await axios.get('http://www.localhost:3001/restaurant/5');
+     const results = await axios.get('http://www.localhost:3001/restaurant');
      //console.log(results.data.restaurantInfo);
-         setRestaurants([results.data.restaurantInfo]);
+         setRestaurants(results.data.data);
      }
    getData();
    
@@ -34,7 +34,7 @@ const handleSearchChange = (event) => {
           <div className="restaurantContainer" >
               {restaurants.filter(restaurant =>restaurant.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
                 restaurant.price_level.toString().includes(searchTerm.toLowerCase())).map(r => 
-                  <Link to={`/restaurants/${r.idrestaurant}`} key={r.idrestaurant}>
+                  <Link to={`/restaurants/${r.id}`} key={r.id}>
                 <Restaurant image={r.image_path} name={r.name} adress={r.adress} openingHours={r.opening_hours} 
                  type={r.restaurant_type} priceLevel={r.price_level}/>
                  </Link>

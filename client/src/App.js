@@ -5,6 +5,8 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import NavBar from './components/NavBar/NavBar'
 import RestaurantListView from './components/Restaurant/RestaurantListView';
 import Cart from './components/ShoppingCart/ShoppingCartView'
+import MenuListView from './components/Menu/MenuListView'
+
 
 
 function App() {
@@ -17,8 +19,8 @@ function App() {
   <NavBar/>
       <Routes>
         <Route path="/cart" element={<Cart address={userAddress}/>} />
-        <Route  path="/restaurants" element={ <RestaurantListView /> } >
-          <Route path=":restaurantId" element= {<div>Here items of a single restaurant</div>} />
+        <Route  path="/restaurants" element={ <RestaurantListView /> } />
+        <Route path="/restaurants/:restaurantId" element= {<MenuListView />} >
           </Route> 
      </Routes>
   </BrowserRouter>
