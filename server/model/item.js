@@ -31,7 +31,7 @@ module.exports = {
             // This should always return === 1 since only one item row is inserted, >= 1 is used only for debugging purposes
             if(getQuery.length >= 1){
                 // Get item info from query result
-                data.itemInfo = getQuery[0];
+                data.itemInfo = getQuery;
                 // Set HTTP status code == success
                 data.status = 200;
             }
