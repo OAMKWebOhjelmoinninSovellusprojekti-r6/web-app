@@ -1,0 +1,35 @@
+.restaurantItem {
+    width: 260px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #f5f5f5;
+    font-size: 14px;
+    font: Arial, Helvetica, sans-serif;
+    margin-left: 4px;
+    
+    }
+    .restaurantItem img {
+        width: 100%;
+        margin-bottom: 5px;
+      }
+      .title {
+        font-size:16px;
+        font: Arial, Helvetica, sans-serif;
+        margin-bottom: 10px;
+      }
+      .address {
+        font-size:14px;
+        font: Arial, Helvetica, sans-serif;
+        margin-bottom: 5px;
+     }
+      .price {
+        font-size: 12px;
+        margin-bottom: 10px;
+        margin-top: 10px;
+      }
+      a:hover, a:visited, a:link, a:active
+{
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+    
+}
