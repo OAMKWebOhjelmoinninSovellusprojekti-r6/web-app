@@ -2,7 +2,7 @@ import './App.css';
 import axios from 'axios'
 import { useState, useEffect, Fragment }  from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
-import NavBar from './components/NavBar/NavBar'
+import NavBar from './components/NavBar/Navbar'
 import RestaurantListView from './components/Restaurant/RestaurantListView';
 import Cart from './components/ShoppingCart/ShoppingCartView'
 import MenuListView from './components/Menu/MenuListView'
