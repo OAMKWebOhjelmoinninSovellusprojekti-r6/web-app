@@ -7,7 +7,7 @@ export default function Navbar() {
     <div className="navBar">
         <Link to="/restaurants"><div className="navBarItem">Restaurants</div></Link>
         <div className="navBarItem">MyProfile</div>
-        <div className="navBarItem">ShoppingCart</div>
+        <Link to="/cart"><div className="navBarItem">ShoppingCart</div></Link>
         <div className="navBarItem">OrderHistory</div>
         <div className="navBarItem">LogOut</div>
     </div>
