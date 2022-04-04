@@ -3,8 +3,7 @@ import './Restaurant.css'
 
 export default function Restaurant(props) {
   return (
-
-  <div className="restaurantItem" key={props.idrestaurant}>
+  <div className="restaurantItem" key={props.id}>
       <img className="image" src={ props.image } alt="RestaurantImage" height="220px"/>
       <div className="title">{props.name}</div>
       <div className="adress">{props.address}</div>

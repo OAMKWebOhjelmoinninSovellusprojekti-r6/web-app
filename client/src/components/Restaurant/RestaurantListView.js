@@ -35,7 +35,7 @@ const handleSearchChange = (event) => {
               {restaurants.filter(restaurant =>restaurant.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
                 restaurant.price_level.toString().includes(searchTerm.toLowerCase())).map(r => 
                   <Link to={`/restaurants/${r.id}`} key={r.id}>
-                <Restaurant image={r.image_path} name={r.name} adress={r.adress} openingHours={r.opening_hours} 
+                <Restaurant image={r.image_path} name={r.name} address={r.address} openingHours={r.opening_hours} 
                  type={r.restaurant_type} priceLevel={r.price_level}/>
                  </Link>
               )}

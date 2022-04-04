@@ -1,0 +1,23 @@
+.historyItem {
+    width: 240px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #f5f5f5;
+    font-size: 14px;
+    font: Arial, Helvetica, sans-serif;
+    margin-left: 4px;
+    margin-bottom: 10px;
+
+}
+.title {
+    font-size:16px;
+    font: Arial, Helvetica, sans-serif;
+    margin-bottom: 10px;
+}
+.singleHistoryContainer {
+    display: flex;
+    flex-direction: row;
+}
+div > h3 {
+    text-align: center;
+}
