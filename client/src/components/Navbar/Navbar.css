@@ -1,4 +1,6 @@
-
+* {
+    box-sizing: border-box;
+}
 .navBar {
     display: flex;
     background-color: rgba(28, 233, 248, 0.466);
@@ -22,3 +24,29 @@ a:hover, a:visited, a:link, a:active
 {
     text-decoration: none;
 }
+
+/* Navigation bar */
+.navbar {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    width: 100%;
+    height: 6vh;
+    border-bottom: 1px solid black;
+}
+.navbar__title-container {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 40px;
+}
+.navbar__title-container a {
+    font-size: 36px;
+}
+.navbar__login-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-left: auto;
+    padding: 0 40px;
+}
+/* / Navigation bar */
