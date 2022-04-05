@@ -1,15 +1,17 @@
 import React from 'react'
 import './Navbar.css'
 import { Link } from 'react-router-dom'
+import Login from '../Login/login.component';
 
 export default function Navbar() {
   return (
-    <div className="navBar">
-        <Link to="/restaurant"><div className="navBarItem">Restaurants</div></Link>
-        <div className="navBarItem">MyProfile</div>
-        <Link to="/cart"><div className="navBarItem">ShoppingCart</div></Link>
-        <div className="navBarItem">OrderHistory</div>
-        <div className="navBarItem">LogOut</div>
-    </div>
+    <nav className="navbar">
+        <div className="navbar__title-container">
+          <Link to="/restaurants">Food Master</Link>
+        </div>
+        <div className="navbar__login-container">
+          <Login></Login>
+        </div>
+    </nav>
   )
 }

@@ -1,6 +1,7 @@
 const db = require("../config/db.js");
 const argon2 = require("argon2");
-var jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
+const randToken = require('rand-token');
 
 module.exports = {
     async getById(userId){
@@ -46,18 +47,19 @@ module.exports = {
         let data = {
             errorCode: 0,
             success: false,
-            token: null
+            userData: null
         }
         try {
             const loginQuery = await db.query(
-                'SELECT `iduser`,`password` FROM `user` WHERE `username`=?',
+                'SELECT a1.`iduser`, a1.`password`, a1.`firstname`, a1.`lastname`, a1.`is_owner`, a2.`idshopping_cart` FROM `user` a1 LEFT JOIN `shopping_cart` a2 ON a1.`iduser`=a2.`user_id` WHERE `username`=?',
                 [username]
             );
             if(loginQuery.length == 1 && argon2.verify(loginQuery[0].password, password)){
                 const token = jwt.sign(
                     {
                         userData: {
-                            id: loginQuery[0].iduser
+                            userId: loginQuery[0].iduser,
+                            shoppingCartId: loginQuery[0].shopping_cart_id,
                         }
                     },
                     process.env.TOKEN_SECRET,
@@ -65,12 +67,27 @@ module.exports = {
                         expiresIn: process.env.TOKEN_EXPIRE
                     }
                 )
-                const updateQuery = await db.query(
-                    'UPDATE `user` SET `token`=? WHERE `iduser`=?',
-                    [token, loginQuery[0].iduser]
+                const refreshToken = randToken.uid(256);
+                const refreshTokenExpireHour = 1;
+                const tokenQuery = await db.query(
+                    'INSERT INTO `active_tokens`(`uid`,`user_id`,`created_at`,`expires`) VALUES (?,?,NOW(),DATE_ADD(NOW(), INTERVAL ? HOUR)) ON DUPLICATE KEY UPDATE `uid`=?, `created_at`=NOW(), `expires`=DATE_ADD(NOW(), INTERVAL ? HOUR)',
+                    [
+                        refreshToken,
+                        loginQuery[0].iduser,
+                        refreshTokenExpireHour,
+                        refreshToken,
+                        refreshTokenExpireHour
+                    ]
                 );
-                if(updateQuery.affectedRows == 1){
-                    data.token = token;
+                console.log(tokenQuery);
+                if(tokenQuery.affectedRows >= 1){
+                    let userData = {};
+                    userData.accessToken = token;
+                    userData.refreshToken = refreshToken;
+                    userData.firstName = loginQuery[0].firstname;
+                    userData.lastName = loginQuery[0].lastname;
+                    userData.isOwner = loginQuery[0].is_owner;
+                    data.userData = userData;
                     data.success = true;
                 } else {
                     data.errorCode = 2;
@@ -120,7 +137,19 @@ module.exports = {
                     ]
                 );
                 if(createQuery.affectedRows == 1){
-                    data.success = true;
+                    const cartQuery = await db.query(
+                        'INSERT INTO `shopping_cart`(`user_id`) VALUES (?)',
+                        [
+                            createQuery.insertId
+                        ]
+                    );
+                    if(cartQuery.affectedRows == 1){
+                        data.success = true;
+                    } else {
+                        errorCode = 3;
+                    }
+                } else {
+                    errorCode = 4;
                 }
             }
         } catch (err){

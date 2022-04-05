@@ -10,12 +10,14 @@ const verifyToken = (req, res, next) => {
             // Decode token
             req.tokenData = jwt.verify(bearerToken, process.env.TOKEN_SECRET);
         } catch (err) {
-            return res.status(403).send({
-               'message': 'Invalid authorization token' 
+            return res.status(401).send({
+                'errorCode': 1,
+                'message': 'Invalid authorization token' 
             });
         }
     } else {
-        return res.status(403).send({
+        return res.status(401).send({
+            'errorCode': 2,
             'message': 'Authorization required'
         });
     }

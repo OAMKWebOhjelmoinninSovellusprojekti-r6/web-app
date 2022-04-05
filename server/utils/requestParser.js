@@ -29,6 +29,17 @@ module.exports = {
         return null;
     },
 
+    parseUserType(value){
+        try {
+            if(value === 0 || value === 1){
+                return true
+            }
+        } catch (err) {
+            console.log(err);
+        }
+        return false;
+    },
+
     parseString(value, maxLength){
         if(typeof value === "string" && value.length <= maxLength){
             return value;
