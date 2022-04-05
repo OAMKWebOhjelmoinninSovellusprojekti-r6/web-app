@@ -16,6 +16,23 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `active_tokens`
+--
+
+DROP TABLE IF EXISTS `active_tokens`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `active_tokens` (
+  `uid` varchar(256) NOT NULL,
+  `user_id` int unsigned NOT NULL DEFAULT '0',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `expires` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `item`
 --
 
@@ -34,7 +51,7 @@ CREATE TABLE `item` (
   UNIQUE KEY `iditem_UNIQUE` (`iditem`),
   KEY `fk_item_restaurant_id_idx` (`restaurant_id`),
   CONSTRAINT `fk_item_restaurant_id` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurant` (`idrestaurant`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -101,7 +118,7 @@ CREATE TABLE `restaurant` (
   UNIQUE KEY `idrestaurant_UNIQUE` (`idrestaurant`),
   KEY `fk_restaurant_user_id_idx` (`user_iduser`),
   CONSTRAINT `fk_restaurant_user_id` FOREIGN KEY (`user_iduser`) REFERENCES `user` (`iduser`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -116,9 +133,10 @@ CREATE TABLE `shopping_cart` (
   `user_id` int unsigned NOT NULL,
   PRIMARY KEY (`idshopping_cart`),
   UNIQUE KEY `idshopping_cart_UNIQUE` (`idshopping_cart`),
+  UNIQUE KEY `user_id` (`user_id`),
   KEY `fk_shopping_cart_user_id_idx` (`user_id`),
   CONSTRAINT `fk_shopping_cart_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`iduser`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -158,12 +176,10 @@ CREATE TABLE `user` (
   `address` varchar(45) NOT NULL,
   `phone` varchar(45) NOT NULL,
   `is_owner` tinyint(1) NOT NULL DEFAULT '0',
-  `token` varchar(255) DEFAULT NULL,
-  `token_refresh` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`iduser`),
   UNIQUE KEY `iduser_UNIQUE` (`iduser`),
   UNIQUE KEY `username_UNIQUE` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -175,4 +191,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-03-18 20:40:44
+-- Dump completed on 2022-04-05 21:53:13
