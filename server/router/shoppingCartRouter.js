@@ -22,20 +22,17 @@ router.get('/:shoppingCartId', async (req, res) => {
 
 // POST method router
 router.post('/', async (req, res) => {
-    console.log(req.body);
     let data = await shoppingCartModel.create(req.body);
-    try {
-        if(data.affectedRows === 1) {
-            console.log(data.affectedRows);
-            res.sendStatus(200);
-        } else if(data.affectedRows === 0) {
-            res.sendStatus(400);
-        } else {
-            res.sendStatus(500);
-        }
-    } catch (err) {
-        res.send("ID does not match");
-    };
+    if(
+        data.success == true
+        && data.errorCode == 0
+    ) {
+        return res.status(200).send({
+            'message': 'jee'
+        })
+    } else {
+        return res.sendStatus(500);
+    }
 });
 // PUT method router
 router.put('/:shoppingCartItemId', async (req, res) => {

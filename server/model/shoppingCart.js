@@ -34,27 +34,39 @@ module.exports = {
     async create(shoppingCartData){
         // Default values for return Object
         let data = {
-            'affectedRows': 0
+            errorCode: 0,
+            success: false
         }
         try {
-            // Insert row into database
-            const createQuery = await db.query(
-                `INSERT INTO shopping_cart_item(item_id,shopping_cart_id,quantity) VALUES(?,?,?);`, 
-                [shoppingCartData.item_id, shoppingCartData.shopping_cart_id, shoppingCartData.quantity]
+            const duplicateQuery = await db.query(
+                'SELECT * FROM `shopping_cart_item` WHERE `item_id`=? AND `shopping_cart_id`=?',
+                [
+                    shoppingCartData.item_id,
+                    shoppingCartData.shopping_cart_id
+                ]
+            );
+            if(duplicateQuery.length > 0){
+                const updateQuery = await db.query(
+                    'UPDATE `shopping_cart_item` SET `quantity`=(`quantity` + 1) WHERE `shopping_cart_id`=? and `item_id`=?',
+                    [shoppingCartData.shopping_cart_id, shoppingCartData.item_id]
                 );
-                console.log(createQuery);
-            // If affectedRows == 1 || >= 1, query was succesful
-            // This should always return === 1 since only one order row are inserted, >= 1 is used only for debugging purposes
-            if(createQuery.affectedRows >= 1){
-                data.affectedRows = createQuery.affectedRows;
-            } else if (createQuery.affectedRows === 0){
-                data.affectedRows = createQuery.affectedRows;
+                if(updateQuery.affectedRows == 1){
+                    data.success = true;
+                }
             } else {
-                data.affectedRows = -1;
-            }       
+                // Insert row into database
+                const createQuery = await db.query(
+                    `INSERT INTO shopping_cart_item(item_id,shopping_cart_id,quantity) VALUES(?,?,?);`, 
+                    [shoppingCartData.item_id, shoppingCartData.shopping_cart_id, shoppingCartData.quantity]
+                );
+                if(createQuery.affectedRows == 1){
+                    data.success = true;
+                }
+            } 
         } catch (err){
             // Debug error in case where try/catch fails
             console.log(err);
+            errorCode = 1;
         }
         return data;
     },
