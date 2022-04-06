@@ -1,19 +1,29 @@
-require('dotenv').config(".env");
-const port = process.env.port;
+require('dotenv').config();
+const port = process.env.port || 3001;
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express();
 const cors = require('cors');
+const upload = require('express-fileupload');
 
-
+// Import routers
 const restaurantRouter = require('./router/restaurantRouter')
 const userRouter = require('./router/userRouter.js');
 const shoppingCartRouter = require('./router/shoppingCartRouter')
-const historyRouter = require('./router/history');
+const historyRouter = require('./router/historyRouter');
 const itemRouter = require('./router/itemRouter');
 
 app.use(cors());
+
+// File uploads, static files folder
+app.use("/static", express.static("static"));
+app.use(upload());
+
+// Request parsing
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+
+// Routers
 app.use('/restaurant', restaurantRouter);
 app.use('/user', userRouter);
 app.use('/cart', shoppingCartRouter);

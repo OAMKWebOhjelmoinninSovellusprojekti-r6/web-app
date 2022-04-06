@@ -1,157 +1,204 @@
 const express = require('express');
 const router = express.Router();
+const auth = require('../middleware/auth.js');
+const parser = require('../utils/requestParser.js');
 const restaurantModel = require('../model/restaurant');
+const FileService = require('../services/fileService.js');
 
 // GET method route
-router.get('/:restaurantId?', (req, res) => {
-
-    console.log(typeof req.params.restaurantId);
-    try {
-        // Transform the value to Integer
-        req.params.restaurantId = parseInt(req.params.restaurantId);
-        console.log(typeof req.params.restaurantId, req.params.restaurantId);
-        // If not correct value type throw to the error clause
-        if(req.params.restaurantId === undefined || isNaN(req.params.restaurantId)) {
-            throw new Error();
+router.get('/', async (req, res) => {
+    const restaurantData = await restaurantModel.getAll();
+    if(
+        restaurantData.success == true
+        && restaurantData.errorCode == 0
+    ) {
+        if(restaurantData.restaurants.length > 0){
+            res.status(200).send({
+                'data': restaurantData.restaurants
+            });
+        } else {
+            res.status(404).send({
+                'message': 'No restaurants found'
+            });
         }
-        // Send request data
-        const data = restaurantModel.get(req.params.restaurantId);
-        data.then(r => {
-            if (r.status === 200) {
-                res.send(r);
-                console.log(r)
-            } else {
-                res.sendStatus(r.status);
-            }
+    } else {
+        res.status(500).send({
+            'message': 'Unknown error'
         });
-    } catch (err) {
-        // GET method only uses ID for parameter so if not provided send error message
-        console.log("errorhandler executed");
-        res.send("No ID defined");
     }
-    
-    
+});
+
+router.get('/:restaurantId', async (req, res) => {
+    // If not correct value type, return bad request
+    console.log(req.params.restaurantId);
+    if(
+        req.params.restaurantId === undefined
+        || isNaN(req.params.restaurantId)
+    ) {
+        return res.status(400).send({
+            'message': 'Invalid restaurant id'
+        });
+    }
+    const restaurantData = await restaurantModel.getById(req.params.restaurantId);
+    if(
+        restaurantData.success == true
+        && restaurantData.errorCode == 0
+    ) {
+        if(restaurantData.restaurants.length == 1){
+            return res.status(200).send(restaurantData.restaurants);
+        } else {
+            return res.status(404).send({
+                'message': 'Restaurant not found'
+            });
+        }
+    } else {
+        return res.status(500).send({
+            'message': 'Unknown error'
+        });
+    }
 });
 
 // POST method route
-router.post('/', (req, res) => {
-  
-/** Example JSON data request
-    {
-        name: 'the Mesta',
-        address: 'alley 7',
-        opening_hours: '9.00-23.00',
-        image_path: 'https://imagelocation.jpg',
-        restaurant_type: 3,
-        price_level: 2,
-        user_iduser: 2
-      }
-*/   
-    console.log(typeof req.body.restaurant_type);
-    try {
-        // Check for correct type values, if incorrect throw to error handler
-        console.log(typeof req.body.user_iduser, req.body.user_iduser);
-        if(typeof req.body.name != 'string' 
-            || typeof req.body.address != 'string' 
-            || typeof req.body.opening_hours != 'string' 
-            || typeof req.body.image_path != 'string'
-            || typeof req.body.restaurant_type != 'number'
-            || typeof req.body.price_level != 'number'
-            || typeof req.body.user_iduser != 'number') 
-        {
-            throw new Error();
-        };
-        // Send request data
-        const data = restaurantModel.create(req.body);
-        data.then(r => {
-            // If query was succesful send the received data, otherwise send the provided status code
-            if (r.status === 200) {
-                console.log(r);
-                res.sendStatus(r.status);
-            } else {
-                res.sendStatus(r.status)
+router.post('/', auth, async (req, res) => {
+    // Init FileService with multipart file
+    let fs = new FileService(
+        req.files.file,
+        'restaurant'
+    );
+    let mData = {};
+    mData.name = parser.parseString(req.body.name, 20);
+    mData.address = parser.parseString(req.body.address, 20);
+    mData.openingHours = parser.parseString(req.body.openingHours, 20);
+    mData.restaurantType = parser.parseRestaurantType(req.body.restaurantType);
+    mData.priceLevel = parser.parsePriceLevel(req.body.priceLevel);
+    if(
+        mData.name != null
+        && mData.address != null
+        && mData.openingHours != null
+        && mData.restaurantType != null
+        && mData.priceLevel != null
+    ) {
+        const data = await restaurantModel.create(
+            req.tokenData.userData.userId,
+            mData
+        )
+        if(
+            data.success == true
+            && data.errorCode == 0
+            && data.restaurantId != null
+        ) {
+            // Save uploaded file to static folder
+            fs.setFileName(data.restaurantId.toString());
+            const saveResult = fs.saveFileToStatic();
+            console.log(saveResult);
+            if(
+                saveResult.errorCode == 0
+                && saveResult.imagePath != null
+            ) {
+                const updateResult = await restaurantModel.updateImageUrl(saveResult.imagePath, data.restaurantId);
+                if(updateResult.success == true && updateResult.errorCode == 0){
+                    return res.status(200).send({
+                        'restaurantId': data.restaurantId
+                    });
+                }
             }
+        return res.status(500).send({
+            'message': 'Unknown error'
         });
-    } catch (err) {
-        // Error response for incorrect valuetypes
-        console.log("errorhandler executed");
-        res.send("Incorrect value types")
+    } else {
+        return res.status(400).send({
+            'message': 'Invalid parameters'
+        });
     }
+}
 });
 
 // PUT method route
-router.put('/:restaurantId', (req, res) => {
-
-/** Example JSON data request, modify method does not need all the values neccessarily
-    {
-        name: 'the Mesta',
-        address: 'alley 7',
-        opening_hours: '9.00-23.00',
-        image_path: 'https://imagelocation.jpg',
-        restaurant_type: 3,
-        price_level: 2,
-        user_iduser: 2
-      }
-*/   
-    console.log("typeof", typeof req.body.address);
-    try {
-        // Check for correct type values, if incorrect throw to error handler
-        if((typeof req.body.name !== 'string' && req.body.name != undefined)
-            ||(typeof req.body.address != 'string' && req.body.address != undefined)
-            ||(typeof req.body.opening_hours != 'string' && req.body.opening_hours != undefined)
-            ||(typeof req.body.image_path != 'string' && req.body.image_path != undefined)
-            ||(typeof req.body.restaurant_type != 'number' && req.body.restaurant_type != undefined)
-            ||(typeof req.body.price_level != 'number' && req.body.price_level != undefined)
-            ||(typeof req.body.user_iduser != 'number' && req.body.user_iduser != undefined)
-
-        ) {
-            throw new Error();
-        }
-        // Send request data
-        const data = restaurantModel.modify(req.params.restaurantId, req.body);
-        data.then(r => {
-            // If query was succesful send the received data, otherwise send the provided status code
-            if (r.status === 200) {
-                console.log(r);
-                res.sendStatus(r.status);
-            } else {
-                res.sendStatus(r.status)
-            }
-        });
-    } catch (err) {
-        // Error response for incorrect valuetypes
-        console.log("errorhandler executed");
-        res.send("Incorrect value types")
+router.put('/:restaurantId', auth, async (req, res) => {
+    let fs = null;
+    let mData = {};
+    let restaurantId = req.params.restaurantId;
+    
+    // If file is sent with multipart request
+    if(req.files && req.files.file){
+        // Init FileService with multipart file
+        fs = new FileService(
+            req.files.file,
+            'restaurant'
+        );
     }
+    
+    mData.name = parser.parseString(req.body.name, 20);
+    mData.address = parser.parseString(req.body.address, 20);
+    mData.openingHours = parser.parseString(req.body.openingHours, 20);
+    mData.restaurantType = parser.parseString(req.body.restaurantType, 20);
+    mData.priceLevel = parser.parseString(req.body.priceLevel, 20);
+    const uQuery = await restaurantModel.modify(
+        req.tokenData.userData.userId,
+        restaurantId,
+        mData
+    )
+    if(
+        uQuery.success == true
+        && uQuery.errorCode == 0    
+    ) {
+        // If file was sent with request
+        if(fs != null){
+            fs.setFileName(restaurantId.toString());
+            const saveResult = fs.saveFileToStatic();
+            if(
+                saveResult.errorCode == 0
+                && saveResult.imagePath != null
+            ) {
+                const updateResult = await restaurantModel.updateImageUrl(saveResult.imagePath, restaurantId);
+                if(updateResult.success == true && updateResult.errorCode == 0){
+                    return res.status(200).send({
+                        'message': 'Restaurant updated succesfully'
+                    });
+                }
+            }
+        } else {
+            // If query was succesful send the received data, otherwise send the provided status code
+            return res.status(200).send({
+                'message': 'Restaurant updated succesfully'
+            });
+        }
+    }
+    return res.status(500).send({
+        'message': 'Uknown error'
+    });
 });
 
 // DELETE method route
-router.delete('/:restaurantId?', (req, res) => {
-
-    console.log(typeof req.params.restaurantId);
-    try {
-        // Transform the value to Integer
-        req.params.restaurantId = parseInt(req.params.restaurantId);
-        console.log(typeof req.params.restaurantId, req.params.restaurantId);
-        // If not correct value type throw to the error clause
-        if(req.params.restaurantId === undefined || isNaN(req.params.restaurantId)) {
-            throw new Error();
-        }
-        // Send the request data
-        const data = restaurantModel.delete(req.params.restaurantId);
-        data.then(r => {
-            // If query was succesful send the received data, otherwise send the provided status code
-            if (r.status === 200) {
-                res.sendStatus(r.status);
-            } else {
-                res.sendStatus(r.status);
-            }
+router.delete('/:restaurantId', auth, async (req, res) => {
+    // If not correct value type, send bad request response
+    if(req.params.restaurantId === undefined || isNaN(req.params.restaurantId)) {
+        res.status(400).send({
+            'message': 'Invalid request parameters'
         });
-    } catch (err) {
-        // DELETE method only uses ID for parameter so if not provided send error message
-        console.log("errorhandler executed");
-        res.send("No ID defined");
     }
+    const restaurantId = req.params.restaurantId;
+    const data = await restaurantModel.delete(
+        req.tokenData.userData.userId,
+        restaurantId
+    );
+    if(
+        data.success == true
+        && data.errorCode == 0    
+    ) {
+        return res.status(200).send({
+            'message': 'Restaurant deleted succesfully'
+        });
+    } else {
+        if(data.errorCode == 1){
+            return res.status(400).send({
+                'message': 'Failed to delete restaurant'
+            });
+        } 
+    }
+    return res.status(500).send({
+        'message': 'Unknown error'
+    });
 });
 
 

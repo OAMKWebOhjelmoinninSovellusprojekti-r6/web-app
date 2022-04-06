@@ -1,0 +1,12 @@
+.historyContainer {
+  display: flex;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
+  align-items: baseline;
+  justify-content: space-around;
+}
+.orderHistoryContainer {
+  position: static;
+}

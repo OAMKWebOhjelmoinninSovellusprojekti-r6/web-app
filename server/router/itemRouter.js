@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const item = require('../model/item');
 
-//Get item info by item number
+//Get item info by restaurant id
 router.get('/:restaurantId', async function(req, res){
     let idRestaurant = parseInt(req.params.restaurantId);
     let data = await item.get(idRestaurant);
