@@ -118,7 +118,7 @@ export default function ShoppingCartView( {address} ) {
           <div className={styles.deliveryBox}>
             <div>{'Delivering to: '}{address}</div>
             <div className={styles.contentRight}>
-              <Link to="/"><button>Pay the order</button></Link>
+              <Link to="/restaurants"><button>Pay the order</button></Link>
             </div>
           </div>
         </div>
