@@ -1,6 +1,7 @@
 module.exports = {
     parsePriceLevel(value){
         try {
+            value = parseInt(value);
             if(
                 Number.isInteger(value)
                 && value > 0
@@ -16,6 +17,7 @@ module.exports = {
 
     parseRestaurantType(value){
         try {
+            value = parseInt(value);
             if(
                 Number.isInteger(value)
                 && value > 0

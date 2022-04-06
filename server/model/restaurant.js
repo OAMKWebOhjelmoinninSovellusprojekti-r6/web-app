@@ -150,11 +150,11 @@ module.exports = {
             );
         }
         rawSql = 'UPDATE `restaurant` SET ' + updateTerms.join(', ') + 'WHERE `idrestaurant`=' + restaurantId + ' AND `user_iduser`=' + userId;
-
         try {
             const updateQuery = await db.query(
                 rawSql
             );
+            console.log(updateQuery);
             if(updateQuery.affectedRows == 1) {
                 data.success = true;
             } else {
@@ -185,6 +185,31 @@ module.exports = {
                 [userId, restaurantId]
             );
             if(deleteQuery.affectedRows >= 1) {
+                data.success = true;
+            } else {
+                data.errorCode = 1;
+            }
+        } catch (err) {
+            console.log(err);
+            data.errorCode = 2;
+        }
+        return data;
+    },
+
+    async updateImageUrl(imagePath, restaurantId){
+        let data = {
+            errorCode: 0,
+            success: false
+        }
+        try {
+            const updateQuery = await db.query(
+                'UPDATE `restaurant` SET `image_path`=? WHERE `idrestaurant`=?',
+                [
+                    imagePath,
+                    restaurantId
+                ]
+            );
+            if(updateQuery.affectedRows > 0){
                 data.success = true;
             } else {
                 data.errorCode = 1;

@@ -3,7 +3,7 @@ const router = express.Router();
 const auth = require('../middleware/auth.js');
 const parser = require('../utils/requestParser.js');
 const restaurantModel = require('../model/restaurant');
-const restaurant = require('../model/restaurant');
+const FileService = require('../services/fileService.js');
 
 // GET method route
 router.get('/', async (req, res) => {
@@ -59,10 +59,12 @@ router.get('/:restaurantId', async (req, res) => {
 });
 
 // POST method route
-router.post('/', async (req, res) => {
-    //!!!!!!!!!!!!!!!!!!!!!!!
-    const userId = req.body.userId; // TEMPORARY, GET FROM JWT WHEN IMPLEMENTED
-    //!!!!!!!!!!!!!!!!!!!!!!!
+router.post('/', auth, async (req, res) => {
+    // Init FileService with multipart file
+    let fs = new FileService(
+        req.files.file,
+        'restaurant'
+    );
     let mData = {};
     mData.name = parser.parseString(req.body.name, 20);
     mData.address = parser.parseString(req.body.address, 20);
@@ -77,7 +79,7 @@ router.post('/', async (req, res) => {
         && mData.priceLevel != null
     ) {
         const data = await restaurantModel.create(
-            userId,
+            req.tokenData.userData.userId,
             mData
         )
         if(
@@ -85,46 +87,54 @@ router.post('/', async (req, res) => {
             && data.errorCode == 0
             && data.restaurantId != null
         ) {
-            res.status(200).send({
-                'restaurantId': data.restaurantId
-            });
-        } else {
-            res.status(500).send({
-                'message': 'Unknown error'
-            });
-        }
+            // Save uploaded file to static folder
+            fs.setFileName(data.restaurantId.toString());
+            const saveResult = fs.saveFileToStatic();
+            console.log(saveResult);
+            if(
+                saveResult.errorCode == 0
+                && saveResult.imagePath != null
+            ) {
+                const updateResult = await restaurantModel.updateImageUrl(saveResult.imagePath, data.restaurantId);
+                if(updateResult.success == true && updateResult.errorCode == 0){
+                    return res.status(200).send({
+                        'restaurantId': data.restaurantId
+                    });
+                }
+            }
+        return res.status(500).send({
+            'message': 'Unknown error'
+        });
     } else {
-        res.status(400).send({
+        return res.status(400).send({
             'message': 'Invalid parameters'
         });
     }
+}
 });
 
 // PUT method route
-router.put('/:restaurantId', async (req, res) => {
-    //!!!!!!!!!!!!!!!!!!!!!!!
-    const userId = req.body.userId; // TEMPORARY, GET FROM JWT WHEN IMPLEMENTED
-    //!!!!!!!!!!!!!!!!!!!!!!!
-    /** Example JSON data request, modify method does not need all the values neccessarily
-        {
-            name: 'the Mesta',
-            address: 'alley 7',
-            opening_hours: '9.00-23.00',
-            image_path: 'https://imagelocation.jpg',
-            restaurant_type: 3,
-            price_level: 2,
-            user_iduser: 2
-        }
-    */   
-    let restaurantId = req.params.restaurantId;
+router.put('/:restaurantId', auth, async (req, res) => {
+    let fs = null;
     let mData = {};
+    let restaurantId = req.params.restaurantId;
+    
+    // If file is sent with multipart request
+    if(req.files && req.files.file){
+        // Init FileService with multipart file
+        fs = new FileService(
+            req.files.file,
+            'restaurant'
+        );
+    }
+    
     mData.name = parser.parseString(req.body.name, 20);
-    mData.address = parser.parseString(req.body.name, 20);
+    mData.address = parser.parseString(req.body.address, 20);
     mData.openingHours = parser.parseString(req.body.openingHours, 20);
     mData.restaurantType = parser.parseString(req.body.restaurantType, 20);
-    mData.priceLevel = parser.parseString(req.body.name, 20);
+    mData.priceLevel = parser.parseString(req.body.priceLevel, 20);
     const uQuery = await restaurantModel.modify(
-        userId,
+        req.tokenData.userData.userId,
         restaurantId,
         mData
     )
@@ -132,22 +142,35 @@ router.put('/:restaurantId', async (req, res) => {
         uQuery.success == true
         && uQuery.errorCode == 0    
     ) {
-        // If query was succesful send the received data, otherwise send the provided status code
-        return res.status(200).send({
-            'message': 'Restaurant updated succesfully'
-        });
-    } else {
-        return res.status(500).send({
-            'message': 'Uknown error'
-        });
+        // If file was sent with request
+        if(fs != null){
+            fs.setFileName(restaurantId.toString());
+            const saveResult = fs.saveFileToStatic();
+            if(
+                saveResult.errorCode == 0
+                && saveResult.imagePath != null
+            ) {
+                const updateResult = await restaurantModel.updateImageUrl(saveResult.imagePath, restaurantId);
+                if(updateResult.success == true && updateResult.errorCode == 0){
+                    return res.status(200).send({
+                        'message': 'Restaurant updated succesfully'
+                    });
+                }
+            }
+        } else {
+            // If query was succesful send the received data, otherwise send the provided status code
+            return res.status(200).send({
+                'message': 'Restaurant updated succesfully'
+            });
+        }
     }
+    return res.status(500).send({
+        'message': 'Uknown error'
+    });
 });
 
 // DELETE method route
-router.delete('/:restaurantId', async (req, res) => {
-    //!!!!!!!!!!!!!!!!!!!!!!!
-    const userId = req.body.userId; // TEMPORARY, GET FROM JWT WHEN IMPLEMENTED
-    //!!!!!!!!!!!!!!!!!!!!!!!
+router.delete('/:restaurantId', auth, async (req, res) => {
     // If not correct value type, send bad request response
     if(req.params.restaurantId === undefined || isNaN(req.params.restaurantId)) {
         res.status(400).send({
@@ -155,25 +178,27 @@ router.delete('/:restaurantId', async (req, res) => {
         });
     }
     const restaurantId = req.params.restaurantId;
-    const data = await restaurantModel.delete(userId, restaurantId);
+    const data = await restaurantModel.delete(
+        req.tokenData.userData.userId,
+        restaurantId
+    );
     if(
         data.success == true
         && data.errorCode == 0    
     ) {
-        res.status(200).send({
+        return res.status(200).send({
             'message': 'Restaurant deleted succesfully'
         });
     } else {
         if(data.errorCode == 1){
-            res.status(400).send({
+            return res.status(400).send({
                 'message': 'Failed to delete restaurant'
             });
-        } else {
-            res.status(500).send({
-                'message': 'Unknown error'
-            });
-        }
+        } 
     }
+    return res.status(500).send({
+        'message': 'Unknown error'
+    });
 });
 
 
