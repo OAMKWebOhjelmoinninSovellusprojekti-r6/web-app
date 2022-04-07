@@ -7,6 +7,11 @@ import { useParams } from 'react-router-dom';
 export default function MenuListView() {
     const [items, setItems] = useState([]);
     const [restaurant, setRestaurant] = useState([]);
+    const [item, addItem] = useState({
+        item_id: 18,
+        shopping_cart_id: 1,
+        quantity: 1
+    });
     const {restaurantId}= useParams();
     //Get all items based on restaurantId
     useEffect(() => {
@@ -23,12 +28,21 @@ export default function MenuListView() {
             
                 setRestaurant(restInfo.data);
         }
-        
+
         getRestaurant(restaurantId);
         getItems(restaurantId);
+        
+        
+        
     },[]);
+
+    async function postItem() {
+        
+        const joo = await axios.post(`http://www.localhost:3001/cart`, item);   
+    }
         console.log('Ravintolan tiedot:', restaurant);
         console.log('Ravintolan menu:', items);
+        
     return (
         
  
@@ -37,8 +51,10 @@ export default function MenuListView() {
             
             <div className="menu">
                 {items.map(i=>
-                <Menu key={i.iditem} name={i.name} description={i.description} price={i.price}/>)
-                }  
+                <Menu key={i.iditem} name={i.name} description={i.description} price={i.price} />)
+                } 
+                
+                
                
             </div>
             <div className="restaurantInfo">
@@ -50,3 +66,5 @@ export default function MenuListView() {
 </div>
             )   
 }
+
+//<button onClick={ postItem()}>Click here</button>

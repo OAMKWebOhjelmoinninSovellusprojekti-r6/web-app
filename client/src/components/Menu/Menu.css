@@ -1,18 +1,19 @@
 .restaurantView {
-    display: flex;
+  display: flex;
 }
+
 .menu {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    align-items: center;
-    margin-right: auto;
-    padding: 15px;
-    font-size: 16px;
-    width: 70%;
-    border-right: 2px solid lightgrey;
-    border-top: 2px solid lightgrey;
-    background-color: rgb(79, 60, 60);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  margin-right: auto;
+  padding: 15px;
+  font-size: 16px;
+  width: 70%;
+  border-right: 2px solid lightgrey;
+  border-top: 2px solid lightgrey;
+  background-color: rgb(79, 60, 60);
 }
 
 .menu.item img {
