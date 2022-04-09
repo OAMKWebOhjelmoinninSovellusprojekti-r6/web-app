@@ -2,17 +2,18 @@ import React from 'react'
 import './AddItem.css'
 import { useState, useEffect} from "react";
 import axios from "axios"
-import {Link} from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
+
 
 export default function AddItem() {
-
+    const {restaurantId} = useParams();
     const [newItem, setNewItem] = useState({
         name: "",
         description: "",
         price: "",
         image_path: "",
         category: "",
-        restaurant_id: ""
+        restaurant_id: restaurantId
     })
 
     const changeHandler = (event) => {
@@ -35,7 +36,8 @@ export default function AddItem() {
       return (
         <div>
             <div>
-            <Link to="/restaurants" className="btn">Return to restaurant page</Link>
+            <Link to="/restaurants/">
+                <button>Return to restaurant menu</button></Link>
             </div>
             <div>
               <form onSubmit={handleSubmit}>

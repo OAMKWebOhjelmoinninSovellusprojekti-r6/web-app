@@ -1,7 +1,7 @@
 import React from 'react';
 import './Menu.css';
 import axios from 'axios' 
-import AddItem from './AddItem.js';
+import {Link} from 'react-router-dom';
 
 
 
@@ -15,13 +15,12 @@ export function Menu (props) {
 return (
     
         <div className="menu.item" key={props.iditem}>
+                <div>ID: {props.id}</div>
                 <img className="image" src={ props.image } alt="ItemImage" height="220px"/>
                 <div className="title">Item: {props.name }</div>
                 <div className="description">Description: {props.description }</div>
                 <div className="description">Price: {props.price} €</div>
-                <button onClick={ props.postItem }>Add to cart</button>
-                <button>Modify item</button>
-                
+                <button onClick={ props.postItem }>Add to cart</button>                
         </div> 
         )
 }

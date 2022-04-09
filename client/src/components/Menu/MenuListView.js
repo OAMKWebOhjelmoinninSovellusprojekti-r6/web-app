@@ -72,19 +72,23 @@ export default function MenuListView() {
                 <Menu key={i.iditem} postItem={postItem} id={i.iditem} name={i.name} description={i.description} price={i.price} />)
                 } 
                 
-                
-               
             </div>
             <div className="restaurantInfo">
-                <Link to="/restaurants/additem">
-                <button>Add item to menu</button></Link>
+                
                 {restaurant.map(r=>
-                <RestaurantInfo key={r.id} image={r.image_path} name={r.name} address={r.address} openingHours={r.opening_hours} 
-                priceLevel={r.price_level}/>)
-                }
+                <Link to={`/restaurants/additem/${r.id}`} key={r.id}>
+                <button>Add item to menu</button>
+                <RestaurantInfo  image={r.image_path} name={r.name} address={r.address} openingHours={r.opening_hours} 
+                priceLevel={r.price_level}/>
+                </Link>
+                )}
             </div>
 </div>
             )   
 }
 
-//<button onClick={ postItem()}>Click here</button>
+/*<button onClick={ postItem()}>Click here</button>
+Link to={`/restaurants/modifyitem/${i.id}`} key={i.id}>
+<button>Modify item</button>
+                
+</Link>*/
