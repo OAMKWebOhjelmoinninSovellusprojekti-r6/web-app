@@ -1,22 +1,21 @@
 import React from 'react';
-import axios from 'axios';
 import { useState, useEffect }  from 'react';
-
 import CartItem from './CartItem';
 import Total from './Total';
 import styles from'./ShoppingCartView.module.css';
 import DeliveryAddress from './DeliveryAddress';
 import UserService from '../../services/user.service';
 
-export default function ShoppingCartView( {address} ) {
+export default function ShoppingCartView( {cartIndex, address, userIndex, restaurantIndex} ) {
 
   const [cartItems, setCartItems] = useState([]);
   const [itemTotalSum, setItemTotalSum] = useState([]);
   const [allItemsTotal, setAllItemsTotal] = useState(0);
 
-  // DUMMYDATA FOR DEVELOPMENT
-  let cartId = 2;
-
+  let cartId = cartIndex;
+  let userId = userIndex;
+  let restaurantId = restaurantIndex;
+  
   useEffect(() => {
     // GET shoppingcart items
     UserService.getCartItems(cartId).then(results => {
@@ -76,8 +75,26 @@ export default function ShoppingCartView( {address} ) {
     }
   }
 
+  // Post order data into order history and order histort item in database
   const payOrder = () => {
+    let historyId = 0;
+    const jsonData = `{
+      "total": ${allItemsTotal},
+      "restaurantId": ${restaurantId},
+      "userId": ${userId}
+    }`;
+    const historyData = JSON.parse(jsonData);
+    console.log("historydata", historyData);
     
+    UserService.orderHistoryCreate(historyData).then(results => {
+      historyId = results.data.idorder_history;
+      console.log("results", results.status);
+      if(results.status === 200) {
+        alert("Order confirmed");
+      } else {
+        alert("There was a problem with payment")
+      }
+    });    
   }
 
   return (

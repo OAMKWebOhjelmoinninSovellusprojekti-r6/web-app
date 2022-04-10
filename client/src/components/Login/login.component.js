@@ -123,7 +123,7 @@ export default class Login extends Component {
           </li>
           {editRestaurants}
           <li>
-            <Link to="/">Shopping cart</Link>
+            <Link to="/cart">Shopping cart</Link>
           </li>
           <li>
             <Link to="/">Order history</Link>

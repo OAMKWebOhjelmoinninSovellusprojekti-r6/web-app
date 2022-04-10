@@ -49,34 +49,31 @@ module.exports = {
 
     async create(orderHistoryData){
         // Default values for return Object
+        console.log(orderHistoryData);
         let data = {
-            'status': 400,
-            'orderHistoryId': null
+            'idorder_history': 0,
+            'affectedRows': 0
         }
         try {
             // Insert row into database
             const createQuery = await db.query(
-                `INSERT INTO \`order_history\`(\
-                    \`total\`,\
-                    \`restaurant_id\`,\
-                    \`user_id\`\             
-                ) VALUES (\
-                    '${orderHistoryData.total}',\
-                    '${orderHistoryData.restaurantId}',\
-                    '${orderHistoryData.userId}'\
-                )`
+                `INSERT INTO order_history(total,restaurant_id,user_id) VALUES(?,?,?);`,
+                [orderHistoryData.total, orderHistoryData.restaurantId, orderHistoryData.userId]
             );
+            console.log(createQuery);
             // If affectedRows == 1 || >= 1, query was succesful
             // This should always return === 1 since only one order row are inserted, >= 1 is used only for debugging purposes
             if(createQuery.affectedRows >= 1){
-                 // Set HTTP status code == success
-                data.status = 200;
-            }
+                data.affectedRows = createQuery.affectedRows;
+                data.idorder_history = createQuery.insertId;
+            } else if (createQuery.affectedRows === 0){
+                data.affectedRows = createQuery.affectedRows;
+            } else {
+                data.affectedRows = -1;
+            }   
         } catch (err){
             // Debug error in case where try/catch fails
             console.log(err);
-            // Set HTTP status code == Internal server error
-            data.status = 500;
         }
         return data;
     },

@@ -13,15 +13,17 @@ import SingleOrderHistory from './components/OrderHistory/SingleOrderHistory';
 
 function App() {
   
-  //const [cartId, setCartId] = useState(1);
+  const cartId = 2; // Dummydata
   const userAddress = 'street 15'; // Dummydata
+  const restaurantId = 6; // Dummydata
+  const userId = 4 // Dummydata
   
   return (
   <BrowserRouter>
   <NavBar/>
       <Routes>
         <Route path="/register" element={<Register />}></Route>
-        <Route path="/cart" element={<Cart address={userAddress}/>} />
+        <Route path="/cart" element={<Cart address={userAddress} userIndex={userId} restaurantIndex={restaurantId} cartIndex={cartId}/>} />
         <Route  path="/restaurants" element={ <RestaurantListView /> } />
         <Route path="/restaurants/:restaurantId" element= {<MenuListView />} >
           </Route> 

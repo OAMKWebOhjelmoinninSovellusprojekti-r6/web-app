@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const history = require('../model/orderHistory');
 const historyItem = require('../model/orderHistoryItem');
+const auth = require('../middleware/auth')
 
-
-router.get('/',
+router.get('/', auth,
 async function(req, res) {
     //check that userid is positive int and size in range and order id is empty set
     try {
@@ -33,7 +33,7 @@ async function(req, res) {
   });
       
 //check that orderid is int and size in range and only positive
-router.get('/:orderId',
+router.get('/:orderId', auth,
 async function(req, res) {
   let userIds = 2;//this should be changed when auth works
     let orderIds="";
@@ -59,13 +59,15 @@ async function(req, res) {
       
   });
 
-router.post('/', async(req, res) => {
-
+router.post('/', auth, async(req, res) => {
+  // Send create request
+  console.log(req.body);
   let data = await history.create(req.body);
+  console.log("routerdata", data);
   try {
     if(data.affectedRows === 1) {
         console.log(data.affectedRows);
-        res.sendStatus(200);
+        res.json(data);
     } else if(data.affectedRows === 0) {
         res.sendStatus(400);
     } else {

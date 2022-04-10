@@ -34,5 +34,13 @@ class UserService {
   modifyCartItems(itemId, quantity){
     return axios.put(API_URL + 'cart/' + itemId, {quantity}, { headers: authHeader() })
   }
+
+  orderHistoryCreate(historyData){
+    return axios.post(API_URL + 'history', historyData, { headers: authHeader() })
+  }
+
+  ordreHistoryItemCreate(itemData){
+    return axios.post(API_URL + 'historyItem', itemData, { headers: authHeader() })
+  }
 }
 export default new UserService();

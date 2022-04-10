@@ -51,8 +51,7 @@ module.exports = {
         // Default values for return Object
         console.log(historyData);
         let data = {
-            'status': 400,
-            'orderId': null
+            'affectedRows': 0
         }
         try {
 
@@ -64,15 +63,15 @@ module.exports = {
             // If affectedRows == 1 || >= 1, query was succesful
             // This should always return === 1 since only one order row are inserted, >= 1 is used only for debugging purposes
             if(createQuery.affectedRows >= 1){
-               
-                // Set HTTP status code == success
-                data.status = 200;
-            }
+                data.affectedRows = createQuery.affectedRows;
+            } else if (createQuery.affectedRows === 0){
+                data.affectedRows = createQuery.affectedRows;
+            } else {
+                data.affectedRows = -1;
+            }   
         } catch (err){
             // Debug error in case where try/catch fails
             console.log(err);
-            // Set HTTP status code == Internal server error
-            data.status = 500;
         }
         return data;
     },
