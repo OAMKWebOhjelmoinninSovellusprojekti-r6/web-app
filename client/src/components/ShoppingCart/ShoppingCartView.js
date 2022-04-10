@@ -9,12 +9,10 @@ import styles from'./ShoppingCartView.module.css';
 export default function ShoppingCartView( {address} ) {
 
   const [cartItems, setCartItems] = useState([]);
-  const [deletedItem, setDeletedItem] = useState('');
   const [quantity, setModifiedItemQuantity] = useState('');
   const [modifiedItemId, setModifiedItemId] = useState('');
   const [itemTotalSum, setItemTotalSum] = useState([]);
   const [allItemsTotal, setAllItemsTotal] = useState(0);
-  const [refreshButton, setRefreshButton] = useState(false);
 
   useEffect(() => {
     // GET shoppingcart items
@@ -26,6 +24,7 @@ export default function ShoppingCartView( {address} ) {
     // DUMMYDATA FOR DEVELOPMENT
     let cartId = 1;
     getCartItems(cartId);
+    countTotal();
   }, []);
   
   // Modify cart item quantity
@@ -44,7 +43,8 @@ export default function ShoppingCartView( {address} ) {
 
   // Count total sum of items in the shoppingcart and make
   // new array of objects for the results
-  useEffect(() => {
+
+  const countTotal = () => {
     var tempArray =  []
     var tempObj = {'id': 'empty', 'name': 'empty', 'total': 0};
     let itemSum = 0;
@@ -61,9 +61,9 @@ export default function ShoppingCartView( {address} ) {
     setAllItemsTotal(tempAllItemSum.toFixed(2));
     setItemTotalSum(tempArray);
     console.log("TOTALSUM", itemTotalSum);
-  }, [deletedItem, quantity, refreshButton]);
+  };
   
-  // DELETE item from client side and trigger useEffect for server item delete request
+  // DELETE item from client side and send server item delete request
   const deleteItem = (index) => {
     console.log("delete item Index", index);
     console.log("delete Cart", cartItems);
@@ -72,6 +72,7 @@ export default function ShoppingCartView( {address} ) {
     clone.splice(itemId, 1);
     setCartItems(clone);
     axios.delete(`http://localhost:3001/cart/${index}`)
+    countTotal();
   }
   // Modify quantity of item on server side and trigger useEffect for server item put request
   const changeQuantity = (idItem, quantity) => {
@@ -84,6 +85,7 @@ export default function ShoppingCartView( {address} ) {
       setCartItems(clone);
       setModifiedItemQuantity(quantity);
       setModifiedItemId(idItem);
+      countTotal();
     } else {
       alert("To remove item press Remove button")
     }
@@ -121,14 +123,10 @@ export default function ShoppingCartView( {address} ) {
             />  
           )
         }
-
-        {refreshButton === true ?         
             <div className={styles.itemTotal}>
               <div>{'All items total'}</div>
               <div>{allItemsTotal}</div>
             </div> 
-          : <div><button onClick={() => setRefreshButton(!refreshButton)}>Show Total</button></div>
-        } 
       </div>
     </div>
   )
