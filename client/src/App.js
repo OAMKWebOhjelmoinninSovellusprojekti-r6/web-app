@@ -19,6 +19,8 @@ function App() {
   <BrowserRouter>
   <Navbar/>
       <Routes>
+
+      <Route path="/" element={<RestaurantListView />}></Route>
         <Route path="/user/add-restaurant" element={<AddRestaurant />} />
         <Route path="/register" element={<Register />}></Route>
         <Route path="/cart" element={<Cart address={userAddress}/>} />

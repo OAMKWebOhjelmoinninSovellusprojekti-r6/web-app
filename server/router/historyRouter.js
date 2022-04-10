@@ -2,15 +2,13 @@ const express = require('express');
 const router = express.Router();
 const history = require('../model/orderHistory');
 const historyItem = require('../model/orderHistoryItem');
+const auth = require('../middleware/auth.js');
 
 
-router.get('/',
-async function(req, res) {
-    //check that userid is positive int and size in range and order id is empty set
+router.get('/', auth, async function(req, res) {
+    //check that userid is positive int and size in range
     try {
-      
-       //userIds = parseInt(request.params.userId); this should be modified when auth works
-       let userIds = 2;
+       let userIds = req.tokenData.userData.userId;
       console.log(userIds);
       
       //checks that is number and not infinity, if ok returns true
@@ -33,9 +31,8 @@ async function(req, res) {
   });
       
       //check that orderid is int and size in range and only positive
-      router.get('/:orderId',
-      async function(req, res) {
-       let userIds = 2;//this should be changed when auth works
+      router.get('/:orderId', auth, async function(req, res) {
+       let userIds = req.tokenData.userData.userId;
         let orderIds="";
         try {
           orderIds = parseInt(req.params.orderId);

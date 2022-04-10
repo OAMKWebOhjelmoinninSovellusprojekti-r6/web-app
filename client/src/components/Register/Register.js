@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React from 'react'
 import { useState, useEffect } from 'react'
+import { Link } from "react-router-dom";
 
 export default function Register() {
   // Object data initialization
@@ -35,7 +36,7 @@ export default function Register() {
   }
   return (
     <div>
-        <div><button>Return to main page</button></div>
+        <Link to="/"><button>Return to main page</button></Link>
         <div>
           <form onSubmit={handleSubmit}>
             <div>User Name<input type='text' name="username" value={newUser.username} onChange={changeHandler}></input></div>

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import AuthService from "../../services/auth.service";
 import './login.styles.css';
 
+
 export default class Login extends Component {
   
   constructor(props) {
@@ -121,16 +122,23 @@ export default class Login extends Component {
         <span className="user__name">{this.state.currentUser.firstName}</span>
         <ul className={'user__menu ' + this.state.userMenuClass}>
           <li onClick={this.test}>
+            Proffile
+          </li>
+          {editRestaurants}
+          <li>
+            <Link to="/cart">Shopping cart</Link>
             <Link to="/user/profile">Profile</Link>
+
           </li>
           {addRestaurantTemplate}
           {browseRestaurantTemplate}
           {shoppingCartTemplate}
           <li>
-            <Link to="/user/history">Order history</Link>
+            <Link to="/history">Order history</Link>
           </li>
           <li>
-            <span onClick={this.userLogout}>Logout</span>
+            <Link to="/" onClick={this.userLogout}>Logout</Link>
+         
           </li>
         </ul>
       </div>
@@ -175,7 +183,7 @@ export default class Login extends Component {
           >
             <span>Sign in</span>
           </button>
-          Sign up
+         <Link to="/register"  >Sign up</Link>
       </form>
     );
   }

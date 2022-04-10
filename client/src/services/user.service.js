@@ -30,5 +30,11 @@ class UserService {
   shoppingCartGet(){
 
   }
+  userOrderHistoryGet(){
+    return axios.get(API_URL + 'history', { headers: authHeader() });
+  }
+  userOrderHistoryDetailGet(orderId){
+    return axios.get(API_URL + 'history/' + orderId, { headers: authHeader() } );
+  }
 }
 export default new UserService();

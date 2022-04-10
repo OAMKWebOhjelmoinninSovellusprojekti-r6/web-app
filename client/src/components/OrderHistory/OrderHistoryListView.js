@@ -4,6 +4,8 @@ import axios from 'axios'
 import { useState, useEffect }  from 'react';
 import {  Link, Outlet } from 'react-router-dom';
 import OrderHistoryItem from './OrderHistoryItem';
+import UserService from "../../services/user.service";
+
 
 export default function OrderHistoryListView() {
   
@@ -12,8 +14,8 @@ export default function OrderHistoryListView() {
   //get orderhistory data from user
   useEffect(() => {
    const getData = async () => {
-     const results = await axios.get('http://www.localhost:3001/history');
-     //console.log(results.data.restaurantInfo);
+    const results = await UserService.userOrderHistoryGet();
+     //console.log(results.data.orderHistoryInfo);
          setOrderedItems(results.data.orderHistoryInfo);
      }
    getData();
