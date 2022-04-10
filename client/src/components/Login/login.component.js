@@ -124,7 +124,7 @@ export default class Login extends Component {
           <li onClick={this.test}>
             Proffile
           </li>
-          {editRestaurants}
+          
           <li>
             <Link to="/cart">Shopping cart</Link>
             <Link to="/user/profile">Profile</Link>
