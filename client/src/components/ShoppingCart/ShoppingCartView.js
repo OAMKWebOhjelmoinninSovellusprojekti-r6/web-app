@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import CartItem from './CartItem';
 import Total from './Total';
 import styles from'./ShoppingCartView.module.css';
+import DeliveryAddress from './DeliveryAddress';
 
 export default function ShoppingCartView( {address} ) {
 
@@ -107,7 +108,7 @@ export default function ShoppingCartView( {address} ) {
         }
         <div className={styles.contentRight}>
           <div className={styles.deliveryBox}>
-            <div>{'Delivering to: '}{address}</div>
+            <DeliveryAddress deliveryAddress={address}/>
             <div className={styles.contentRight}>
               <Link to="/restaurants"><button>Pay the order</button></Link>
             </div>

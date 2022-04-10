@@ -14,7 +14,7 @@ export default function RestaurantListView() {
   //get restaurants data
   useEffect(() => {
    const getData = async () => {
-     const results = await axios.get('http://www.localhost:3001/restaurant');
+     const results = await axios.get('http://localhost:3001/restaurant');
      //console.log(results.data.restaurantInfo);
          setRestaurants(results.data.data);
      }

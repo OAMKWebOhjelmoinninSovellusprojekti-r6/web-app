@@ -12,6 +12,7 @@ const userRouter = require('./router/userRouter.js');
 const shoppingCartRouter = require('./router/shoppingCartRouter')
 const historyRouter = require('./router/historyRouter');
 const itemRouter = require('./router/itemRouter');
+const itemHistory = require('./router/historyItemRouter');
 
 app.use(cors());
 
@@ -29,6 +30,7 @@ app.use('/user', userRouter);
 app.use('/cart', shoppingCartRouter);
 app.use('/history', historyRouter);
 app.use('/item', itemRouter);
+app.use('/historyItem', itemHistory);
 
 app.get('/', (req, res) => {
   res.send('FoodMachine!');
