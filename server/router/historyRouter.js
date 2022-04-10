@@ -62,7 +62,18 @@ async function(req, res) {
 router.post('/', async(req, res) => {
 
   let data = await history.create(req.body);
-  res.send(data);
+  try {
+    if(data.affectedRows === 1) {
+        console.log(data.affectedRows);
+        res.sendStatus(200);
+    } else if(data.affectedRows === 0) {
+        res.sendStatus(400);
+    } else {
+        res.sendStatus(500);
+    }
+  } catch (err) {
+    res.send("ID does not match");
+  };
 });
 
   module.exports = router;
