@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useState, useEffect, Fragment }  from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import Register from './components/Register/Register';
-import NavBar from './components/NavBar/Navbar'
+import NavBar from './components/Navbar/Navbar'
 import RestaurantListView from './components/Restaurant/RestaurantListView';
 import Cart from './components/ShoppingCart/ShoppingCartView'
 import MenuListView from './components/Menu/MenuListView'

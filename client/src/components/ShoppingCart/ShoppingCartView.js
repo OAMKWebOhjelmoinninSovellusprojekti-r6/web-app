@@ -27,18 +27,7 @@ export default function ShoppingCartView( {address} ) {
     let cartId = 1;
     getCartItems(cartId);
   }, []);
-
-  useEffect(() => {
-    // DELETE item from cart
-    const deleteItem = async () => {
-      const results = await axios.delete(`http://localhost:3001/cart/${deletedItem}`);
-      console.log("deleted", results);
-    }
-    if(deletedItem !== '') {
-    deleteItem();
-    }
-  }, [deletedItem])
-
+  
   // Modify cart item quantity
   useEffect(() => {
     const modItem = async () => {
@@ -82,7 +71,7 @@ export default function ShoppingCartView( {address} ) {
     let itemId = clone.findIndex(c => c.idItem === index);
     clone.splice(itemId, 1);
     setCartItems(clone);
-    setDeletedItem(index);
+    axios.delete(`http://localhost:3001/cart/${index}`)
   }
   // Modify quantity of item on server side and trigger useEffect for server item put request
   const changeQuantity = (idItem, quantity) => {
