@@ -16,7 +16,7 @@ class UserService {
   }
 
   userCreate(userData){
-    return axios.post(API_URL + 'user', userData);
+    return axios.post(API_URL + 'user/', userData);
   }
 
   userModify(userData){
