@@ -1,4 +1,14 @@
 module.exports = {
+    parsePrice(value){
+        try {
+            value = parseFloat(value);
+            return value;
+        } catch (err){
+            console.log(err);
+        }
+        return null;
+    },
+
     parsePriceLevel(value){
         try {
             value = parseInt(value);
@@ -23,7 +33,7 @@ module.exports = {
                 && value > 0
                 && value <= 5
             ){
-                return true;
+                return value;
             }
         } catch (err) {
             console.log(err);
@@ -34,16 +44,26 @@ module.exports = {
     parseUserType(value){
         try {
             if(value === 0 || value === 1){
-                return true
+                return value
             }
         } catch (err) {
             console.log(err);
         }
-        return false;
+        return null;
+    },
+
+    parseId(value){
+        try {
+            value = parseInt(value)
+            return value;
+        } catch (err){
+            console.log(err);
+        }
+        return null;
     },
 
     parseString(value, maxLength){
-        if(typeof value === "string" && value.length <= maxLength){
+        if(typeof value === "string" && value.length <= maxLength && value !== ''){
             return value;
         }
         return null;

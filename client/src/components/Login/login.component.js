@@ -1,19 +1,9 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import AuthService from "../../services/auth.service";
-import UserService from "../../services/user.service";
 import './login.styles.css';
 
 
-const required = value => {
-  if (!value) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        This field is required!
-      </div>
-    );
-  }
-};
 export default class Login extends Component {
   
   constructor(props) {
@@ -24,12 +14,7 @@ export default class Login extends Component {
     this.onChangePassword = this.onChangePassword.bind(this);
     this.toggleMenu = this.toggleMenu.bind(this);
 
-    let isLoggedIn = false;
     let currentUser = AuthService.getCurrentUser();
-    console.log(currentUser);
-    if(currentUser != null){
-      isLoggedIn = true;
-    }
 
     this.state = {
       currentUser: currentUser,
@@ -37,7 +22,6 @@ export default class Login extends Component {
       password: '',
       loading: false,
       message: "",
-      isLoggedIn: isLoggedIn,
       userMenuClass: ''
     };
   }
@@ -45,7 +29,7 @@ export default class Login extends Component {
   toggleMenu(e){
     // Toggle menu only when parent elements are clicked
     if(e.target.classList.contains('user') || e.target.classList.contains('user__name')){
-      if(this.state.userMenuClass == ''){
+      if(this.state.userMenuClass === ''){
         this.setState({
           userMenuClass: 'active'
         })
@@ -79,8 +63,7 @@ export default class Login extends Component {
       .then( result => {
         console.log(result);
         this.setState({
-          currentUser: AuthService.getCurrentUser(),
-          isLoggedIn: true
+          currentUser: AuthService.getCurrentUser()
         });
       },
       error => {
@@ -103,17 +86,36 @@ export default class Login extends Component {
       currentUser: null,
       username: '',
       password: '',
-      isLoggedIn: false,
       loading: false
     });
   }
 
   getAuthorizedTemplate(){
-    let editRestaurants = '';
-    if(this.state.isOwner == 1){
-      editRestaurants = <li>
-        <Link to="/">Edit restaurants</Link>
-      </li>;
+    // Default templates if user type is customer
+    let addRestaurantTemplate = '';
+    let browseRestaurantTemplate = (
+      <li>
+        <Link to="/restaurants">Browse restaurant</Link>
+      </li>
+    );
+    let shoppingCartTemplate = (
+      <li>
+        <Link to="/user/shopping-cart">Shopping cart</Link>
+      </li>
+    );
+    // Templates if user type is restaurant owner
+    if(this.state.currentUser.isOwner === 1){
+      addRestaurantTemplate = (
+        <li>
+          <Link to="/user/add-restaurant">Add restaurant</Link>
+        </li>
+      );
+      browseRestaurantTemplate = (
+        <li>
+          <Link to="/restaurants">Edit restaurant</Link>
+        </li>
+      )
+      shoppingCartTemplate = '';
     }
     return (
       <div className="user" onClick={this.toggleMenu}>
@@ -125,12 +127,18 @@ export default class Login extends Component {
           {editRestaurants}
           <li>
             <Link to="/cart">Shopping cart</Link>
+            <Link to="/user/profile">Profile</Link>
+
           </li>
+          {addRestaurantTemplate}
+          {browseRestaurantTemplate}
+          {shoppingCartTemplate}
           <li>
             <Link to="/history">Order history</Link>
           </li>
           <li>
             <Link to="/" onClick={this.userLogout}>Logout</Link>
+         
           </li>
         </ul>
       </div>
@@ -159,7 +167,6 @@ export default class Login extends Component {
             name="username"
             value={this.state.username}
             onChange={this.onChangeUsername}
-            validations={[required]}
             placeholder="Username"
           />
           <input
@@ -168,7 +175,6 @@ export default class Login extends Component {
             name="password"
             value={this.state.password}
             onChange={this.onChangePassword}
-            validations={[required]}
             placeholder="Password"
           />
           <button
@@ -183,7 +189,7 @@ export default class Login extends Component {
   }
 
   render() {
-    if(this.state.isLoggedIn){
+    if(this.state.currentUser){
       return this.getAuthorizedTemplate();
     } else {
       return this.getUnauthorizedTemplate();

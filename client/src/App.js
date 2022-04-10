@@ -1,7 +1,5 @@
 import './App.css';
-import axios from 'axios';
-import { useState, useEffect, Fragment }  from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Register from './components/Register/Register';
 import Navbar from './components/Navbar/Navbar'
 import RestaurantListView from './components/Restaurant/RestaurantListView';
@@ -10,6 +8,7 @@ import MenuListView from './components/Menu/MenuListView'
 import UserProfile from './components/UserProfile/UserProfile'
 import OrderHistoryListView from './components/OrderHistory/OrderHistoryListView'
 import SingleOrderHistory from './components/OrderHistory/SingleOrderHistory';
+import AddRestaurant from './components/AddRestaurant/add-restaurant.component';
 
 function App() {
   
@@ -20,7 +19,9 @@ function App() {
   <BrowserRouter>
   <Navbar/>
       <Routes>
+
       <Route path="/" element={<RestaurantListView />}></Route>
+        <Route path="/user/add-restaurant" element={<AddRestaurant />} />
         <Route path="/register" element={<Register />}></Route>
         <Route path="/cart" element={<Cart address={userAddress}/>} />
         <Route  path="/restaurants" element={ <RestaurantListView /> } />
