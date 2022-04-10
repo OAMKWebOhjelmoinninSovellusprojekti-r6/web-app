@@ -11,6 +11,10 @@ class UserService {
     return axios.get(API_URL + 'restaurant/' + restaurantId);
   }
 
+  restaurantAdd(data){
+    return axios.post(API_URL + 'restaurant', data, { headers: authHeader() });
+  }
+
   userCreate(userData){
     return axios.post(API_URL + 'user', userData);
   }

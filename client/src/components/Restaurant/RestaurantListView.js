@@ -2,9 +2,9 @@ import React from 'react'
 import './RestaurantListView.css'
 import Restaurant from './Restaurant'
 import RestaurantSearch from './RestaurantSearch'
-import axios from 'axios'
 import { useState, useEffect }  from 'react';
 import {  Link, Outlet } from 'react-router-dom';
+import UserService from '../../services/user.service';
 
 export default function RestaurantListView() {
   
@@ -13,20 +13,16 @@ export default function RestaurantListView() {
 
   //get restaurants data
   useEffect(() => {
-   const getData = async () => {
-     const results = await axios.get('http://www.localhost:3001/restaurant');
-     //console.log(results.data.restaurantInfo);
-         setRestaurants(results.data.data);
-     }
-   getData();
+    UserService.restaurantGetAll().then(result => {
+      setRestaurants(result.data.data);
+    });
    
-},[]); 
-console.log(restaurants);
+  },[]);
   
-//for searching restaurants
-const handleSearchChange = (event) => {
-  setSearchTerm(event.target.value);
-}
+  //for searching restaurants
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  }
 
   return (
     <div>

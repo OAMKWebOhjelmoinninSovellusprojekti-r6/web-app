@@ -107,10 +107,10 @@ DROP TABLE IF EXISTS `restaurant`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `restaurant` (
   `idrestaurant` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `address` varchar(45) DEFAULT NULL,
-  `opening_hours` varchar(45) DEFAULT NULL,
-  `image_path` varchar(100) DEFAULT NULL,
+  `name` varchar(50) NOT NULL,
+  `address` varchar(50) DEFAULT NULL,
+  `opening_hours` varchar(20) DEFAULT NULL,
+  `image_path` varchar(50) DEFAULT NULL,
   `restaurant_type` tinyint(1) DEFAULT NULL,
   `price_level` tinyint(1) NOT NULL,
   `user_iduser` int unsigned NOT NULL,

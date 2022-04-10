@@ -2,9 +2,10 @@ import React from 'react'
 import './Restaurant.css'
 
 export default function Restaurant(props) {
+  console.log(props);
   return (
   <div className="restaurantItem" key={props.id}>
-      <img className="image" src={ props.image } alt="RestaurantImage" height="220px"/>
+      <img className="image" src={ process.env.REACT_APP_SERVER_HOST + props.image } alt="RestaurantImage" height="220px"/>
       <div className="title">{props.name}</div>
       <div className="adress">{props.address}</div>
       <div className="adress">{props.openingHours}</div>
