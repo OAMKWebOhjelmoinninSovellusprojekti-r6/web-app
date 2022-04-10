@@ -4,6 +4,7 @@ import AuthService from "../../services/auth.service";
 import UserService from "../../services/user.service";
 import './login.styles.css';
 
+
 const required = value => {
   if (!value) {
     return (
@@ -123,13 +124,13 @@ export default class Login extends Component {
           </li>
           {editRestaurants}
           <li>
-            <Link to="/">Shopping cart</Link>
+            <Link to="/cart">Shopping cart</Link>
           </li>
           <li>
-            <Link to="/">Order history</Link>
+            <Link to="/history">Order history</Link>
           </li>
           <li>
-            <a href="#" onClick={this.userLogout}>Logout</a>
+            <Link to="/" onClick={this.userLogout}>Logout</Link>
           </li>
         </ul>
       </div>
@@ -176,7 +177,7 @@ export default class Login extends Component {
           >
             <span>Sign in</span>
           </button>
-          Sign up
+         <Link to="/register"  >Sign up</Link>
       </form>
     );
   }
