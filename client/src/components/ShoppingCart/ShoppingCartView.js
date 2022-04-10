@@ -1,46 +1,30 @@
 import React from 'react';
 import axios from 'axios';
 import { useState, useEffect }  from 'react';
-import { Link } from 'react-router-dom';
+
 import CartItem from './CartItem';
 import Total from './Total';
 import styles from'./ShoppingCartView.module.css';
 import DeliveryAddress from './DeliveryAddress';
+import UserService from '../../services/user.service';
 
 export default function ShoppingCartView( {address} ) {
 
   const [cartItems, setCartItems] = useState([]);
-  const [quantity, setModifiedItemQuantity] = useState('');
-  const [modifiedItemId, setModifiedItemId] = useState('');
   const [itemTotalSum, setItemTotalSum] = useState([]);
   const [allItemsTotal, setAllItemsTotal] = useState(0);
 
+  // DUMMYDATA FOR DEVELOPMENT
+  let cartId = 2;
+
   useEffect(() => {
     // GET shoppingcart items
-    const getCartItems = async (cartId) => {
-      const results = await axios.get(`http://localhost:3001/cart/${cartId}`);
+    UserService.getCartItems(cartId).then(results => {
+      console.log(results);
       setCartItems(results.data.shoppingCartInfo);
-      console.log("GET results", results.data.shoppingCartInfo);
-    }
-    // DUMMYDATA FOR DEVELOPMENT
-    let cartId = 1;
-    getCartItems(cartId);
+    });
     countTotal();
   }, []);
-  
-  // Modify cart item quantity
-  useEffect(() => {
-    const modItem = async () => {
-      const results = await axios.put(`http://localhost:3001/cart/${modifiedItemId}`,
-      {
-        quantity
-      });
-      console.log("modified", results);
-    }
-    if(quantity !== '') {
-      modItem();
-    }
-  }, [quantity]);
 
   // Count total sum of items in the shoppingcart and make
   // new array of objects for the results
@@ -72,7 +56,8 @@ export default function ShoppingCartView( {address} ) {
     let itemId = clone.findIndex(c => c.idItem === index);
     clone.splice(itemId, 1);
     setCartItems(clone);
-    axios.delete(`http://localhost:3001/cart/${index}`)
+    UserService.deleteCartItem(index);
+
     countTotal();
   }
   // Modify quantity of item on server side and trigger useEffect for server item put request
@@ -84,13 +69,17 @@ export default function ShoppingCartView( {address} ) {
       console.log(clone[index].quantity);
       clone[index].quantity = quantity;
       setCartItems(clone);
-      setModifiedItemQuantity(quantity);
-      setModifiedItemId(idItem);
+      UserService.modifyCartItems(idItem, quantity);
       countTotal();
     } else {
       alert("To remove item press Remove button")
     }
   }
+
+  const payOrder = () => {
+    
+  }
+
   return (
     <div className={styles.mainContainer}>
       <div className={styles.itemContainer}>
@@ -108,10 +97,7 @@ export default function ShoppingCartView( {address} ) {
         }
         <div className={styles.contentRight}>
           <div className={styles.deliveryBox}>
-            <DeliveryAddress deliveryAddress={address}/>
-            <div className={styles.contentRight}>
-              <Link to="/restaurants"><button>Pay the order</button></Link>
-            </div>
+            <DeliveryAddress deliveryAddress={address} payOrder={payOrder}/>
           </div>
         </div>
       </div>
