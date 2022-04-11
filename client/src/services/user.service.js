@@ -52,5 +52,9 @@ class UserService {
   userOrderHistoryDetailGet(orderId){
     return axios.get(API_URL + 'history/' + orderId, { headers: authHeader() } );
   }
+  getMenu(restaurantId){
+    return axios.get(API_URL + 'item/' + restaurantId, {headers: authHeader()})
+  }
+
 }
 export default new UserService();
