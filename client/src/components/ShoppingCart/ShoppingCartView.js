@@ -108,6 +108,7 @@ export default function ShoppingCartView( {cartIndex, address, userIndex, restau
           tempObj.quantity = cartItems[i].quantity;
           tempObj = {...tempObj};
           UserService.ordreHistoryItemCreate(tempObj);
+          UserService.deleteCartItem(cartItems[i].idItem);
         }
         alert("Order confirmed");
       } else {
