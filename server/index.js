@@ -12,6 +12,7 @@ const userRouter = require('./router/userRouter.js');
 const shoppingCartRouter = require('./router/shoppingCartRouter')
 const historyRouter = require('./router/historyRouter');
 const itemRouter = require('./router/itemRouter');
+const authRouter  = require('./router/authRouter.js');
 
 app.use(cors());
 
@@ -24,6 +25,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 // Routers
+app.use('/auth', authRouter);
 app.use('/restaurant', restaurantRouter);
 app.use('/user', userRouter);
 app.use('/cart', shoppingCartRouter);

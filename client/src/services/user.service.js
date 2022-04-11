@@ -1,5 +1,6 @@
 import axios from 'axios';
 import authHeader from './auth-header';
+import api from './api.js';
 const API_URL = process.env.REACT_APP_SERVER_HOST;
 class UserService {
 
@@ -12,7 +13,7 @@ class UserService {
   }
 
   restaurantAdd(data){
-    return axios.post(API_URL + 'restaurant', data, { headers: authHeader() });
+    return api.post(API_URL + 'restaurant', data);
   }
 
   userCreate(userData){
@@ -25,10 +26,6 @@ class UserService {
 
   userDelete(){
     return axios.delete(API_URL + 'user', { headers: authHeader() });
-  }
-
-  shoppingCartGet(){
-
   }
 }
 export default new UserService();
