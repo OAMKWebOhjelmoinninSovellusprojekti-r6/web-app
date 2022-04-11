@@ -18,11 +18,20 @@ export default function ShoppingCartView( {cartIndex, address, userIndex, restau
   
   useEffect(() => {
     // GET shoppingcart items
+    /*
     UserService.getCartItems(cartId).then(results => {
       console.log(results);
       setCartItems(results.data.shoppingCartInfo);
       countTotal();
     });
+*/
+    let tempFunc = async () => {
+      let results = await UserService.getCartItems(cartId);
+      console.log(results);
+      setCartItems(results.data.shoppingCartInfo);
+      countTotal();
+    }
+    tempFunc();
   }, []);
 
   // Count total sum of items in the shoppingcart and make
@@ -33,6 +42,7 @@ export default function ShoppingCartView( {cartIndex, address, userIndex, restau
     var tempObj = {'id': 'empty', 'name': 'empty', 'total': 0};
     let itemSum = 0;
     let tempAllItemSum = 0;
+    console.log(cartItems);
     for(let i = 0; i < cartItems.length; i++) {
       itemSum = cartItems[i].price * cartItems[i].quantity;
       tempAllItemSum += itemSum;
@@ -83,13 +93,17 @@ export default function ShoppingCartView( {cartIndex, address, userIndex, restau
       "restaurantId": ${restaurantId},
       "userId": ${userId}
     }`;
+
+    // Parse data into json file
     const historyData = JSON.parse(jsonData);
     console.log("historydata", historyData);
     
+    // Create order history data and send request
     UserService.orderHistoryCreate(historyData).then(results => {
       historyId = results.data.idorder_history;
       console.log("results", results.status);
       console.log("cartItems" , cartItems);
+      // If accepted order history id is send as response and used on client side for making order history item request
       if(results.status === 200) {
         let tempObj = {
           'name': 'empty',
