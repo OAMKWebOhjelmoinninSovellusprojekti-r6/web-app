@@ -6,17 +6,17 @@ import styles from'./ShoppingCartView.module.css';
 export default function DeliveryAddress( {deliveryAddress, payOrder} ) {
 
   const [ternaryTrigger, setTernaryTrigger] = useState(false);
-  const [customDeliveryAddress, setCustomDeliveryAddress] = useState('');
+  const [customDeliveryAddress, setCustomDeliveryAddress] = useState(deliveryAddress);
 
   return (
     <div>
       <div>
       { ternaryTrigger === false
         ? <div>
-            {'Delivering to: '}{deliveryAddress}
+            {'Delivering to: '}{customDeliveryAddress}
           </div>
         : <div>
-          Testi
+          <input type="type" value={customDeliveryAddress} onChange={(event) => setCustomDeliveryAddress(event.target.value)} />
           </div>  
       }
       </div>
