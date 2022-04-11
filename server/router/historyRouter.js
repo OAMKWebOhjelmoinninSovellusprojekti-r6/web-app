@@ -46,8 +46,11 @@ router.get('/', auth, async function(req, res) {
                }
           }
       }
+      catch(err){
+        console.log(err);
+        res.sendStatus(400);
 
-    
+      }
       
   });
 
