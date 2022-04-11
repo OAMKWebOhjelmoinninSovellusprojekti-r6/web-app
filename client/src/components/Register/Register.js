@@ -1,6 +1,8 @@
 import axios from 'axios'
 import React from 'react'
 import { useState, useEffect } from 'react'
+import { Link } from "react-router-dom";
+import UserService from "../../services/user.service";
 
 export default function Register() {
   // Object data initialization
@@ -11,7 +13,7 @@ export default function Register() {
     lastName: "",
     address: "",
     phone: "",
-    isOwner: '0'
+    isOwner: 0
   })
   // Takes the input name and value and makes a deep copy of the object and saves the inserted values to object data
   const changeHandler = (event) => {
@@ -23,19 +25,27 @@ export default function Register() {
   // Make a create new user request
   const handleSubmit = (event) => {
     console.log("newuser", newUser);
-    event.preventDefault()
+    event.preventDefault();
+    let data = {};
+    data.username=event.target.username.value;
+    data.password=event.target.password.value;
+    data.firstName=event.target.firstName.value;
+    data.lastName=event.target.lastName.value;
+    data.address=event.target.address.value;
+    data.phone=event.target.phone.value;
+    data.isOwner=parseInt(event.target.isOwner.value);
+
     const add = async() => {
         //let clone = [...newUser];
         //console.log("clone", clone);
-          const results = await axios.post('http://localhost:3001/user',
-            newUser)
+          const results = await UserService.userCreate(data);
         console.log("results", results);
     }
     add(); 
   }
   return (
     <div>
-        <div><button>Return to main page</button></div>
+        <Link to="/"><button>Return to main page</button></Link>
         <div>
           <form onSubmit={handleSubmit}>
             <div>User Name<input type='text' name="username" value={newUser.username} onChange={changeHandler}></input></div>

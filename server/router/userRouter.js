@@ -6,6 +6,7 @@ const auth = require('../middleware/auth.js');
 
 // Create user
 router.post('/', async function(req, res){
+    console.log(req.body);
     let reqData = {}
     reqData.username = parser.parseString(req.body.username, 20);
     reqData.password = parser.parseString(req.body.password, 256);
@@ -15,11 +16,11 @@ router.post('/', async function(req, res){
     reqData.phone = parser.parseString(req.body.phone, 20);
     reqData.isOwner = parser.parseUserType(req.body.isOwner);
     if(
-        reqData.username != null
-        && reqData.password != null
-        && reqData.firstName != null
-        && reqData.lastName != null
-        && reqData.address != null
+        reqData.username != null 
+        && reqData.password != null 
+        && reqData.firstName != null 
+        && reqData.lastName != null 
+        && reqData.address != null 
         && reqData.phone != null
         && reqData.isOwner != null
     ){

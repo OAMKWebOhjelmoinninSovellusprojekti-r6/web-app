@@ -4,7 +4,19 @@ module.exports = {
     async get(cartId){
       
         let data = {
-            shoppingCartInfo: null
+            shoppingCartInfo: [
+                {
+                    'idItem': 0,
+                    'itemName': '',
+                    'description': '',
+                    'price': 0,
+                    'image_path': '',
+                    'category': '',
+                    'quantity': 0,
+                    'idrestaurant': 0,
+                    'restaurantName': ''
+                }
+            ]
         }
         try {
             // Get all the items in shopping cart 

@@ -2,15 +2,12 @@ const express = require('express');
 const router = express.Router();
 const history = require('../model/orderHistory');
 const historyItem = require('../model/orderHistoryItem');
+const auth = require('../middleware/auth.js');
 
-
-router.get('/',
-async function(req, res) {
-    //check that userid is positive int and size in range and order id is empty set
+router.get('/', auth, async function(req, res) {
+    //check that userid is positive int and size in range
     try {
-      
-       //userIds = parseInt(request.params.userId); this should be modified when auth works
-       let userIds = 2;
+       let userIds = req.tokenData.userData.userId;
       console.log(userIds);
       
       //checks that is number and not infinity, if ok returns true
@@ -31,11 +28,10 @@ async function(req, res) {
     } 
     
   });
-      
+
       //check that orderid is int and size in range and only positive
-      router.get('/:orderId',
-      async function(req, res) {
-       let userIds = 2;//this should be changed when auth works
+      router.get('/:orderId', auth, async function(req, res) {
+       let userIds = req.tokenData.userData.userId;
         let orderIds="";
         try {
           orderIds = parseInt(req.params.orderId);
@@ -48,15 +44,33 @@ async function(req, res) {
                } else {
                  res.send(data);
                }
-        }
+          }
       }
-        catch(err){
-          console.log(err);
-          res.sendStatus(400);
-        }
+      catch(err){
+        console.log(err);
+        res.sendStatus(400);
 
-    
+      }
       
-      });
+  });
+
+router.post('/', auth, async(req, res) => {
+  // Send create request
+  console.log(req.body);
+  let data = await history.create(req.body);
+  console.log("routerdata", data);
+  try {
+    if(data.affectedRows === 1) {
+        console.log(data.affectedRows);
+        res.json(data);
+    } else if(data.affectedRows === 0) {
+        res.sendStatus(400);
+    } else {
+        res.sendStatus(500);
+    }
+  } catch (err) {
+    res.send("ID does not match");
+  };
+});
 
   module.exports = router;
