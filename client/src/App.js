@@ -1,15 +1,14 @@
 import './App.css';
-import axios from 'axios';
-import { useState, useEffect, Fragment }  from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Register from './components/Register/Register';
-import NavBar from './components/Navbar/Navbar'
+import Navbar from './components/Navbar/Navbar'
 import RestaurantListView from './components/Restaurant/RestaurantListView';
 import Cart from './components/ShoppingCart/ShoppingCartView'
 import MenuListView from './components/Menu/MenuListView'
 import UserProfile from './components/UserProfile/UserProfile'
 import OrderHistoryListView from './components/OrderHistory/OrderHistoryListView'
 import SingleOrderHistory from './components/OrderHistory/SingleOrderHistory';
+import AddRestaurant from './components/AddRestaurant/add-restaurant.component';
 
 function App() {
   
@@ -20,8 +19,11 @@ function App() {
   
   return (
   <BrowserRouter>
-  <NavBar/>
+  <Navbar/>
       <Routes>
+
+      <Route path="/" element={<RestaurantListView />}></Route>
+        <Route path="/user/add-restaurant" element={<AddRestaurant />} />
         <Route path="/register" element={<Register />}></Route>
         <Route path="/cart" element={<Cart address={userAddress} userIndex={userId} restaurantIndex={restaurantId} cartIndex={cartId}/>} />
         <Route  path="/restaurants" element={ <RestaurantListView /> } />

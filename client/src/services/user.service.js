@@ -11,8 +11,12 @@ class UserService {
     return axios.get(API_URL + 'restaurant/' + restaurantId);
   }
 
+  restaurantAdd(data){
+    return axios.post(API_URL + 'restaurant', data, { headers: authHeader() });
+  }
+
   userCreate(userData){
-    return axios.post(API_URL + 'user', userData);
+    return axios.post(API_URL + 'user/', userData);
   }
 
   userModify(userData){
@@ -41,6 +45,12 @@ class UserService {
 
   ordreHistoryItemCreate(itemData){
     return axios.post(API_URL + 'historyItem', itemData, { headers: authHeader() })
+  }
+  userOrderHistoryGet(){
+    return axios.get(API_URL + 'history', { headers: authHeader() });
+  }
+  userOrderHistoryDetailGet(orderId){
+    return axios.get(API_URL + 'history/' + orderId, { headers: authHeader() } );
   }
 }
 export default new UserService();

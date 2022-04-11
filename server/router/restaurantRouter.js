@@ -58,26 +58,38 @@ router.get('/:restaurantId', async (req, res) => {
     }
 });
 
-// POST method route
+// POST method route for /restaurant, create new restaurant
 router.post('/', auth, async (req, res) => {
+    console.log("POST, /restaurant");
     // Init FileService with multipart file
-    let fs = new FileService(
-        req.files.file,
-        'restaurant'
-    );
+    let fs = null;
+    if(req.files.image){
+        try {
+            fs = new FileService(
+                req.files.image,
+                'restaurant'
+            );
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    // Create Object with required POST data
     let mData = {};
-    mData.name = parser.parseString(req.body.name, 20);
-    mData.address = parser.parseString(req.body.address, 20);
+    mData.name = parser.parseString(req.body.name, 50);
+    mData.address = parser.parseString(req.body.address, 50);
     mData.openingHours = parser.parseString(req.body.openingHours, 20);
     mData.restaurantType = parser.parseRestaurantType(req.body.restaurantType);
     mData.priceLevel = parser.parsePriceLevel(req.body.priceLevel);
+    // Verify that all required values exists and are valid
     if(
         mData.name != null
         && mData.address != null
         && mData.openingHours != null
         && mData.restaurantType != null
         && mData.priceLevel != null
+        && fs != null
     ) {
+        // Insert new restaurant in database
         const data = await restaurantModel.create(
             req.tokenData.userData.userId,
             mData
@@ -87,30 +99,36 @@ router.post('/', auth, async (req, res) => {
             && data.errorCode == 0
             && data.restaurantId != null
         ) {
-            // Save uploaded file to static folder
+            // Save uploaded file (restaurant image) to static folder
             fs.setFileName(data.restaurantId.toString());
             const saveResult = fs.saveFileToStatic();
-            console.log(saveResult);
             if(
                 saveResult.errorCode == 0
                 && saveResult.imagePath != null
             ) {
-                const updateResult = await restaurantModel.updateImageUrl(saveResult.imagePath, data.restaurantId);
+                // Update saved image path to database
+                const updateResult = await restaurantModel.updateImageUrl(
+                    saveResult.imagePath,
+                    data.restaurantId
+                );
                 if(updateResult.success == true && updateResult.errorCode == 0){
+                    console.log("POST, /restaurant, 200");
                     return res.status(200).send({
                         'restaurantId': data.restaurantId
                     });
                 }
             }
+        }
+        console.log("POST, /restaurant, 500");
         return res.status(500).send({
             'message': 'Unknown error'
         });
     } else {
+        console.log("POST, /restaurant, 400");
         return res.status(400).send({
             'message': 'Invalid parameters'
         });
     }
-}
 });
 
 // PUT method route
