@@ -12,7 +12,7 @@ router.get('/:shoppingCartId', auth, async (req, res) => {
             console.log(data);
             res.send(data);
         } else if (data.shoppingCartInfo === null) {
-            res.sendStatus(400);
+            res.send(data);
         } else {
             res.sendStatus(500);
         }

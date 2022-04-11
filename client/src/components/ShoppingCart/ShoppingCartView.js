@@ -11,6 +11,8 @@ export default function ShoppingCartView( {cartIndex, address, userIndex, restau
   const [cartItems, setCartItems] = useState([]);
   const [itemTotalSum, setItemTotalSum] = useState([]);
   const [allItemsTotal, setAllItemsTotal] = useState(0);
+  const [cartView, setCartView] = useState(false);
+  const [syncCartView, setSyncCartView] = useState(false);
 
   let cartId = cartIndex;
   let userId = userIndex;
@@ -18,21 +20,21 @@ export default function ShoppingCartView( {cartIndex, address, userIndex, restau
   
   useEffect(() => {
     // GET shoppingcart items
-    /*
     UserService.getCartItems(cartId).then(results => {
-      console.log(results);
-      setCartItems(results.data.shoppingCartInfo);
-      countTotal();
+      console.log("results", results);
+        setCartItems(results.data.shoppingCartInfo);
+        if(results.data.shoppingCartInfo[0].idItem === 0) {
+          setCartView(false);
+        } else {
+          setCartView(true);
+        }
     });
-*/
-    let tempFunc = async () => {
-      let results = await UserService.getCartItems(cartId);
-      console.log(results);
-      setCartItems(results.data.shoppingCartInfo);
-      countTotal();
-    }
-    tempFunc();
-  }, []);
+
+  }, [syncCartView]);
+
+  useEffect(() => {
+    countTotal();
+  }, [cartItems])
 
   // Count total sum of items in the shoppingcart and make
   // new array of objects for the results
@@ -65,9 +67,9 @@ export default function ShoppingCartView( {cartIndex, address, userIndex, restau
     let itemId = clone.findIndex(c => c.idItem === index);
     clone.splice(itemId, 1);
     setCartItems(clone);
-    UserService.deleteCartItem(index);
-
-    countTotal();
+    UserService.deleteCartItem(index).then(() => {
+      setSyncCartView(!syncCartView);
+    });
   }
   // Modify quantity of item on server side and trigger useEffect for server item put request
   const changeQuantity = (idItem, quantity) => {
@@ -79,7 +81,6 @@ export default function ShoppingCartView( {cartIndex, address, userIndex, restau
       clone[index].quantity = quantity;
       setCartItems(clone);
       UserService.modifyCartItems(idItem, quantity);
-      countTotal();
     } else {
       alert("To remove item press Remove button")
     }
@@ -132,40 +133,49 @@ export default function ShoppingCartView( {cartIndex, address, userIndex, restau
   }
 
   return (
-    <div className={styles.mainContainer}>
+    <div>
+    { cartView === false
+      ? <div>Shoppingcart is empty</div>
+      : <div>
+      <div className={styles.mainContainer}>
+
       <div className={styles.itemContainer}>
-        {
-          cartItems.map(c => 
-            <CartItem key={c.idItem}
-              idItem={c.idItem}
-              price={c.price}
-              name={c.itemName}
-              quantity={c.quantity}
-              deleteItem={deleteItem}
-              changeQuantity={changeQuantity}
-            />  
-          )
-        }
-        <div className={styles.contentRight}>
-          <div className={styles.deliveryBox}>
-            <DeliveryAddress deliveryAddress={address} payOrder={payOrder}/>
-          </div>
-        </div>
-      </div>
-      <div className={styles.rightBox}>
-        {
-          itemTotalSum.map(c =>
-            <Total key={c.id}
-              itemTotal={c.total}
-              name={c.name}
-            />  
-          )
-        }
-            <div className={styles.itemTotal}>
-              <div>{'All items total'}</div>
-              <div>{allItemsTotal}</div>
-            </div> 
+    {
+      cartItems.map(c => 
+        <CartItem key={c.idItem}
+          idItem={c.idItem}
+          price={c.price}
+          name={c.itemName}
+          quantity={c.quantity}
+          deleteItem={deleteItem}
+          changeQuantity={changeQuantity}
+        />  
+      )
+    }
+    <div className={styles.contentRight}>
+      <div className={styles.deliveryBox}>
+        <DeliveryAddress deliveryAddress={address} payOrder={payOrder}/>
       </div>
     </div>
+  </div>
+  <div className={styles.rightBox}>
+    {
+      itemTotalSum.map(c =>
+        <Total key={c.id}
+          itemTotal={c.total}
+          name={c.name}
+        />  
+      )
+    }
+        <div className={styles.itemTotal}>
+          <div>{'All items total'}</div>
+          <div>{allItemsTotal}</div>
+        </div> 
+  </div>
+    </div>
+      </div>
+   
+      }
+      </div>
   )
 }
