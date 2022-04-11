@@ -135,7 +135,9 @@ export default function ShoppingCartView( {cartIndex, address, userIndex, restau
   return (
     <div>
     { cartView === false
-      ? <div>Shoppingcart is empty</div>
+      ? <div className={styles.emptyCart}>
+          <div>Shoppingcart is empty</div>
+      </div>
       : <div>
       <div className={styles.mainContainer}>
 
