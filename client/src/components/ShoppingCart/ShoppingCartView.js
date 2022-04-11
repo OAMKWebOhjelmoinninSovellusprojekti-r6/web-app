@@ -21,8 +21,8 @@ export default function ShoppingCartView( {cartIndex, address, userIndex, restau
     UserService.getCartItems(cartId).then(results => {
       console.log(results);
       setCartItems(results.data.shoppingCartInfo);
+      countTotal();
     });
-    countTotal();
   }, []);
 
   // Count total sum of items in the shoppingcart and make
@@ -89,7 +89,26 @@ export default function ShoppingCartView( {cartIndex, address, userIndex, restau
     UserService.orderHistoryCreate(historyData).then(results => {
       historyId = results.data.idorder_history;
       console.log("results", results.status);
+      console.log("cartItems" , cartItems);
       if(results.status === 200) {
+        let tempObj = {
+          'name': 'empty',
+          'description': 'empty',
+          'price': 0,
+          'category': 'empty',
+          'order_history_id': 0,
+          'quantity': 0
+        }
+        for(let i = 0; i < cartItems.length; i++) {
+          tempObj.name = cartItems[i].itemName;
+          tempObj.description = cartItems[i].description;
+          tempObj.price = cartItems[i].price;
+          tempObj.category = cartItems[i].category;
+          tempObj.order_history_id = historyId;
+          tempObj.quantity = cartItems[i].quantity;
+          tempObj = {...tempObj};
+          UserService.ordreHistoryItemCreate(tempObj);
+        }
         alert("Order confirmed");
       } else {
         alert("There was a problem with payment")
