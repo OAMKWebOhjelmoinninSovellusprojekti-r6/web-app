@@ -1,4 +1,18 @@
 const jwt = require("jsonwebtoken");
+const { TokenExpiredError } = jwt;
+
+const catchError = (err, res) => {
+    if (err instanceof TokenExpiredError) {
+      return res.status(401).send({
+          errorCode: 1,
+          message: "Access token expired"
+    });
+    }
+    return res.sendStatus(401).send({
+        errorCode: 2,
+        message: "Invalid token"
+    });
+  }
 
 const verifyToken = (req, res, next) => {
     // Get authorization header from request
@@ -8,21 +22,22 @@ const verifyToken = (req, res, next) => {
             // Extract token string from Authorization:Bearer {token}
             const bearerToken = authHeader.split(" ")[1];
             // Decode token
-            req.tokenData = jwt.verify(bearerToken, process.env.TOKEN_SECRET);
-        } catch (err) {
-            return res.status(401).send({
-                'errorCode': 1,
-                'message': 'Invalid authorization token' 
+            jwt.verify(bearerToken, process.env.TOKEN_SECRET, (err, decoded) => {
+                if (err) {
+                    return catchError(err, res);
+                }
+                req.tokenData = decoded;
+                next();
             });
+        } catch (err) {
+            console.log(err);
         }
     } else {
         return res.status(401).send({
-            'errorCode': 2,
-            'message': 'Authorization required'
+            'errorCode': 3,
+            'message': 'Authorization missing'
         });
     }
-    // If no errors, continue to target route normally with token data included
-    return next();
 }
 
 module.exports = verifyToken;

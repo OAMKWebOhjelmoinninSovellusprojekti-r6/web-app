@@ -1,7 +1,7 @@
 const db = require("../config/db.js");
 const argon2 = require("argon2");
-const jwt = require('jsonwebtoken');
-const randToken = require('rand-token');
+const TokenService = require("../services/tokenService.js");
+const ts = new TokenService();
 
 module.exports = {
     async getById(userId){
@@ -55,35 +55,28 @@ module.exports = {
                 [username]
             );
             if(loginQuery.length == 1 && argon2.verify(loginQuery[0].password, password)){
-                const token = jwt.sign(
-                    {
-                        userData: {
-                            userId: loginQuery[0].iduser,
-                            shoppingCartId: loginQuery[0].shopping_cart_id,
-                        }
-                    },
-                    process.env.TOKEN_SECRET,
-                    {
-                        expiresIn: process.env.TOKEN_EXPIRE
-                    }
+                const accessToken = ts.createAccessToken(
+                    loginQuery[0].iduser,
+                    loginQuery[0].shopping_cart_id
                 )
-                const refreshToken = randToken.uid(256);
-                const refreshTokenExpireHour = 1;
+                const refreshTokenData = ts.createRefreshToken();
                 const tokenQuery = await db.query(
-                    'INSERT INTO `active_tokens`(`uid`,`user_id`,`created_at`,`expires`) VALUES (?,?,NOW(),DATE_ADD(NOW(), INTERVAL ? HOUR)) ON DUPLICATE KEY UPDATE `uid`=?, `created_at`=NOW(), `expires`=DATE_ADD(NOW(), INTERVAL ? HOUR)',
+                    'INSERT INTO `active_tokens`(`uid`,`user_id`,`created_at`,`expires`) VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE `uid`=?, `created_at`=?, `expires`=?',
                     [
-                        refreshToken,
+                        refreshTokenData.token,
                         loginQuery[0].iduser,
-                        refreshTokenExpireHour,
-                        refreshToken,
-                        refreshTokenExpireHour
+                        refreshTokenData.validFrom,
+                        refreshTokenData.validTo,
+                        refreshTokenData.token,
+                        refreshTokenData.validFrom,
+                        refreshTokenData.validTo
                     ]
                 );
                 console.log(tokenQuery);
                 if(tokenQuery.affectedRows >= 1){
                     let userData = {};
-                    userData.accessToken = token;
-                    userData.refreshToken = refreshToken;
+                    userData.accessToken = accessToken;
+                    userData.refreshToken = refreshTokenData.token;
                     userData.firstName = loginQuery[0].firstname;
                     userData.lastName = loginQuery[0].lastname;
                     userData.isOwner = loginQuery[0].is_owner;
@@ -193,19 +186,23 @@ module.exports = {
             );
         }
         // Create raw SQL from userData values
-        updateString = `UPDATE \`user\` SET ${updateTerms.join(', ')} WHERE \`iduser\`=${userId}`
-        try {
-            const updateQuery = await db.query(
-                updateString
-            );
-            if(updateQuery.affectedRows == 1){
-                data.success = true;
-            } else {
-                data.errorCode = 1;
+        if(updateTerms.length <= 0){
+            data.errorCode = 4;
+        } else {
+            updateString = `UPDATE \`user\` SET ${updateTerms.join(', ')} WHERE \`iduser\`=${userId}`
+            try {
+                const updateQuery = await db.query(
+                    updateString
+                );
+                if(updateQuery.affectedRows == 1){
+                    data.success = true;
+                } else {
+                    data.errorCode = 1;
+                }
+            } catch (err){
+                console.log(err);
+                data.errorCode = 2;
             }
-        } catch (err){
-            console.log(err);
-            data.errorCode = 2;
         }
         return data;
     },

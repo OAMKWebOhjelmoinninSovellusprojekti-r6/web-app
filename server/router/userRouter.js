@@ -69,10 +69,15 @@ router.put('/', auth, async function(req, res){
             'message': 'User updated succesfully'
         });
     } else {
-        return res.status(500).send({
-            'message': 'Unknown error'
-        });
+        if(modifyData.errorCode == 4){
+            return res.status(400).send({
+                'message': 'Need at least one parameter to modify'
+            })
+        }
     }
+    return res.status(500).send({
+        'message': 'Unknown error'
+    });
 });
 
 router.delete('/', auth, async function(req, res){
