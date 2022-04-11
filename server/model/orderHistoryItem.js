@@ -47,54 +47,31 @@ module.exports = {
         return data;
     },
 
-    async create(userId){
+    async create(historyData){
         // Default values for return Object
+        console.log(historyData);
         let data = {
-            'status': 400,
-            'orderId': null
+            'affectedRows': 0
         }
         try {
-            // Insert row into database
-            const historyIdQuery = await db.query(`SELECT \`idorder_history\` FROM \`order_history\` WHERE \`iduser\`=${userId}`)
-            
-            let historyId = historyIdQuery[0].idorder_history;
-
-            const shoppingCartQuery = await db.query(`SELECT \`item_id\` FROM \`shopping_cart_item\` LEFT JOIN \`shopping_cart\` ON \`shopping_cart_item\`.\`shopping_cart_id\`=\`shopping_cart\`.\`idshopping_cart\` WHERE \`shopping_cart\`.\`user_id\`=${userId}`)
-           
-            let itemIds = [];
-            for(let x=0;x<shoppingCartQuery.length;x++){
-                itemIds.push(shoppingCartQuery[x]);
-                }
 
             const createQuery = await db.query(
-                `INSERT INTO \`order_history_item\`(
-                    \`name\`,\
-                    \`description\`,\
-                    \`price\`,\
-                    \`category\`,\ 
-                    \`order_history_id\`,\
-                    \`quantity\`\               
-                ) SELECT \`item\`.\`name\`,\
-                 \`item\`.\`description\`,\
-                 \`item\`.\`price\`,\
-                \`item\`.\`category\`,\ 
-                ${historyId},\
-                \`item\`.\`quantity\`,\ 
-                 FROM \`item\`  WHERE \`iditem\` IN (${itemIds})`
+                `INSERT INTO order_history_item(name,description,price,category,order_history_id,quantity) VALUES(?,?,?,?,?,?)`,
+                [historyData.name, historyData.description, historyData.price, historyData.category, historyData.order_history_id, historyData.quantity]
             );
             
             // If affectedRows == 1 || >= 1, query was succesful
             // This should always return === 1 since only one order row are inserted, >= 1 is used only for debugging purposes
             if(createQuery.affectedRows >= 1){
-               
-                // Set HTTP status code == success
-                data.status = 200;
-            }
+                data.affectedRows = createQuery.affectedRows;
+            } else if (createQuery.affectedRows === 0){
+                data.affectedRows = createQuery.affectedRows;
+            } else {
+                data.affectedRows = -1;
+            }   
         } catch (err){
             // Debug error in case where try/catch fails
             console.log(err);
-            // Set HTTP status code == Internal server error
-            data.status = 500;
         }
         return data;
     },

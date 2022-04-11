@@ -16,7 +16,6 @@ export default function RestaurantListView() {
     UserService.restaurantGetAll().then(result => {
       setRestaurants(result.data.data);
     });
-   
   },[]);
   
   //for searching restaurants

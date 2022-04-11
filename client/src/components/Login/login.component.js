@@ -127,8 +127,9 @@ export default class Login extends Component {
           
           <li>
             <Link to="/cart">Shopping cart</Link>
+          </li>
+          <li>
             <Link to="/user/profile">Profile</Link>
-
           </li>
           {addRestaurantTemplate}
           {browseRestaurantTemplate}

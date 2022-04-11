@@ -26,9 +26,25 @@ class UserService {
   userDelete(){
     return axios.delete(API_URL + 'user', { headers: authHeader() });
   }
+  
+  getCartItems(cartId){
+    return axios.get(API_URL + 'cart/' + cartId, { headers: authHeader() });
+  }
 
-  shoppingCartGet(){
+  deleteCartItem(itemId){
+    return axios.delete(API_URL + 'cart/' + itemId, { headers: authHeader() });
+  }
 
+  modifyCartItems(itemId, quantity){
+    return axios.put(API_URL + 'cart/' + itemId, {quantity}, { headers: authHeader() })
+  }
+
+  orderHistoryCreate(historyData){
+    return axios.post(API_URL + 'history', historyData, { headers: authHeader() })
+  }
+
+  ordreHistoryItemCreate(itemData){
+    return axios.post(API_URL + 'historyItem', itemData, { headers: authHeader() })
   }
   userOrderHistoryGet(){
     return axios.get(API_URL + 'history', { headers: authHeader() });

@@ -4,7 +4,6 @@ const history = require('../model/orderHistory');
 const historyItem = require('../model/orderHistoryItem');
 const auth = require('../middleware/auth.js');
 
-
 router.get('/', auth, async function(req, res) {
     //check that userid is positive int and size in range
     try {
@@ -29,7 +28,7 @@ router.get('/', auth, async function(req, res) {
     } 
     
   });
-      
+
       //check that orderid is int and size in range and only positive
       router.get('/:orderId', auth, async function(req, res) {
        let userIds = req.tokenData.userData.userId;
@@ -45,15 +44,30 @@ router.get('/', auth, async function(req, res) {
                } else {
                  res.send(data);
                }
-        }
+          }
       }
-        catch(err){
-          console.log(err);
-          res.sendStatus(400);
-        }
 
     
       
-      });
+  });
+
+router.post('/', auth, async(req, res) => {
+  // Send create request
+  console.log(req.body);
+  let data = await history.create(req.body);
+  console.log("routerdata", data);
+  try {
+    if(data.affectedRows === 1) {
+        console.log(data.affectedRows);
+        res.json(data);
+    } else if(data.affectedRows === 0) {
+        res.sendStatus(400);
+    } else {
+        res.sendStatus(500);
+    }
+  } catch (err) {
+    res.send("ID does not match");
+  };
+});
 
   module.exports = router;

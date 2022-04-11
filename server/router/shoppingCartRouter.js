@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const shoppingCartModel = require('../model/shoppingCart');
+const auth = require('../middleware/auth')
 
 // GET method router
-router.get('/:shoppingCartId', async (req, res) => {
+router.get('/:shoppingCartId', auth, async (req, res) => {
     console.log(req.params.shoppingCartId);
     let data = await shoppingCartModel.get(req.params.shoppingCartId);
     try {
@@ -11,7 +12,7 @@ router.get('/:shoppingCartId', async (req, res) => {
             console.log(data);
             res.send(data);
         } else if (data.shoppingCartInfo === null) {
-            res.sendStatus(400);
+            res.send(data);
         } else {
             res.sendStatus(500);
         }
@@ -21,7 +22,7 @@ router.get('/:shoppingCartId', async (req, res) => {
 });
 
 // POST method router
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
     console.log(req.body);
     let data = await shoppingCartModel.create(req.body);
     try {
@@ -38,7 +39,7 @@ router.post('/', async (req, res) => {
     };
 });
 // PUT method router
-router.put('/:shoppingCartItemId', async (req, res) => {
+router.put('/:shoppingCartItemId', auth, async (req, res) => {
     console.log(req.params.shoppingCartItemId);
     let data = await shoppingCartModel.modify(req.params.shoppingCartItemId, req.body);
     try {
@@ -55,7 +56,7 @@ router.put('/:shoppingCartItemId', async (req, res) => {
     }
 });
 // DELETE method router
-router.delete('/:cartItemId', async (req, res) => {
+router.delete('/:cartItemId', auth, async (req, res) => {
     console.log(req.params.cartItemId);
     let data = await shoppingCartModel.delete(req.params.cartItemId);
     try {
