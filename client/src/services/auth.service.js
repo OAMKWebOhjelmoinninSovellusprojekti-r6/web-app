@@ -20,16 +20,40 @@ class AuthService {
     localStorage.removeItem("userData");
   }
 
-  refreshToken(){
-    
-  }
-
-  changePassword(){
-
+  parseTokenPayload(token){
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    return JSON.parse(jsonPayload);
   }
 
   getCurrentUser() {
     return JSON.parse(localStorage.getItem('userData'));;
   }
+
+  getCurrentUserId(){
+    let userData = JSON.parse(localStorage.getItem('userData'));
+    let payload = this.parseTokenPayload(userData.accessToken);
+    return payload.userData.userId;
+  }
+
+  getLocalAccessToken(){
+    let userData = JSON.parse(localStorage.getItem('userData'));
+    return userData?.accessToken;
+  }
+
+  updateLocalAccessToken(token){
+    let user = JSON.parse(localStorage.getItem("userData"));
+    user.accessToken = token;
+    localStorage.setItem("userData", JSON.stringify(user));
+  }
+
+  getLocalRefreshToken(){
+    let userData = JSON.parse(localStorage.getItem('userData'));
+    return userData?.refreshToken;
+  }
+
 }
 export default new AuthService();
