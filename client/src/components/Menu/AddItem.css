@@ -1,4 +1,4 @@
-.restaurant-container {
+.item-container {
     display: flex;
     justify-content: center;
     max-width: 600px;
@@ -6,10 +6,10 @@
     margin-right: auto;
     padding: 16px;
 }
-.restaurant-form {
+.item-form {
     width: 100%;
 }
-.restaurant__form-element {
+.item__form-element {
     appearance: none;
     display: block;
     width: 100%;
