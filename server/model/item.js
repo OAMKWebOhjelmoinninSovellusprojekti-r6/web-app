@@ -44,7 +44,7 @@ module.exports = {
         return data;
     },
 
-    async create(itemData){
+    async create(userId,itemData){
         let data = {
             errorCode: 0,
             success: false,
@@ -60,7 +60,8 @@ module.exports = {
                     itemData.price,
                     itemData.imagePath,
                     itemData.category,
-                    itemData.restaurantId
+                    itemData.restaurantId,
+                    userId
                 ]
             );
             if(createQuery.affectedRows == 1){

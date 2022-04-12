@@ -17,11 +17,11 @@ router.get('/:restaurantId', async function(req, res){
     });
 
 // Create item
-router.post('/', auth, async function(req, res){
+router.post('/', auth, async (req, res) => {
     console.log('POST, /item');
     // Initialize FileService if file is sent with request
     let fs = null;
-    if(req.files && req.files.image){
+    if(req.files.image){
         fs = new FileService(
             req.files.image,
             'item'
@@ -29,8 +29,8 @@ router.post('/', auth, async function(req, res){
     }
     //Object for data which is transmitted to new item
     let requestData = {};
-    requestData.name = parser.parseString(req.body.name, 20);
-    requestData.description = parser.parseString(req.body.description, 20);
+    requestData.name = parser.parseString(req.body.name, 50);
+    requestData.description = parser.parseString(req.body.description, 50);
     requestData.price = parser.parsePrice(req.body.price);
     requestData.category = parser.parseString(req.body.category, 20);
     requestData.restaurantId = parser.parseId(req.body.restaurantId);
@@ -42,28 +42,28 @@ router.post('/', auth, async function(req, res){
         && requestData.restaurantId != null
         && fs != null
     ){
-        const createData = await item.create(
+        const data = await item.create(
             req.tokenData.userData.userId,
             requestData
         );
-        console.log(createData);
+        console.log(data);
         if(
-            createData.success == true
-            && createData.errorCode == 0
-            && createData.itemId != null
+            data.success == true
+            && data.errorCode == 0
+            && data.itemId != null
         ) {
             // Save uploaded file to static folder
-            fs.setFileName(createData.itemId.toString());
+            fs.setFileName(data.itemId.toString());
             const saveResult = fs.saveFileToStatic();
             console.log(saveResult);
             if(
                 saveResult.errorCode == 0
                 && saveResult.imagePath != null
             ) {
-                const updateResult = await item.updateImageUrl(saveResult.imagePath, createData.itemId);
+                const updateResult = await item.updateImageUrl(saveResult.imagePath, data.itemId);
                 if(updateResult.success == true && updateResult.errorCode == 0){
                     return res.status(200).send({
-                        'itemId': createData.itemId
+                        'itemId': data.itemId
                     });
                 }
             }

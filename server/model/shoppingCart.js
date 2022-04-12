@@ -43,7 +43,45 @@ module.exports = {
         return data;
     },
 
-    async create(shoppingCartData){
+    async create(shoppingCartId,shoppingCartData){
+        // Default values for return Object
+        let data = {
+            'affectedRows': 0
+        }
+        try {
+            const duplicateQuery = await db.query(
+                'SELECT * FROM `shopping_cart_item` WHERE `item_id`=? AND `shopping_cart_id`=?',
+                [
+                    shoppingCartData.itemId,
+                    shoppingCartId
+                ]
+            );
+            if(duplicateQuery.length > 0){
+                const updateQuery = await db.query(
+                    'UPDATE `shopping_cart_item` SET `quantity`=(`quantity` + 1) WHERE `shopping_cart_id`=? and `item_id`=?',
+                    [shoppingCartId, shoppingCartData.itemId]
+                );
+                if(updateQuery.affectedRows == 1){
+                    data.affectedRows = updateQuery.affectedRows;
+                }
+            } else {
+                // Insert row into database
+                const createQuery = await db.query(
+                    `INSERT INTO shopping_cart_item(item_id,shopping_cart_id,quantity) VALUES(?,?,1);`, 
+                    [shoppingCartData.itemId, shoppingCartId]
+                );
+                if(createQuery.affectedRows == 1){
+                    data.affectedRows = createQuery.affectedRows;
+                }
+            } 
+        } catch (err){
+            // Debug error in case where try/catch fails
+            console.log(err);
+            errorCode = 1;
+        }
+        return data;
+    },
+    /*async create(shoppingCartData){
         // Default values for return Object
         let data = {
             'affectedRows': 0
@@ -69,7 +107,7 @@ module.exports = {
             console.log(err);
         }
         return data;
-    },
+    },*/
 
     async modify(cartItemId, itemQuantity) {
         console.log("model", cartItemId, itemQuantity);

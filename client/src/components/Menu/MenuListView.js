@@ -20,33 +20,13 @@ export default function MenuListView() {
         UserService.restaurantGetById(restaurantId).then(result => {
               setRestaurant(result.data);
         });
-        
-      
-    /*useEffect(() => {
-      
-        const getItems = async (restaurantId) => {
-            const results = await axios.get(`http://www.localhost:3001/item/${restaurantId}`);
-                setItems(results.data.itemInfo);
-              
-        } */   
-        
-        //Get restaurant info to sidebar  
-        /*const getRestaurant = async (restaurantId) => {
-            const restInfo = await axios.get(`http://www.localhost:3001/restaurant/${restaurantId}`);
-            
-                setRestaurant(restInfo.data);
-        }*/
-        
-        //getRestaurant(restaurantId);
-        //getItems(restaurantId);
     },[]);
+    
         async function postItem(itemId){
         const item = {
-            item_id: itemId ,
-            shopping_cart_id: 1,
-            quantity: 1
+            itemId: itemId 
         };
-        await axios.post(`http://www.localhost:3001/cart`, item)
+        UserService.postCartItem(item);
     }
         console.log('Ravintolan tiedot:', restaurant);
         console.log('Ravintolan menu:', items);   

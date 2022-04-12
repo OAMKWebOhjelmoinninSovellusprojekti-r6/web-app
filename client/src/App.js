@@ -9,13 +9,14 @@ import UserProfile from './components/UserProfile/UserProfile'
 import OrderHistoryListView from './components/OrderHistory/OrderHistoryListView'
 import SingleOrderHistory from './components/OrderHistory/SingleOrderHistory';
 import AddRestaurant from './components/AddRestaurant/add-restaurant.component';
+import AddItem from './components/Menu/AddItem';
 
 function App() {
   
-  const cartId = 2; // Dummydata
+  const cartId = 3; // Dummydata
   const userAddress = 'street 15'; // Dummydata
   const restaurantId = 6; // Dummydata
-  const userId = 4 // Dummydata
+  const userId = 8 // Dummydata
   
   return (
   <BrowserRouter>
@@ -28,7 +29,8 @@ function App() {
         <Route path="/cart" element={<Cart address={userAddress} userIndex={userId} restaurantIndex={restaurantId} cartIndex={cartId}/>} />
         <Route  path="/restaurants" element={ <RestaurantListView /> } />
         <Route path="/restaurants/:restaurantId" element= {<MenuListView />} >
-          </Route> 
+      </Route>
+          <Route path="/restaurants/additem/:restaurantId" element = {<AddItem />} />  
           <Route  path="/myprofile" element={ <UserProfile /> } />
           <Route  path="/history" element={ <OrderHistoryListView /> } >
             <Route path=":orderId" element= {<SingleOrderHistory/>} />
