@@ -57,6 +57,9 @@ class UserService {
   userOrderHistoryDetailGet(orderId){
     return axios.get(API_URL + 'history/' + orderId, { headers: authHeader() } );
   }
+  ownerOrderHistoryGet(restaurantId){
+    return axios.get(API_URL + 'history/' + restaurantId, { headers: authHeader() } );
+  }
   getMenu(restaurantId){
     return axios.get(API_URL + 'item/' + restaurantId);
   }
