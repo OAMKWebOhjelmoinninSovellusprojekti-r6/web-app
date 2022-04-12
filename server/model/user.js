@@ -59,7 +59,7 @@ module.exports = {
                     {
                         userData: {
                             userId: loginQuery[0].iduser,
-                            shoppingCartId: loginQuery[0].shopping_cart_id,
+                            shoppingCartId: loginQuery[0].idshopping_cart,
                         }
                     },
                     process.env.TOKEN_SECRET,
