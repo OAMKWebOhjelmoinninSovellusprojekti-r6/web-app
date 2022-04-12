@@ -1,0 +1,20 @@
+.item-container {
+    display: flex;
+    justify-content: center;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 16px;
+}
+.item-form {
+    width: 100%;
+}
+.item__form-element {
+    appearance: none;
+    display: block;
+    width: 100%;
+    border: 1px solid rgb(194, 194, 194);
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin: 5px 0;
+}

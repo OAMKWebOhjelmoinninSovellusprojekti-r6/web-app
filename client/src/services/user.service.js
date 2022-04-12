@@ -40,6 +40,10 @@ class UserService {
     return axios.put(API_URL + 'cart/' + itemId, {quantity}, { headers: authHeader() })
   }
 
+  postCartItem(item){
+    return axios.post(API_URL + 'cart/', item, { headers: authHeader()});
+  }
+
   orderHistoryCreate(historyData){
     return axios.post(API_URL + 'history', historyData, { headers: authHeader() })
   }
@@ -52,6 +56,13 @@ class UserService {
   }
   userOrderHistoryDetailGet(orderId){
     return axios.get(API_URL + 'history/' + orderId, { headers: authHeader() } );
+  }
+  getMenu(restaurantId){
+    return axios.get(API_URL + 'item/' + restaurantId);
+  }
+
+  itemAdd(data){
+    return axios.post(API_URL + 'item', data, { headers: authHeader() });
   }
 }
 export default new UserService();
