@@ -17,6 +17,7 @@ async function getUserByUsername(username){
 }
 
 describe('Test `user` endpoints', () =>{
+    
     before( async () => {
         // Truncate `user` table
         await User.testTruncateRestaurant();
