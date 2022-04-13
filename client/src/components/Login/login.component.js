@@ -1,70 +1,37 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import AuthService from "../../services/auth.service";
 import './login.styles.css';
 
+export default function Login(){
+  AuthService.autoLogout();
 
-export default class Login extends Component {
-  
-  constructor(props) {
-    super(props);
-    this.userLogin = this.userLogin.bind(this);
-    this.userLogout = this.userLogout.bind(this);
-    this.onChangeUsername = this.onChangeUsername.bind(this);
-    this.onChangePassword = this.onChangePassword.bind(this);
-    this.toggleMenu = this.toggleMenu.bind(this);
+  const [username, setUsername] = useState();
+  const [password, setPassword] = useState();
+  const [authenticatingUser, setAuthenticatingUser] = useState();
+  const [errorMessage, setErrorMessage] = useState();
+  const [UIMenuClass, setUIMenuClass] = useState('');
+  const [currentUser, setCurrentUser] = useState();
 
-    let currentUser = AuthService.getCurrentUser();
+  useEffect(() => {
+    setCurrentUser(AuthService.getCurrentUser());
+  }, []);
 
-    this.state = {
-      currentUser: currentUser,
-      username: '',
-      password: '',
-      loading: false,
-      message: "",
-      userMenuClass: ''
-    };
+  const inputEventUsername = (e) => {
+    setUsername(e.target.value);
   }
 
-  toggleMenu(e){
-    // Toggle menu only when parent elements are clicked
-    if(e.target.classList.contains('user') || e.target.classList.contains('user__name')){
-      if(this.state.userMenuClass === ''){
-        this.setState({
-          userMenuClass: 'active'
-        })
-      } else {
-        this.setState({
-          userMenuClass: ''
-        })
-      }
-    }
+  const inputEventPassword = (e) => {
+    setPassword(e.target.value);
   }
 
-  onChangeUsername(e) {
-    this.setState({
-      username: e.target.value
-    });
-  }
-
-  onChangePassword(e) {
-    this.setState({
-      password: e.target.value
-    });
-  }
-
-  userLogin(e) {
+  const userLogin = (e) => {
     e.preventDefault();
-    this.setState({
-      message: "",
-      loading: true
-    });
-    AuthService.login(this.state.username, this.state.password)
+    setErrorMessage('');
+    setAuthenticatingUser(true);
+    AuthService.login(username, password)
       .then( result => {
-        console.log(result);
-        this.setState({
-          currentUser: AuthService.getCurrentUser()
-        });
+        setCurrentUser(AuthService.getCurrentUser())
       },
       error => {
         const resMessage =
@@ -73,24 +40,30 @@ export default class Login extends Component {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        this.setState({
-          loading: false,
-          message: resMessage
-        });
+        setErrorMessage(resMessage);
+        setAuthenticatingUser(false );
       });
   }
 
-  userLogout(){
+  const userLogout = () => {
+    setUsername('');
+    setPassword('');
+    setCurrentUser(null);
     AuthService.logout();
-    this.setState({
-      currentUser: null,
-      username: '',
-      password: '',
-      loading: false
-    });
   }
 
-  getAuthorizedTemplate(){
+  const UIToggleMenu = (e) => {
+    // Toggle menu only when parent elements are clicked
+    if(e.target.classList.contains('user') || e.target.classList.contains('user__name')){
+      if(UIMenuClass === ''){
+        setUIMenuClass('active');
+      } else {
+        setUIMenuClass('');
+      }
+    }
+  }
+
+  const getAuthorizedTemplate = () => {
     // Default templates if user type is customer
     let addRestaurantTemplate = '';
     let browseRestaurantTemplate = (
@@ -104,7 +77,7 @@ export default class Login extends Component {
       </li>
     );
     // Templates if user type is restaurant owner
-    if(this.state.currentUser.isOwner === 1){
+    if(currentUser.isOwner === 1){
       addRestaurantTemplate = (
         <li>
           <Link to="/user/add-restaurant">Add restaurant</Link>
@@ -118,13 +91,9 @@ export default class Login extends Component {
       shoppingCartTemplate = '';
     }
     return (
-      <div className="user" onClick={this.toggleMenu}>
-        <span className="user__name">{this.state.currentUser.firstName}</span>
-        <ul className={'user__menu ' + this.state.userMenuClass}>
-          <li onClick={this.test}>
-            Proffile
-          </li>
-          
+      <div className="user" onClick={UIToggleMenu}>
+        <span className="user__name">{currentUser.firstName}</span>
+        <ul className={'user__menu ' + UIMenuClass}>
           <li>
             <Link to="/cart">Shopping cart</Link>
           </li>
@@ -138,7 +107,7 @@ export default class Login extends Component {
             <Link to="/history">Order history</Link>
           </li>
           <li>
-            <Link to="/" onClick={this.userLogout}>Logout</Link>
+            <Link to="/" onClick={userLogout}>Logout</Link>
          
           </li>
         </ul>
@@ -146,54 +115,41 @@ export default class Login extends Component {
     );
   }
 
-  getUnauthorizedTemplate(){
+  const getUnAuthorizedTemplate = () => {
     return (
       <form
         className="login"
-        onSubmit={this.userLogin}
-        ref={c => {
-          this.form = c;
-        }}
+        onSubmit={userLogin}
       >
-          {this.state.message && (
-            <div className="form-group">
-              <div className="alert alert-danger" role="alert">
-                {this.state.message}
-              </div>
-            </div>
-          )}
+          {errorMessage && ( {errorMessage} )}
           <input
             type="text"
             className="login__form-item"
             name="username"
-            value={this.state.username}
-            onChange={this.onChangeUsername}
+            onChange={inputEventUsername}
             placeholder="Username"
           />
           <input
             type="password"
             className="login__form-item"
             name="password"
-            value={this.state.password}
-            onChange={this.onChangePassword}
+            onChange={inputEventPassword}
             placeholder="Password"
           />
           <button
             className="login__form-item"
-            disabled={this.state.loading}
+            disabled={authenticatingUser}
           >
             <span>Sign in</span>
           </button>
-         <Link to="/register"  >Sign up</Link>
+         <Link to="/register">Sign up</Link>
       </form>
     );
   }
 
-  render() {
-    if(this.state.currentUser){
-      return this.getAuthorizedTemplate();
-    } else {
-      return this.getUnauthorizedTemplate();
-    }
+  if(currentUser){
+    return getAuthorizedTemplate();
+  } else {
+    return getUnAuthorizedTemplate();
   }
 }
