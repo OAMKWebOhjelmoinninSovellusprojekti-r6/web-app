@@ -10,6 +10,7 @@ import OrderHistoryListView from './components/OrderHistory/OrderHistoryListView
 import SingleOrderHistory from './components/OrderHistory/SingleOrderHistory';
 import AddRestaurant from './components/AddRestaurant/add-restaurant.component';
 import AddItem from './components/Menu/AddItem';
+import OwnerOrderHistory from './components/OrderHistory/OwnerOrderHistory';
 
 function App() {
   
@@ -35,6 +36,7 @@ function App() {
           <Route  path="/history" element={ <OrderHistoryListView /> } >
             <Route path=":orderId" element= {<SingleOrderHistory/>} />
            </Route>
+           <Route  path="/history/owner/:restaurantId" element={ <OwnerOrderHistory/> } />
      </Routes>
   </BrowserRouter>
   );

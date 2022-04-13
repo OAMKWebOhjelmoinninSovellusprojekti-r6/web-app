@@ -53,6 +53,29 @@ router.get('/', auth, async function(req, res) {
       }
       
   });
+  router.get('/owner/:restaurantId', auth, async function(req, res) {
+    
+     let restaurantId = req.params.restaurantId;
+     try {
+       restaurantId = parseInt(req.params.restaurantId);
+       console.log(restaurantId);
+       //checks that is number and not infinity, if ok returns true
+       if(Number.isFinite(restaurantId) && restaurantId > 0){
+         let data = await historyItem.getByOwner(restaurantId);
+            if(data.status === 500 || data.status === 400) {
+             res.sendStatus(data.status);
+            } else {
+              res.send(data);
+            }
+       }
+   }
+   catch(err){
+     console.log(err);
+     res.sendStatus(400);
+
+   }
+   
+});
 
 router.post('/', auth, async(req, res) => {
   // Send create request

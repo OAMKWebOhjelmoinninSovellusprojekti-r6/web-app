@@ -16,7 +16,8 @@ module.exports = {
         }
         try {
             const getQuery = await db.query(
-                'SELECT `idrestaurant` AS "id",`name`,`address`,`opening_hours`,`image_path`,`restaurant_type`,`price_level`, `user_iduser` FROM `restaurant`'
+
+             'SELECT `idrestaurant` AS "id",`name`,`address`,`opening_hours`,`image_path`,`restaurant_type`,`price_level`,`user_iduser` FROM `restaurant`'
             )
             if(getQuery.length > 0){
                 for(let x=0; x<getQuery.length; x++){

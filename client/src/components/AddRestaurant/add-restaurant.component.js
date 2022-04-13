@@ -1,151 +1,129 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { Navigate } from 'react-router-dom';
+import AuthService from "../../services/auth.service";
 import UserService from "../../services/user.service";
 import './add-restaurant.styles.css';
 
-export default class AddRestaurant extends Component {
-  
-    constructor(props) {
-        super(props);
-        this.addRestaurant = this.addRestaurant.bind(this);
-        this.inputEventName = this.inputEventName.bind(this);
-        this.inputEventAddress = this.inputEventAddress.bind(this);
-        this.inputEventImage = this.inputEventImage.bind(this);
-        this.inputEventOpeningHours = this.inputEventOpeningHours.bind(this);
-        this.inputEventPriceLevel = this.inputEventPriceLevel.bind(this);
-        this.inputEventRestaurantType = this.inputEventRestaurantType.bind(this);
-        this.state = {
-            name: '',
-            address: '',
-            image: '',
-            priceLevel: "1",
-            type: "1",
-            openingHours: '',
-            redirect: null
-        }
+export default function AddRestaurant(){
+    const [restaurantName, setRestaurantName] = useState();
+    const [restaurantAddress, setRestaurantAddress] = useState();
+    const [restaurantImage, setRestaurantImage] = useState();
+    const [restaurantPriceLevel, setRestaurantPriceLevel] = useState("1");
+    const [restaurantType, setRestaurantType] = useState("1");
+    const [restaurantOpeningHours, setRestaurantOpeningHours] = useState();
+    const [redirect, setRedirect] = useState();
+
+    const inputEventName = (e) => {
+        setRestaurantName(e.target.value)
+    }
+    const inputEventAddress = (e) => {
+        setRestaurantAddress(e.target.value)
+    }
+    const inputEventImage = (e) => {
+        setRestaurantImage(e.target.files[0])
+    }
+    const inputEventOpeningHours = (e) => {
+        setRestaurantOpeningHours(e.target.value)
+    }
+    const inputEventPriceLevel = (e) => {
+        setRestaurantPriceLevel(e.target.value)
+    }
+    const inputEventRestaurantType = (e) => {
+        setRestaurantType(e.target.value)
     }
 
-    addRestaurant(e){
+    const addRestaurant = (e) => {
         e.preventDefault();
+
         let data = new FormData()
-        data.append('name', this.state.name);
-        data.append('address', this.state.address);
-        data.append('image', this.state.image);
-        data.append('priceLevel', this.state.priceLevel);
-        data.append('openingHours', this.state.openingHours);
-        data.append('restaurantType', this.state.type);
+        data.append('name', restaurantName);
+        data.append('address', restaurantAddress);
+        data.append('image', restaurantImage);
+        data.append('priceLevel', restaurantPriceLevel);
+        data.append('openingHours', restaurantOpeningHours);
+        data.append('restaurantType', restaurantType);
+
         UserService.restaurantAdd(data).then(result => {
-            this.setState({
-                redirect: result.data.restaurantId
-            })
+            setRedirect(result.data.restaurantId)
         });
     }
 
-    inputEventName(e){
-        this.setState({
-                name: e.target.value
-        })
-    }
-    inputEventAddress(e){
-        this.setState({
-                address: e.target.value
-        })
-    }
-    inputEventImage(e){
-        this.setState({
-                image: e.target.files[0]
-        })
-    }
-    inputEventOpeningHours(e){
-        this.setState({
-                openingHours: e.target.value
-        })
-    }
-    inputEventPriceLevel(e){
-        this.setState({
-                priceLevel: e.target.value
-        })
-    }
-    inputEventRestaurantType(e){
-        this.setState({
-                restaurantType: e.target.value
-        })
-    }
-
-  render() {
-        if(this.state.redirect){
-            return(
-                <Navigate to={'/restaurants/' + this.state.redirect}></Navigate>
-            )
-        } else {
-            return (
-                <div className="restaurant-container">
-                    <form
-                        className="restaurant-form"
-                        onSubmit={this.addRestaurant}
+    if(!AuthService.getCurrentUser()){
+        return(
+            <Navigate to="/"></Navigate>
+        )
+    } else if(redirect){
+        return(
+            <Navigate to={'/restaurants/' + redirect}></Navigate>
+        )
+    } else {
+        return (
+            <div className="restaurant-container">
+                <form
+                    className="restaurant-form"
+                    onSubmit={addRestaurant}
+                >
+                    <label>Restaurant name</label>
+                    <input
+                        className="restaurant__form-element"
+                        type="text"
+                        maxLength="50"
+                        required
+                        onChange={(e) => inputEventName(e)}
+                    />
+                    <label>Restaurant address</label>
+                    <input
+                        className="restaurant__form-element"
+                        type="text"
+                        maxLength="50"
+                        required
+                        onChange={inputEventAddress}
+                    />
+                    <label>Opening hours</label>
+                    <input
+                        className="restaurant__form-element"
+                        type="text"
+                        maxLength="20"
+                        required
+                        onChange={inputEventOpeningHours}
+                    />
+                    <label>Restaurant type</label>
+                    <select
+                        className="restaurant__form-element"
+                        required
+                        onChange={inputEventRestaurantType}
                     >
-                        <label>Restaurant name</label>
-                        <input
-                            className="restaurant__form-element"
-                            type="text"
-                            maxLength="50"
-                            required
-                            onChange={this.inputEventName}
-                        />
-                        <label>Restaurant address</label>
-                        <input
-                            className="restaurant__form-element"
-                            type="text"
-                            maxLength="50"
-                            required
-                            onChange={this.inputEventAddress}
-                        />
-                        <label>Opening hours</label>
-                        <input
-                            className="restaurant__form-element"
-                            type="text"
-                            maxLength="20"
-                            required
-                            onChange={this.inputEventOpeningHours}
-                        />
-                        <label>Restaurant type</label>
-                        <select
-                            className="restaurant__form-element"
-                            required
-                            onChange={this.inputEvenRestaurantType}
-                        >
-                            <option value="1">Fast food</option>
-                            <option value="2">Slow food</option>
-                            <option value="3">Food with intermediate interval</option>
-                            <option value="4">Timeless food</option>
-                            <option value="5">Food from future</option>
-                        </select>
-                        <label>Price level</label>
-                        <select
-                            className="restaurant__form-element"
-                            required
-                            onChange={this.inputEventPriceLevel}
-                        >
-                            <option value="1">€</option>
-                            <option value="2">€€</option>
-                            <option value="3">€€€</option>
-                            <option value="4">€€€€</option>
-                        </select>
-                        <label>Restaurant picture</label>
-                        <input
-                            className="restaurant__form-element"
-                            type="file"
-                            required
-                            onChange={this.inputEventImage}
-                        />
-                        <input
-                            className="restaurant__form-element"
-                            type="submit"
-                            value="Add restaurant"
-                        />
-                    </form>
-                </div>
-            )
-        }
+                        <option value="1">Fast food</option>
+                        <option value="2">Slow food</option>
+                        <option value="3">Food with intermediate interval</option>
+                        <option value="4">Timeless food</option>
+                        <option value="5">Food from future</option>
+                    </select>
+                    <label>Price level</label>
+                    <select
+                        className="restaurant__form-element"
+                        required
+                        onChange={inputEventPriceLevel}
+                    >
+                        <option value="1">€</option>
+                        <option value="2">€€</option>
+                        <option value="3">€€€</option>
+                        <option value="4">€€€€</option>
+                    </select>
+                    <label>Restaurant picture</label>
+                    <input
+                        className="restaurant__form-element"
+                        type="file"
+                        required
+                        onChange={inputEventImage}
+                    />
+                    <input
+                        className="restaurant__form-element"
+                        type="submit"
+                        value="Add restaurant"
+                    />
+                </form>
+            </div>
+        )
     }
 }
