@@ -17,7 +17,7 @@ if (currentUser === null) {
                 </div> 
                 )
 }
-else if (currentUser.owner === 0){
+else if (currentUser.isOwner === 0){
         return (
     
                 <div className="menu.item" key={props.iditem}>
