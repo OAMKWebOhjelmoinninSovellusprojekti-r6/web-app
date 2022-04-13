@@ -34,9 +34,13 @@ class AuthService {
   }
 
   getCurrentUserId(){
+    try {
     let userData = JSON.parse(localStorage.getItem('userData'));
     let payload = this.parseTokenPayload(userData.accessToken);
     return payload.userData.userId;
+    }
+    catch{}
+    return null;
   }
 
   getLocalAccessToken(){
