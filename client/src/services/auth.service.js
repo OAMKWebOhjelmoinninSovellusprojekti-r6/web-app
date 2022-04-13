@@ -55,5 +55,26 @@ class AuthService {
     return userData?.refreshToken;
   }
 
+  autoLogout(){
+    let expired = true;
+    let token = this.getLocalAccessToken()
+    if(token){
+      let payload = this.parseTokenPayload(token);
+      if(payload && payload.exp){
+        // Get current unix time
+        let now = Date.now();
+        // Remove milliseconds and convert to integer
+        now = parseInt(now / 1000)
+        // If token is expired
+        if(payload.exp >= now){
+          expired = false;
+        }
+      }
+    }
+    if(expired == true){
+      this.logout();
+    }
+  }
+
 }
 export default new AuthService();
