@@ -13,11 +13,11 @@
 }
 .menuitem {
   padding: 2px;
-  border-radius: 5px;
   border: 1px solid #f5f5f5;
+  border-radius: 3px;
   font-size: 14px;
   font: Arial, Helvetica, sans-serif;
-  margin-left: 4px;
+  margin-bottom: 5px;
 }
 .title {
   font-size:16px;
