@@ -61,6 +61,8 @@ router.get('/:restaurantId', async (req, res) => {
 // POST method route for /restaurant, create new restaurant
 router.post('/', auth, async (req, res) => {
     console.log("POST, /restaurant");
+    console.log(req.body);
+    console.log(req.files.image);
     // Init FileService with multipart file
     let fs = null;
     if(req.files.image){

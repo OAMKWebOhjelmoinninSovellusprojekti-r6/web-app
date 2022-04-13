@@ -32,6 +32,7 @@ describe('Restaurant API tests', () => {
 
     before( async () => {
         // Truncate `user` table
+        await User.testTruncateRestaurant();
         await User.testTruncateCart();
         await User.testTruncate();
     })
@@ -101,11 +102,16 @@ describe('Restaurant API tests', () => {
         it('should add restaurant data when the data is correct', (done) => {
             chai.request(server)
             .post('/restaurant')
-            .type('form')
+            .set('content-type','multipart/form-data')
             .set('authorization', 'Bearer ' + token)
-            .send(form)
+            .attach('image', fs.readFileSync('./test/tictactoe.png'), 'tictactoe.png')
+            .field('name', 'Foodory',)
+            .field('address', 'funstreet 16')
+            .field('openingHours', '9,00-23,00')
+            .field('restaurantType', '1')
+            .field('priceLevel', '2')
             .end((err, res) => {
-                res.should.have.status(201);
+                res.should.have.status(200);
                 /*
                 expect(err).to.be.null;
                 expect(res).to.have.status(201);
