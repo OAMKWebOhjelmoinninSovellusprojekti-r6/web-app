@@ -30,7 +30,11 @@ class AuthService {
   }
 
   getCurrentUser() {
+    try {
     return JSON.parse(localStorage.getItem('userData'));;
+    }
+    catch{}
+    return null;
   }
 
   getCurrentUserId(){
