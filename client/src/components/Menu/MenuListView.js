@@ -39,7 +39,25 @@ export default function MenuListView() {
         //let idUser = restaurant[0].user_iduser;
               //console.log(idUser);
 
-if(currentUser.isOwner === 1) {
+if(currentUser === null) {
+    return (
+
+        <div className="restaurantView">          
+                    <div className="menu">
+                        {items.map(i=>
+                        <Menu key={i.iditem} image={i.image_path} id={i.iditem} name={i.name} description={i.description} price={i.price} />)
+                        }     
+                    </div>
+                    <div className="restaurantInfo">  
+                        {restaurant.map(r=>
+                        <RestaurantInfo key={r.id}  image={r.image_path} name={r.name} address={r.address} openingHours={r.opening_hours} 
+                        priceLevel={r.price_level}/>
+                        )}
+                    </div>
+        </div>
+            )
+                        }
+else if(currentUser.isOwner === 1) {
     return (
         
 <div className="restaurantView">          
