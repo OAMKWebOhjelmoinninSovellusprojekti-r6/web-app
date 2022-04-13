@@ -18,6 +18,25 @@
     display: flex;
     flex-direction: row;
 }
+.singleOwnerHistoryContainer{
+    display: flex;
+    flex-direction: column;
+}
 div > h3 {
     text-align: center;
+}
+.ownerHistoryItem {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 1200px;
+    padding: 5px;
+    border-radius: 10px;
+    border: 1px solid #f5f5f5;
+    font-size: 14px;
+    font: Arial, Helvetica, sans-serif;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+
 }

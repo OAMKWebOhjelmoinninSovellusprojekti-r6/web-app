@@ -10,3 +10,13 @@
 .orderHistoryContainer {
   position: static;
 }
+
+.restaurantContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 50px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}

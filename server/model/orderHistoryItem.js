@@ -1,6 +1,37 @@
 const db = require("../config/db.js");
 
 module.exports = {
+    async getByOwner(restaurantId){
+        
+        // Default values for return Object
+        let data = {
+            'status': 400,
+            orderInfo: null
+        }
+        try {
+            // Get order row from database
+            const getQuery = await db.query(
+                `SELECT \`order_history_id\`,\ \`idorder\`,\ \`timestamp\`,\ \`total\`,\ \`restaurant\`.\`idrestaurant\`,\ \`restaurant\`.\`name\`,\ \`order_history_item\`.\`name\`,\ \`order_history_item\`.\`description\`,\ \`order_history_item\`.\`price\`,\ \`order_history_item\`.\`category\`,\ \`order_history_item\`.\`quantity\`,\ \`user\`.\`firstname\`,\ \`user\`.\`lastname\`,\ \`user\`.\`address\` FROM \`order_history\` INNER JOIN \`restaurant\` ON \`order_history\`.\`restaurant_id\` =\ \`restaurant\`.\`idrestaurant\` INNER JOIN \`order_history_item\` ON \`order_history\`.\`idorder_history\` = \`order_history_item\`.\`order_history_id\` INNER JOIN \`user\` ON \`order_history\`.\`user_id\` = \`user\`.\`iduser\`  WHERE \`restaurant\`.\`idrestaurant\` =${restaurantId} `
+            );
+            console.log(getQuery);
+            // If affectedRows == 1 || >= 1, query was succesful
+            // This should always return === 1 since only one order row are inserted, >= 1 is used only for debugging purposes
+            if(getQuery.length >= 1){
+                // Get order info from query result
+                data.orderInfo = getQuery;
+                // Set HTTP status code == success
+                data.status = 200;
+                
+            }
+        } catch (err){
+            // Debug error in case where try/catch fails
+            console.log(err);
+            // Set HTTP status code == Internal server error
+            data.status == 500;
+        }
+        //console.log(data.status);
+        return data;
+    },
     async get(userId, orderId){
          /**
         * Example success response from database query
@@ -46,6 +77,8 @@ module.exports = {
         //console.log(data.status);
         return data;
     },
+    
+    
 
     async create(historyData){
         // Default values for return Object
