@@ -12,6 +12,7 @@ export default class AddItem extends Component {
   constructor(props) {
     super(props);
     this.addItem = this.addItem.bind(this);
+    this.restaurantId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
     this.inputEventName = this.inputEventName.bind(this);
     this.inputEventDescription = this.inputEventDescription.bind(this);
     this.inputEventPrice = this.inputEventPrice.bind(this);
@@ -24,7 +25,7 @@ export default class AddItem extends Component {
         price: '',
         image: '',
         category: '', 
-        restaurantId: '',
+        restaurantId: this.restaurantId,
         redirect: null
     }
 }
@@ -126,7 +127,9 @@ render() {
                     <input
                         className="item__form-element"
                         type="text"
+                        readonly = "readonly"
                         maxLength="20"
+                        value={this.restaurantId}
                         required
                         onChange={this.inputEventRestaurantId}
                     />

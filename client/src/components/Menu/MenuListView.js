@@ -1,6 +1,5 @@
 import React from 'react';
 import { Menu, RestaurantInfo} from './Menu'
-import axios from 'axios' 
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom'; 
 import UserService from '../../services/user.service';
@@ -12,7 +11,7 @@ export default function MenuListView() {
     const [restaurant, setRestaurant] = useState([]);
     const {restaurantId}= useParams();
     let currentUser = AuthService.getCurrentUser();
-    console.log(currentUser);
+  
 
     //Get all items based on restaurantId
     useEffect(() => {
@@ -22,17 +21,23 @@ export default function MenuListView() {
         
         UserService.restaurantGetById(restaurantId).then(result => {
               setRestaurant(result.data);
+              
         });
+
     },[]);
     
-        async function postItem(itemId){
+    async function postItem(itemId){
         const item = {
             itemId: itemId 
         };
         UserService.postCartItem(item);
     }
-        console.log('Ravintolan tiedot:', restaurant);
-        console.log('Ravintolan menu:', items);   
+
+    console.log('Ravintolan tiedot:', restaurant);
+    console.log('Ravintolan menu:', items);
+
+        //let idUser = restaurant[0].user_iduser;
+              //console.log(idUser);
 
 if(currentUser.isOwner === 1) {
     return (
@@ -40,7 +45,7 @@ if(currentUser.isOwner === 1) {
 <div className="restaurantView">          
             <div className="menu">
                 {items.map(i=>
-                <Menu key={i.iditem} image={i.image_path} postItem={postItem} id={i.iditem} name={i.name} description={i.description} price={i.price} />)
+                <Menu key={i.iditem} image={i.image_path} id={i.iditem} name={i.name} description={i.description} price={i.price} />)
                 }     
             </div>
             <div className="restaurantInfo">  
@@ -55,7 +60,9 @@ if(currentUser.isOwner === 1) {
 </div>
             )   
                 }
+
 else {
+
     return (
 
 <div className="restaurantView">          
