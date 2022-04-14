@@ -244,6 +244,21 @@ module.exports = {
             console.log(err);
         }
     },
+    async testTruncateCart(){
+        try {
+            const truncateQuery = await db.query('DELETE FROM `shopping_cart`');
+        } catch (err){
+            console.log(err);
+        }
+    },
+
+    async testTruncateRestaurant(){
+        try {
+            const truncateQuery = await db.query('DELETE FROM `restaurant`');
+        } catch (err){
+            console.log(err);
+        }
+    },
 
     async testGetByUsername(username){
         /**

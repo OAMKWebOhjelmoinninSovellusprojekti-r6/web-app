@@ -17,8 +17,11 @@ async function getUserByUsername(username){
 }
 
 describe('Test `user` endpoints', () =>{
+    
     before( async () => {
         // Truncate `user` table
+        await User.testTruncateRestaurant();
+        await User.testTruncateCart();
         await User.testTruncate();
     })
 
@@ -69,11 +72,11 @@ describe('Test `user` endpoints', () =>{
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('object');
-                    res.body.should.have.property('token');
+                    res.body.userData.should.have.property('accessToken');
                     if(err){
                         console.log(err);
                     } else {
-                        token = res.body.token;
+                        token = res.body.userData.accessToken;
                         done();
                     }
                 });

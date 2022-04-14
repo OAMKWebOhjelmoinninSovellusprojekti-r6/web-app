@@ -133,6 +133,7 @@ router.post('/', auth, async (req, res) => {
 
 // PUT method route
 router.put('/:restaurantId', auth, async (req, res) => {
+
     let fs = null;
     let mData = {};
     let restaurantId = req.params.restaurantId;
