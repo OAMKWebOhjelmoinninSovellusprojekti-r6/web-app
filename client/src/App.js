@@ -14,10 +14,10 @@ import OwnerOrderHistory from './components/OrderHistory/OwnerOrderHistory';
 
 function App() {
   
-  const cartId = 3; // Dummydata
+  const cartId = 2; // Dummydata
   const userAddress = 'street 15'; // Dummydata
   const restaurantId = 6; // Dummydata
-  const userId = 8 // Dummydata
+  const userId = 4 // Dummydata
   
   return (
   <BrowserRouter>

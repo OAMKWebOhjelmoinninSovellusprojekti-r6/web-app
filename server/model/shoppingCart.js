@@ -81,7 +81,7 @@ module.exports = {
         }
         return data;
     },
-    /*async create(shoppingCartData){
+    async create(shoppingCartData){
         // Default values for return Object
         let data = {
             'affectedRows': 0
@@ -107,7 +107,7 @@ module.exports = {
             console.log(err);
         }
         return data;
-    },*/
+    },
 
     async modify(cartItemId, itemQuantity) {
         console.log("model", cartItemId, itemQuantity);
