@@ -280,7 +280,7 @@ describe('Restaurant API tests', () => {
 
 
     /** Test delete restaurant*/
-/*
+
     describe('DELETE restaurant', () => {
         it('should delete restaurant with correct id', (done) => {
             chai.request(server)
@@ -301,15 +301,30 @@ describe('Restaurant API tests', () => {
             .delete(`/restaurant/${restaurantId}`)
             .set('authorization', 'Bearer ' + token + 'qweasd')
             .end((err, res) => {
-                res.should.have.status(403);
+                res.should.have.status(401);
                 if(err){
                     console.log(err);
                 } else {
                     done();
                 }
+            })
+        })
+
+        it('should reject request with invalid id', (done) => {
+            chai.request(server)
+            .delete(`/restaurant/zxc`)
+            .set('authorization', 'Bearer ' + token)
+            .end((err, res) => {
+                res.should.have.status(400);
+                if(err){
+                    console.log(err);
+                } else {
+                    done();
+                }
+            })
         })
     })
-*/
+
     /**END delete restaurant */
 
 })

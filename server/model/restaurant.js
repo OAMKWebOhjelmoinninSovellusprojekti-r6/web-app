@@ -182,7 +182,7 @@ module.exports = {
             // Delete row from Database
             const deleteQuery = await db.query(
                 'DELETE FROM `restaurant` WHERE `idrestaurant`=? AND `user_iduser`=?',
-                [userId, restaurantId]
+                [restaurantId, userId]
             );
             if(deleteQuery.affectedRows >= 1) {
                 data.success = true;
