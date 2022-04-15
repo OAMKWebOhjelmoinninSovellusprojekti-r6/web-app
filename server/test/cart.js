@@ -327,7 +327,7 @@ describe('Shopping cart API tests', () => {
             })
         })
 
-        it('should reject delete shoppingcart item id is invalid', (done) => {
+        it('should reject request delete shoppingcart item when id is invalid', (done) => {
             chai.request(server)
             .delete(`/cart/qweasdq`)
             .set('content-type', 'application/json')
