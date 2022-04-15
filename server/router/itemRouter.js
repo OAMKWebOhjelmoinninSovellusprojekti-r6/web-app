@@ -33,9 +33,9 @@ router.post('/', auth, async (req, res) => {
     console.log('POST, /item');
     // Initialize FileService if file is sent with request
     let fs = null;
-    if(req.files.image){
+    if(req.files.imagePath){
         fs = new FileService(
-            req.files.image,
+            req.files.imagePath,
             'item'
         );
     }

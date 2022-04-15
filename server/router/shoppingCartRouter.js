@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const shoppingCartModel = require('../model/shoppingCart');
-const auth = require('../middleware/auth')
+const auth = require('../middleware/auth.js')
 
 // GET method router
 router.get('/:shoppingCartId', auth, async (req, res) => {
@@ -23,11 +23,9 @@ router.get('/:shoppingCartId', auth, async (req, res) => {
 
 // POST method router
 router.post('/', auth, async (req, res) => {
-    console.log(req.tokenData);
     let data = await shoppingCartModel.create(req.tokenData.userData.shoppingCartId, req.body);
     try {
         if(data.affectedRows === 1) {
-            console.log(data.affectedRows);
             res.sendStatus(200);
         } else if(data.affectedRows === 0) {
             res.sendStatus(400);

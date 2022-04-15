@@ -104,7 +104,8 @@ module.exports = {
          */
         let data = {
             errorCode: 0,
-            success: false
+            success: false,
+            cartId: null
         }
         try {
             const existQuery = await db.query(
@@ -138,6 +139,7 @@ module.exports = {
                     );
                     if(cartQuery.affectedRows == 1){
                         data.success = true;
+                        data.cartId = cartQuery.insertId;
                     } else {
                         errorCode = 3;
                     }
@@ -255,6 +257,22 @@ module.exports = {
     async testTruncateRestaurant(){
         try {
             const truncateQuery = await db.query('DELETE FROM `restaurant`');
+        } catch (err){
+            console.log(err);
+        }
+    },
+
+    async testTruncateItem(){
+        try {
+            const truncateQuery = await db.query('DELETE FROM `item`');
+        } catch (err){
+            console.log(err);
+        }
+    },
+
+    async testTruncateCartItem(){
+        try {
+            const truncateQuery = await db.query('DELETE FROM `shopping_cart_item`');
         } catch (err){
             console.log(err);
         }

@@ -1,24 +1,18 @@
 process.env.MYSQL_DATABASE='webapp_dev';
 
 const chai = require('chai');
-const { assert, expect } = require('chai');
 const chaiHttp = require('chai-http');
 const server = require('../index');
 const fs = require('fs');
-const http = require('http')
 
-const User = require('../model/user');
+const TruncateData = require('./testTruncate');
 chai.use(chaiHttp);
-
-let token = null
 
 describe('Restaurant API tests', () => {
 
     before( async () => {
         // Truncate `user` table
-        await User.testTruncateRestaurant();
-        await User.testTruncateCart();
-        await User.testTruncate();
+        await TruncateData.truncateData();
     })
 
     // Login token
@@ -118,8 +112,12 @@ describe('Restaurant API tests', () => {
             .field('priceLevel', '3')
             .end((err, res) => {
                 res.should.have.status(200);
-                done();
-                restaurantId = res.body.restaurantId;
+                if(err){
+                    console.log(err);
+                } else {
+                    done();
+                    restaurantId = res.body.restaurantId;
+                }
             })
         })
 

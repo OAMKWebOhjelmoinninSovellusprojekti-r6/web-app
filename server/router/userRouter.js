@@ -24,13 +24,14 @@ router.post('/', async function(req, res){
         && reqData.phone != null
         && reqData.isOwner != null
     ){
-        createData = await User.create(reqData);
+        const createData = await User.create(reqData);
         if(
             createData.success == true
             && createData.errorCode == 0
         ){
             return res.status(200).send({
-                'message': 'User created succesfully'
+                'message': 'User created succesfully',
+                'cartId': createData.cartId
             })
         } else {
             if(createData.errorCode == 1){
