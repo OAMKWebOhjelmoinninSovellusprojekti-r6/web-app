@@ -104,7 +104,8 @@ module.exports = {
          */
         let data = {
             errorCode: 0,
-            success: false
+            success: false,
+            cartId: null
         }
         try {
             const existQuery = await db.query(
@@ -138,6 +139,7 @@ module.exports = {
                     );
                     if(cartQuery.affectedRows == 1){
                         data.success = true;
+                        data.cartId = cartQuery.insertId;
                     } else {
                         errorCode = 3;
                     }

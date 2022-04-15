@@ -17,6 +17,7 @@ describe('Shopping cart API tests', () => {
 
     // Login token
     let token = null;
+    let cartId = null;
 
     /** Test create user */
     let userData = {
@@ -41,6 +42,7 @@ describe('Shopping cart API tests', () => {
                     if(err){
                         console.log(err);
                     } else {
+                        cartId = res.body.cartId
                         done();
                     }
                 });
@@ -94,8 +96,8 @@ describe('Shopping cart API tests', () => {
                 if(err) {
                     console.log(err);
                 } else {
-                    done();
                     restaurantId = res.body.restaurantId;
+                    done();
                 }
             })
         })
@@ -123,8 +125,8 @@ describe('Shopping cart API tests', () => {
                 if(err) {
                     console.log(err);
                 } else {
-                    done();
                     itemId = res.body.itemId;
+                    done();
                 }
             })
         })
@@ -146,7 +148,6 @@ describe('Shopping cart API tests', () => {
                 idrestaurant: restaurantId
             })
             .end((err, res) => {
-                console.log(res);
                 res.should.have.status(200);
                 if (err) {
                     console.log(err);
@@ -166,7 +167,6 @@ describe('Shopping cart API tests', () => {
                 idrestaurant: restaurantId
             })
             .end((err, res) => {
-                console.log(res);
                 res.should.have.status(400);
                 if (err) {
                     console.log(err);
@@ -183,7 +183,6 @@ describe('Shopping cart API tests', () => {
             .set('authorization', 'Bearer ' + token)
             .send({})
             .end((err, res) => {
-                console.log(res);
                 res.should.have.status(400);
                 if (err) {
                     console.log(err);
@@ -204,7 +203,6 @@ describe('Shopping cart API tests', () => {
                 idrestaurant: restaurantId
             })
             .end((err, res) => {
-                console.log(res);
                 res.should.have.status(401);
                 if (err) {
                     console.log(err);
@@ -214,6 +212,151 @@ describe('Shopping cart API tests', () => {
             })
         })
     });
-    /** END shopping cart create test*/
+    /** END test shopping cart create*/
+
+
+    /** Test get shoppingcart items */
+
+    let cartItemId = null;
+
+    describe('GET shopping cart item request ', () => {
+        it('should get shoppingcart item when data is correct', (done) => {
+            chai.request(server)
+            .get(`/cart/${cartId}`)
+            .set('content-type', 'application/json')
+            .set('authorization', 'Bearer ' + token)
+            .send({
+                itemId: itemId,
+                quantity: 1,
+                idrestaurant: restaurantId
+            })
+            .end((err, res) => {
+                res.should.have.status(200);
+                if (err) {
+                    console.log(err);
+                } else {
+                    cartItemId = res.body.shoppingCartInfo[0].idItem;
+                    done();
+                }
+            })
+        })
+    })
+    /**END test get shoppingcart item */
+
+
+    /**Test modify shoppingcart item */
+    describe('PUT shopping cart item request ', () => {
+        it('should modify shoppingcart item when data is correct', (done) => {
+            chai.request(server)
+            .put(`/cart/${cartItemId}`)
+            .set('content-type', 'application/json')
+            .set('authorization', 'Bearer ' + token)
+            .send({
+                itemId: itemId,
+                quantity: 1,
+                idrestaurant: restaurantId
+            })
+            .end((err, res) => {
+                res.should.have.status(200);
+                if (err) {
+                    console.log(err);
+                } else {
+                    done();
+                }
+            })
+        })
+
+        it('should reject shoppingcart modification when authentication is invalid', (done) => {
+            chai.request(server)
+            .put(`/cart/${cartItemId}`)
+            .set('content-type', 'application/json')
+            .set('authorization', 'Bearer ' + token + 'awe')
+            .send({
+                itemId: itemId,
+                quantity: 1,
+                idrestaurant: restaurantId
+            })
+            .end((err, res) => {
+                res.should.have.status(401);
+                if (err) {
+                    console.log(err);
+                } else {
+                    done();
+                }
+            })
+        })
+
+        it('should reject shoppingcart modification when cart item id is invalid', (done) => {
+            chai.request(server)
+            .put(`/cart/qwdqxq`)
+            .set('content-type', 'application/json')
+            .set('authorization', 'Bearer ' + token)
+            .send({
+                itemId: itemId,
+                quantity: 1,
+                idrestaurant: restaurantId
+            })
+            .end((err, res) => {
+                res.should.have.status(400);
+                if (err) {
+                    console.log(err);
+                } else {
+                    done();
+                }
+            })
+        })
+    })
+    /**END test modify shoppingcart item */
+
+
+    /** Test delete cart item*/
+
+    describe('DELETE shopping cart item request ', () => {
+        it('should delete shoppingcart item when data is correct', (done) => {
+            chai.request(server)
+            .delete(`/cart/${cartItemId}`)
+            .set('content-type', 'application/json')
+            .set('authorization', 'Bearer ' + token)
+            .end((err, res) => {
+                res.should.have.status(200);
+                if (err) {
+                    console.log(err);
+                } else {
+                    done();
+                }
+            })
+        })
+
+        it('should reject delete shoppingcart item id is invalid', (done) => {
+            chai.request(server)
+            .delete(`/cart/qweasdq`)
+            .set('content-type', 'application/json')
+            .set('authorization', 'Bearer ' + token)
+            .end((err, res) => {
+                res.should.have.status(400);
+                if (err) {
+                    console.log(err);
+                } else {
+                    done();
+                }
+            })
+        })
+
+        it('should reject delete shoppingcart item request when authentication is invalid', (done) => {
+            chai.request(server)
+            .delete(`/cart/${cartItemId}`)
+            .set('content-type', 'application/json')
+            .set('authorization', 'Bearer ' + token + "erw")
+            .end((err, res) => {
+                res.should.have.status(401);
+                if (err) {
+                    console.log(err);
+                } else {
+                    done();
+                }
+            })
+        })
+    })
+    /**END test delete cart item */
 
 })
