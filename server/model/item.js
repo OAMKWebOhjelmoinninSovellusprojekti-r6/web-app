@@ -2,49 +2,46 @@ const db = require("../config/db.js");
 
 module.exports = {
     async get(restaurantId){
-        /*
-         * Example success response from database query
-         * [
-                RowDataPacket {
-                    iditem: 1,
-                    name: 'superpizza',
-                    description: 'kebabmajoneesi',
-                    price: '7',
-                    image_path: 'serveri.com/kuva1',
-                    category: 'roska',
-                    restaurant_id: 1,
-                }
-            ]
+        /**
+         * Error codes:
+         * 0: Query succesful
+         * 1: Query failed
+         * 2: Unknown error
          */
-        // Default values for return Object
-        var data = {
-            'status': 400,
-            itemInfo: null
+        let data = {
+            errorCode: 0,
+            success: false,
+            itemInfo: []
         }
         try {
             // Get item info from database
             const getQuery = await db.query(
-                `SELECT * FROM \`item\` WHERE \`restaurant_id\`=${restaurantId}`
+                'SELECT `iditem`, `name`, `description`, `price`, `image_path`, `category` FROM `item` WHERE `restaurant_id`=?',
+                [restaurantId]
             );
-            console.log(getQuery);
-            // If affectedRows == 1 || >= 1, query was succesful
-            // This should always return === 1 since only one item row is inserted, >= 1 is used only for debugging purposes
-            if(getQuery.length >= 1){
+            // Result can be empty and still be correct
+            if(getQuery.length >= 0){
                 // Get item info from query result
                 data.itemInfo = getQuery;
-                // Set HTTP status code == success
-                data.status = 200;
+                data.success = true;
+            } else {
+                data.errorCode = 1;
             }
         } catch (err){
             // Debug error in case where try/catch fails
             console.log(err);
-            // Set HTTP status code == Internal server error
-            data.status == 500;
+            data.errorCode = 2;
         }
         return data;
     },
 
     async create(userId,itemData){
+        /**
+         * Error codes:
+         * 0: Item created succesful
+         * 1: Failed to create item
+         * 2: Unknown error
+         */
         let data = {
             errorCode: 0,
             success: false,
@@ -81,44 +78,44 @@ module.exports = {
 
     async delete(itemId){
         /**
-         * Example success response from delete query
-         * {
-         *      fieldCount: 0,
-         *      affectedRows: 1,
-         *      insertId: 0,
-         *      serverStatus: 2,
-         *      warningCount: 0,
-         *      message: '',
-         *      protocol41: true,
-         *      changedRows: 0
-         * }
+         * Error codes:
+         * 0: Item deleted succesfully
+         * 1: Failed to delete item
+         * 2: Unknown error / server error
          */
         // Default values for return Object
-        var data = {
-            'status': 400
+        let data = {
+            errorCode: 0,
+            success: false
         }
         try {
             // Delete row from database
             const deleteQuery = await db.query(
-                `DELETE FROM \`item\` WHERE \`iditem\`=${itemId}`
+                'DELETE from `item` WHERE `iditem`=?',
+                [itemId]
             );
-            console.log(deleteQuery);
-            // If affectedRows == 1 || >= 1, query was succesful
-            // This should always return === 1 since only one item row is inserted, >= 1 is used only for debugging purposes
-            if(deleteQuery.affectedRows >= 1){
-                // Set HTTP status code == success
-                data.status = 200;
+            if(deleteQuery.affectedRows == 1){
+                data.success = true;
+            } else {
+                data.errorCode = 1;
             }
         } catch (err){
             // Debug error in case where try/catch fails
             console.log(err);
-            // Set HTTP status code == Internal server error
-            data.status = 500;
+            data.errorCode = 2;
         }
         return data;
     },
     
-    async modify(userId, itemId, itemData){
+    async modify(itemId, itemData){
+        /**
+         * Error codes:
+         * 0: Item modified succesfully
+         * 1: Failed to modify item
+         * 2: Unknown error
+         * 3: No values selected
+         */
+
         let data = {
             errorCode: 0,
             success: false
@@ -146,28 +143,33 @@ module.exports = {
                 '`category`="' + itemData.category + '"'
             );
         }
-        // Create raw SQL from itemData values
-        updateString = 'UPDATE `item` SET ' + updateTerms.join(', ') + ' WHERE `iditem`=? AND `restaurant_id`=?';
-
-        try {
-            // Update database row
-            const updateQuery = await db.query(
-                updateString,
-                [
-                    itemId,
-                    itemData.restaurantId
-                ]
-            );
-            if(updateQuery.affectedRows == 1){
-                data.success = true;
-            } else {
-                data.errorCode = 1;
+        if(updateTerms.length > 0){
+            // Create raw SQL from itemData values
+            updateString = 'UPDATE `item` SET ? WHERE `iditem`=? AND `restaurant_id`=?';
+            try {
+                // Update database row
+                const updateQuery = await db.query(
+                    updateString,
+                    [
+                        updateTerms.join(', '),
+                        itemId,
+                        itemData.restaurantId
+                    ]
+                );
+                if(updateQuery.affectedRows == 1){
+                    data.success = true;
+                } else {
+                    data.errorCode = 1;
+                }
+            } catch (err){
+                // Debug error in case where try/catch fails
+                console.log(err);
+                data.errorCode = 2;
             }
-        } catch (err){
-            // Debug error in case where try/catch fails
-            console.log(err);
-            data.errorCode = 2;
+        } else {
+            data.errorCode = 3;
         }
+        
         return data;
     },
 

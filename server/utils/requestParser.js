@@ -67,5 +67,13 @@ module.exports = {
             return value;
         }
         return null;
+    },
+
+    parsePathInteger(value){
+        try {
+            value = parseInt(value);
+            return value
+        } catch {}
+        return null;
     }
 };

@@ -15,7 +15,7 @@ export default function MenuListView() {
 
     //Get all items based on restaurantId
     useEffect(() => {
-        UserService.getMenu(restaurantId).then(result => {
+        UserService.itemGetByRestaurantId(restaurantId).then(result => {
           setItems(result.data.itemInfo);
         });
         
