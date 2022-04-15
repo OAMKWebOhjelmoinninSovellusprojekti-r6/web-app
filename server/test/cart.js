@@ -106,7 +106,7 @@ describe('Shopping cart API tests', () => {
     /**Test create item */
     let itemId = null;
 
-    describe('POST item request', () => {
+    describe('POST item request into item table', () => {
         it('should add item data when data is correct', (done) => {
             chai.request(server)
             .post('/item')
@@ -131,5 +131,89 @@ describe('Shopping cart API tests', () => {
     })
 
     /**END test create item */
+
+    /** Test create shoppingcart item*/
+
+    describe('POST shopping cart item request ', () => {
+        it('should add shoppingcart item when data is correct', (done) => {
+            chai.request(server)
+            .post('/cart')
+            .set('content-type', 'application/json')
+            .set('authorization', 'Bearer ' + token)
+            .send({
+                itemId: itemId,
+                quantity: 1,
+                idrestaurant: restaurantId
+            })
+            .end((err, res) => {
+                console.log(res);
+                res.should.have.status(200);
+                if (err) {
+                    console.log(err);
+                } else {
+                    done();
+                }
+            })
+        })
+
+        it('should reject shoppingcart item request when missing fields from the data', (done) => {
+            chai.request(server)
+            .post('/cart')
+            .set('content-type', 'application/json')
+            .set('authorization', 'Bearer ' + token)
+            .send({
+                quantity: 1,
+                idrestaurant: restaurantId
+            })
+            .end((err, res) => {
+                console.log(res);
+                res.should.have.status(400);
+                if (err) {
+                    console.log(err);
+                } else {
+                    done();
+                }
+            })
+        })
+
+        it('should reject request with empty data structure', (done) => {
+            chai.request(server)
+            .post('/cart')
+            .set('content-type', 'application/json')
+            .set('authorization', 'Bearer ' + token)
+            .send({})
+            .end((err, res) => {
+                console.log(res);
+                res.should.have.status(400);
+                if (err) {
+                    console.log(err);
+                } else {
+                    done();
+                }
+            })
+        })
+
+        it('should reject request with invalid token', (done) => {
+            chai.request(server)
+            .post('/cart')
+            .set('content-type', 'application/json')
+            .set('authorization', 'Bearer ' + token + 'zxcqweasd')
+            .send({
+                itemId: itemId,
+                quantity: 1,
+                idrestaurant: restaurantId
+            })
+            .end((err, res) => {
+                console.log(res);
+                res.should.have.status(401);
+                if (err) {
+                    console.log(err);
+                } else {
+                    done();
+                }
+            })
+        })
+    });
+    /** END shopping cart create test*/
 
 })

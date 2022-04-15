@@ -268,6 +268,14 @@ module.exports = {
         }
     },
 
+    async testTruncateCartItem(){
+        try {
+            const truncateQuery = await db.query('DELETE FROM `shopping_cart_item`');
+        } catch (err){
+            console.log(err);
+        }
+    },
+
     async testGetByUsername(username){
         /**
          * Error codes:

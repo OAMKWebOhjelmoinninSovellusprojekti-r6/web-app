@@ -6,7 +6,7 @@ module.exports = {
         let data = {
             shoppingCartInfo: [
                 {
-                    'idItem': 0,
+                    'itemId': 0,
                     'itemName': '',
                     'description': '',
                     'price': 0,
@@ -43,7 +43,8 @@ module.exports = {
         return data;
     },
 
-    async create(shoppingCartId,shoppingCartData){
+    async create(shoppingCartId, shoppingCartData){
+        
         // Default values for return Object
         let data = {
             'affectedRows': 0
@@ -76,11 +77,11 @@ module.exports = {
             } 
         } catch (err){
             // Debug error in case where try/catch fails
-            console.log(err);
             errorCode = 1;
         }
         return data;
     },
+    /*
     async create(shoppingCartData){
         // Default values for return Object
         let data = {
@@ -108,7 +109,7 @@ module.exports = {
         }
         return data;
     },
-
+*/
     async modify(cartItemId, itemQuantity) {
         console.log("model", cartItemId, itemQuantity);
         let data = {
