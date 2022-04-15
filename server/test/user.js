@@ -6,7 +6,7 @@ const { assert } = require('chai')
 
 const chaiHttp = require('chai-http');
 const server = require('../index.js');
-const User = require('../model/user.js');
+const TruncateData = require('./testTruncate');
 
 chai.use(chaiHttp);
 let should = chai.should();
@@ -20,9 +20,7 @@ describe('Test `user` endpoints', () =>{
     
     before( async () => {
         // Truncate `user` table
-        await User.testTruncateRestaurant();
-        await User.testTruncateCart();
-        await User.testTruncate();
+        await TruncateData.truncateData();
     })
 
     // Login token

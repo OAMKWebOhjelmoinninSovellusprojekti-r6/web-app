@@ -5,18 +5,14 @@ const chaiHttp = require('chai-http');
 const server = require('../index');
 const fs = require('fs');
 
-const User = require('../model/user');
+const TruncateData = require('./testTruncate');
 chai.use(chaiHttp);
-
-let token = null
 
 describe('Shopping cart API tests', () => {
 
     before( async () => {
         // Truncate `user` table
-        await User.testTruncateRestaurant();
-        await User.testTruncateCart();
-        await User.testTruncate();
+        await TruncateData.truncateData();
     })
 
     // Login token
@@ -81,7 +77,7 @@ describe('Shopping cart API tests', () => {
     /**Test create restaurant */
     let restaurantId = null;
 
-    describe('POST restaurant requet', () => {
+    describe('POST restaurant request', () => {
         it('should add restaurant data when the data is correct', (done) => {
             chai.request(server)
             .post('/restaurant')
@@ -105,7 +101,35 @@ describe('Shopping cart API tests', () => {
         })
     })
 
-
     /**END test create restaurant */
+
+    /**Test create item */
+    let itemId = null;
+
+    describe('POST item request', () => {
+        it('should add item data when data is correct', (done) => {
+            chai.request(server)
+            .post('/item')
+            .set('content-type', 'multipart/form-data')
+            .set('authorization', 'Bearer ' + token)
+            .attach('imagePath', fs.readFileSync('./test/tictactoe.png'), 'tictactoe.png')
+            .field('name', 'the Burger')
+            .field('description', 'delicious dish')
+            .field('price', 4.99)
+            .field('category', 'burgers')
+            .field('restaurantId', restaurantId)
+            .end((err, res) => {
+                res.should.have.status(200);
+                if(err) {
+                    console.log(err);
+                } else {
+                    done();
+                    itemId = res.body.itemId;
+                }
+            })
+        })
+    })
+
+    /**END test create item */
 
 })

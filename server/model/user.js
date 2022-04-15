@@ -260,6 +260,14 @@ module.exports = {
         }
     },
 
+    async testTruncateItem(){
+        try {
+            const truncateQuery = await db.query('DELETE FROM `item`');
+        } catch (err){
+            console.log(err);
+        }
+    },
+
     async testGetByUsername(username){
         /**
          * Error codes:

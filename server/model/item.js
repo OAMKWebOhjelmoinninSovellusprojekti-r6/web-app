@@ -45,6 +45,8 @@ module.exports = {
     },
 
     async create(userId,itemData){
+
+        console.log("itemdata", userId, itemData);
         let data = {
             errorCode: 0,
             success: false,

@@ -18,12 +18,12 @@ router.get('/:restaurantId', async function(req, res){
 
 // Create item
 router.post('/', auth, async (req, res) => {
-    console.log('POST, /item');
+    console.log('POST, /item', req.body, req.files.imagePath);
     // Initialize FileService if file is sent with request
     let fs = null;
-    if(req.files.image){
+    if(req.files.imagePath){
         fs = new FileService(
-            req.files.image,
+            req.files.imagePath,
             'item'
         );
     }
