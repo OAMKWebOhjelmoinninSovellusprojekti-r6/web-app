@@ -15,7 +15,7 @@ export default function MenuListView() {
 
     //Get all items based on restaurantId
     useEffect(() => {
-        UserService.getMenu(restaurantId).then(result => {
+        UserService.itemGetByRestaurantId(restaurantId).then(result => {
           setItems(result.data.itemInfo);
         });
         
@@ -31,6 +31,7 @@ export default function MenuListView() {
             itemId: itemId 
         };
         UserService.postCartItem(item);
+        alert("Item added to shopping cart");
     }
 
     console.log('Ravintolan tiedot:', restaurant);
@@ -42,60 +43,59 @@ export default function MenuListView() {
 if(currentUser === null) {
     return (
 
-        <div className="restaurantView">          
-                    <div className="menu">
-                        {items.map(i=>
-                        <Menu key={i.iditem} image={i.image_path} id={i.iditem} name={i.name} description={i.description} price={i.price} />)
-                        }     
-                    </div>
-                    <div className="restaurantInfo">  
-                        {restaurant.map(r=>
-                        <RestaurantInfo key={r.id}  image={r.image_path} name={r.name} address={r.address} openingHours={r.opening_hours} 
-                        priceLevel={r.price_level}/>
-                        )}
-                    </div>
-        </div>
-            )
-                        }
-else if(currentUser.isOwner === 1) {
-    return (
-        
-<div className="restaurantView">          
+        <div className="restaurantView">      
             <div className="menu">
                 {items.map(i=>
                 <Menu key={i.iditem} image={i.image_path} id={i.iditem} name={i.name} description={i.description} price={i.price} />)
                 }     
             </div>
-            <div className="restaurantInfo">  
-                {restaurant.map(r=>
-                <Link to={`/restaurants/additem/${r.id}`} key={r.id}>
-                <button>Add item to menu</button>
-                <RestaurantInfo  image={r.image_path} name={r.name} address={r.address} openingHours={r.opening_hours} 
-                priceLevel={r.price_level}/>
-                </Link>
-                )}
-            </div>
-</div>
-            )   
-                }
-
-else {
-
-    return (
-
-<div className="restaurantView">          
-            <div className="menu">
-                {items.map(i=>
-                <Menu key={i.iditem} image={i.image_path} postItem={postItem} id={i.iditem} name={i.name} description={i.description} price={i.price} />)
-                }     
-            </div>
-            <div className="restaurantInfo">  
+            <div className="restaurant">  
                 {restaurant.map(r=>
                 <RestaurantInfo key={r.id}  image={r.image_path} name={r.name} address={r.address} openingHours={r.opening_hours} 
                 priceLevel={r.price_level}/>
                 )}
             </div>
-</div>
-    )
+        </div>
+            )
+}
+else if(currentUser.isOwner === 1) {
+    return (
+        
+        <div className="restaurantView">          
+            <div className="menu">
+                {items.map(i=>
+                <Menu key={i.iditem} image={i.image_path} id={i.iditem} name={i.name} description={i.description} price={i.price} />)
+                }     
+            </div>
+            <div className="restaurant">  
+                {restaurant.map(r=>
+                <Link to={`/restaurants/additem/${r.id}`} key={r.id}>
+                <button className="btn">Add item to menu</button>
+                <RestaurantInfo  image={r.image_path} name={r.name} address={r.address} openingHours={r.opening_hours} 
+                priceLevel={r.price_level}/>
+                </Link>
+                )}
+            </div>
+        </div>
+            )   
+}
+
+else {
+    return (
+
+        <div className="restaurantView">          
+            <div className="menu">
+                {items.map(i=>
+                <Menu key={i.iditem} image={i.image_path} postItem={postItem} id={i.iditem} name={i.name} description={i.description} price={i.price} />)
+                }     
+            </div>
+            <div className="restaurant">  
+                {restaurant.map(r=>
+                <RestaurantInfo key={r.id}  image={r.image_path} name={r.name} address={r.address} openingHours={r.opening_hours} 
+                priceLevel={r.price_level}/>
+                )}
+            </div>
+        </div>
+            )
 }
 }

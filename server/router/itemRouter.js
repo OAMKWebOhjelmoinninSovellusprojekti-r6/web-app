@@ -7,14 +7,26 @@ const auth = require('../middleware/auth.js');
 
 //Get item info by restaurant id
 router.get('/:restaurantId', async function(req, res){
-    let idRestaurant = parseInt(req.params.restaurantId);
-    let data = await item.get(idRestaurant);
-    if(data.status === 500 || data.status === 400) {
-        res.send(data.status);
+    console.log('GET, /item/:{restaurantId}');
+    if(req.params.restaurantId){
+        let data = await item.get(req.params.restaurantId);
+        if(
+            data.success == true
+            && data.errorCode == 0
+        ) {
+            return res.status(200).send({
+                'data': data
+            });
+        }
     } else {
-        res.send(data);
-    }  
+        return res.status(400).send({
+            'message': 'Invalid restaurant id'
+        });
+    }
+    return res.status(500).send({
+        'message': 'Unknown error'
     });
+});
 
 // Create item
 router.post('/', auth, async (req, res) => {
@@ -81,6 +93,8 @@ router.post('/', auth, async (req, res) => {
 // Change item
 router.put('/:itemId', auth, async function(req, res){
     console.log('PUT, /item');
+    console.log(req.body);
+    let itemId = parser.parsePathInteger(req.params.itemId);
     let fs = null;
     if(req.files && req.files.image){
         fs = new FileService(
@@ -91,9 +105,9 @@ router.put('/:itemId', auth, async function(req, res){
     //Object for data which is updated. Some or all of the values are changeable.
     let updateData = {}
     updateData.name = parser.parseString(req.body.name, 20);
-    updateData.description = parser.parseString(req.body.description);
+    updateData.description = parser.parseString(req.body.description, 50);
     updateData.price = parser.parsePrice(req.body.price);
-    updateData.category = parser.parseString(req.body.category);
+    updateData.category = parser.parseString(req.body.category, 20);
     updateData.restaurantId = parser.parseId(req.body.restaurantId);
     if(
         (
@@ -103,11 +117,10 @@ router.put('/:itemId', auth, async function(req, res){
             || updateData.category != null
             || fs != null
         )
-        && req.params.restaurantId
-        && req.params.itemId
+        && updateData.restaurantId != null
+        && itemId != null
     ){
         changeData = await item.modify(
-            req.tokenData.userData.userId,
             req.params.itemId,
             updateData
         );
@@ -139,15 +152,27 @@ router.put('/:itemId', auth, async function(req, res){
 });
 
 // Delete item
-router.delete('/:itemId', async function(req, res){
+router.delete('/:itemId', auth, async function(req, res){
     console.log('DELETE, /item');
-    let idItem = parseInt(req.params.itemId);
-    let data = await item.delete(idItem);
-    if(data.status === 500 || data.status === 400) {
-        res.send(data.status);
+    let itemId = parser.parsePathInteger(req.params.itemId);
+    if(itemId != null){
+        let data = await item.delete(itemId);
+        if(
+            data.success == true
+            && data.errorCode == 0
+        ) {
+            return res.status(200).send({
+                'message': 'Item deleted succesfully'
+            });
+        }
     } else {
-        res.send(data);
-    }  
+        return res.status(400).send({
+            'message': 'Invalid parameters'
+        });
+    }
+    return res.status(500).send({
+        'message': 'Unknown error'
     });
+});
     
 module.exports = router;

@@ -60,12 +60,22 @@ class UserService {
   ownerOrderHistoryGet(restaurantId){
     return axios.get(API_URL + 'history/owner/' + restaurantId, { headers: authHeader() } );
   }
-  getMenu(restaurantId){
+
+
+  /** Item router actions */
+  
+  // Get items by restaurant id
+  itemGetByRestaurantId(restaurantId){
     return axios.get(API_URL + 'item/' + restaurantId);
   }
 
+  // Adds new item to restaurant
   itemAdd(data){
     return axios.post(API_URL + 'item', data, { headers: authHeader() });
+  }
+
+  itemDelete(itemId){
+    return api.delete(API_URL + 'item/' + itemId);
   }
 }
 export default new UserService();
