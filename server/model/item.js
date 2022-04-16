@@ -13,6 +13,7 @@ module.exports = {
             success: false,
             itemInfo: []
         }
+
         try {
             // Get item info from database
             const getQuery = await db.query(
@@ -20,7 +21,7 @@ module.exports = {
                 [restaurantId]
             );
             // Result can be empty and still be correct
-            if(getQuery.length >= 0){
+            if(getQuery.length > 0){
                 // Get item info from query result
                 data.itemInfo = getQuery;
                 data.success = true;
