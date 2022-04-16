@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const historyItem = require('../model/orderHistoryItem');
+const auth = require('../middleware/auth.js');
 
-router.post('/', async(req, res) => {
+router.post('/', auth, async(req, res) => {
     // POST method router
     let data = await historyItem.create(req.body);
     try {

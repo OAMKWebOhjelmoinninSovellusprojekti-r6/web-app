@@ -44,6 +44,8 @@ router.get('/', auth, async function(req, res) {
                } else {
                  res.send(data);
                }
+          } else {
+            res.sendStatus(400);
           }
       }
       catch(err){
@@ -79,8 +81,9 @@ router.get('/', auth, async function(req, res) {
 
 router.post('/', auth, async(req, res) => {
   // Send create request
-  console.log(req.body);
-  let data = await history.create(req.body);
+
+  let userId = req.tokenData.userData.userId
+  let data = await history.create(userId, req.body);
   console.log("routerdata", data);
   try {
     if(data.affectedRows === 1) {

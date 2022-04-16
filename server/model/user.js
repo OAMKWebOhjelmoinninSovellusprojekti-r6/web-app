@@ -278,6 +278,22 @@ module.exports = {
         }
     },
 
+    async testTruncateItemHistory(){
+        try {
+            const truncateQuery = await db.query('DELETE FROM `order_history_item`');
+        } catch (err){
+            console.log(err);
+        }
+    },
+
+    async testTruncateHistory(){
+        try {
+            const truncateQuery = await db.query('DELETE FROM `order_history`');
+        } catch (err){
+            console.log(err);
+        }
+    },
+
     async testGetByUsername(username){
         /**
          * Error codes:
