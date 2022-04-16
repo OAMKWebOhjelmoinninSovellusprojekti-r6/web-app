@@ -17,15 +17,16 @@ router.get('/:restaurantId', async function(req, res){
             return res.status(200).send({
                 'itemInfo': data.itemInfo
             });
+        } else {
+            return res.status(400).send({
+                'message': 'Invalid restaurant id'
+            });
         }
     } else {
-        return res.status(400).send({
-            'message': 'Invalid restaurant id'
+        return res.status(500).send({
+            'message': 'Unknown error'
         });
     }
-    return res.status(500).send({
-        'message': 'Unknown error'
-    });
 });
 
 // Create item
@@ -109,6 +110,7 @@ router.put('/:itemId', auth, async function(req, res){
     updateData.price = parser.parsePrice(req.body.price);
     updateData.category = parser.parseString(req.body.category, 20);
     updateData.restaurantId = parser.parseId(req.body.restaurantId);
+    
     if(
         (
             updateData.name != null
@@ -155,6 +157,7 @@ router.put('/:itemId', auth, async function(req, res){
 router.delete('/:itemId', auth, async function(req, res){
     console.log('DELETE, /item');
     let itemId = parser.parsePathInteger(req.params.itemId);
+    
     if(itemId != null){
         let data = await item.delete(itemId);
         if(

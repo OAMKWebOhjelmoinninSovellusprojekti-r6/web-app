@@ -2,11 +2,14 @@ module.exports = {
     parsePrice(value){
         try {
             value = parseFloat(value);
-            return value;
+            if(isNaN(value)){
+                return null;
+            } else {
+                return value;
+            }
         } catch (err){
             console.log(err);
         }
-        return null;
     },
 
     parsePriceLevel(value){
@@ -55,7 +58,11 @@ module.exports = {
     parseId(value){
         try {
             value = parseInt(value)
-            return value;
+            if(isNaN(value)){
+                return null;
+            } else {
+                return value;
+            }
         } catch (err){
             console.log(err);
         }
@@ -72,7 +79,11 @@ module.exports = {
     parsePathInteger(value){
         try {
             value = parseInt(value);
-            return value
+            if(isNaN(value)){
+                return null;
+            } else {
+                return value;
+            }
         } catch {}
         return null;
     }
