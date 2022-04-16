@@ -84,7 +84,6 @@ module.exports = {
 
     async create(historyData){
         // Default values for return Object
-        console.log(historyData);
         let data = {
             'affectedRows': 0
         }

@@ -70,8 +70,8 @@ router.put('/:shoppingCartItemId', auth, async (req, res) => {
 
     if(
         requestData.itemId != null
-        && requestData.quantity != null
-        && requestData.idrestaurant != null
+        || requestData.quantity != null
+        || requestData.idrestaurant != null
     ) {
         let data = await shoppingCartModel.modify(req.params.shoppingCartItemId, req.body);
         try {
