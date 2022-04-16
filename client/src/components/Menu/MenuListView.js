@@ -1,101 +1,66 @@
 import React from 'react';
 import { Menu, RestaurantInfo} from './Menu'
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom'; 
+import { useParams } from 'react-router-dom'; 
 import UserService from '../../services/user.service';
-import AuthService from "../../services/auth.service";
 
 export default function MenuListView() {
 
     const [items, setItems] = useState([]);
     const [restaurant, setRestaurant] = useState([]);
     const {restaurantId}= useParams();
-    let currentUser = AuthService.getCurrentUser();
-  
 
     //Get all items based on restaurantId
     useEffect(() => {
         UserService.itemGetByRestaurantId(restaurantId).then(result => {
-          setItems(result.data.itemInfo);
+            setItems(result.data.itemInfo);
         });
-        
         UserService.restaurantGetById(restaurantId).then(result => {
-              setRestaurant(result.data);
-              
+            if(result.data && result.data.length > 0){
+                setRestaurant(result.data[0]);
+            }
         });
-
     },[]);
     
-    async function postItem(itemId){
-        const item = {
-            itemId: itemId 
-        };
-        UserService.postCartItem(item);
-        alert("Item added to shopping cart");
+    const getMenuTemplate = () => {
+        // Create template for menu items
+        let itemsTemplate = 'Restaurant doesnt have any menu items yet';
+        if(items){
+            itemsTemplate = items.map( i => 
+                <Menu
+                    key={i.iditem}
+                    image={i.image_path}
+                    id={i.iditem}
+                    name={i.name}
+                    description={i.description}
+                    price={i.price}
+                />
+            )
+        }
+
+        let restaurantTemplate = 'Failed to get restaurant info';
+        if(restaurant){
+            restaurantTemplate = <RestaurantInfo 
+                key={restaurant.id}
+                image={restaurant.image_path}
+                name={restaurant.name}
+                address={restaurant.address}
+                openingHours={restaurant.opening_hours} 
+                priceLevel={restaurant.price_level}
+            />
+        }
+
+        return (
+            <div className="restaurantView">
+                <div className="menu">
+                    { itemsTemplate }
+                </div>
+                <div className="restaurant">
+                    { restaurantTemplate }
+                </div>
+            </div>
+        )
     }
 
-    console.log('Ravintolan tiedot:', restaurant);
-    console.log('Ravintolan menu:', items);
-
-        //let idUser = restaurant[0].user_iduser;
-              //console.log(idUser);
-
-if(currentUser === null) {
-    return (
-
-        <div className="restaurantView">      
-            <div className="menu">
-                {items.map(i=>
-                <Menu key={i.iditem} image={i.image_path} id={i.iditem} name={i.name} description={i.description} price={i.price} />)
-                }     
-            </div>
-            <div className="restaurant">  
-                {restaurant.map(r=>
-                <RestaurantInfo key={r.id}  image={r.image_path} name={r.name} address={r.address} openingHours={r.opening_hours} 
-                priceLevel={r.price_level}/>
-                )}
-            </div>
-        </div>
-            )
-}
-else if(currentUser.isOwner === 1) {
-    return (
-        
-        <div className="restaurantView">          
-            <div className="menu">
-                {items.map(i=>
-                <Menu key={i.iditem} image={i.image_path} id={i.iditem} name={i.name} description={i.description} price={i.price} />)
-                }     
-            </div>
-            <div className="restaurant">  
-                {restaurant.map(r=>
-                <Link to={`/restaurants/additem/${r.id}`} key={r.id}>
-                <button className="btn">Add item to menu</button>
-                <RestaurantInfo  image={r.image_path} name={r.name} address={r.address} openingHours={r.opening_hours} 
-                priceLevel={r.price_level}/>
-                </Link>
-                )}
-            </div>
-        </div>
-            )   
-}
-
-else {
-    return (
-
-        <div className="restaurantView">          
-            <div className="menu">
-                {items.map(i=>
-                <Menu key={i.iditem} image={i.image_path} postItem={postItem} id={i.iditem} name={i.name} description={i.description} price={i.price} />)
-                }     
-            </div>
-            <div className="restaurant">  
-                {restaurant.map(r=>
-                <RestaurantInfo key={r.id}  image={r.image_path} name={r.name} address={r.address} openingHours={r.opening_hours} 
-                priceLevel={r.price_level}/>
-                )}
-            </div>
-        </div>
-            )
-}
+    return getMenuTemplate();
 }

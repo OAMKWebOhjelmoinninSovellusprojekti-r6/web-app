@@ -15,7 +15,7 @@ router.get('/:restaurantId', async function(req, res){
             && data.errorCode == 0
         ) {
             return res.status(200).send({
-                'data': data
+                'itemInfo': data.itemInfo
             });
         }
     } else {
