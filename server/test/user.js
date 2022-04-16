@@ -6,6 +6,7 @@ const { assert } = require('chai')
 
 const chaiHttp = require('chai-http');
 const server = require('../index.js');
+const { login } = require('../model/user.js');
 const TruncateData = require('./testTruncate');
 
 chai.use(chaiHttp);
@@ -53,6 +54,71 @@ describe('Test `user` endpoints', () =>{
                     }
                 });
         });
+
+        it('Should reject creating user with already existing username', (done) => {
+            chai.request(server)
+                .post("/user")
+                .set('content-type', 'application/json')
+                .send(userData)
+                .end((err, res) => {
+                    res.should.have.status(403);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('message');
+                    if(err){
+                        console.log(err);
+                    } else {
+                        done();
+                    }
+                });
+        });
+
+        it('Should reject request with invalid data type', (done) => {
+            chai.request(server)
+                .post("/user")
+                .set('content-type', 'application/json')
+                .send({
+                    username: 'testuser2',
+                    password: 'pass123',
+                    firstName: 'test',
+                    lastName: 'user',
+                    address: 'Osoite 123',
+                    phone: 0401231234,
+                    isOwner: 0
+                })
+                .end((err, res) => {
+                    res.should.have.status(400);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('message');
+                    if(err){
+                        console.log(err);
+                    } else {
+                        done();
+                    }
+                });
+        });
+
+        it('Should reject request with missing data', (done) => {
+            chai.request(server)
+                .post("/user")
+                .set('content-type', 'application/json')
+                .send({
+                    username: 'testuser2',
+                    password: 'pass123',
+                    firstName: 'test',
+                    lastName: 'user',
+                    isOwner: 0
+                })
+                .end((err, res) => {
+                    res.should.have.status(400);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('message');
+                    if(err){
+                        console.log(err);
+                    } else {
+                        done();
+                    }
+                });
+        });
     });
     /** END Test create user */
 
@@ -62,6 +128,7 @@ describe('Test `user` endpoints', () =>{
         password: userData.password
     }
     describe('POST /user/login', () => {
+
         it('Should log user in', (done) => {
             chai.request(server)
                 .post('/user/login')
@@ -79,6 +146,49 @@ describe('Test `user` endpoints', () =>{
                     }
                 });
         });
+
+        it('Should reject requests with wrong password', (done) => {
+            chai.request(server)
+                .post('/user/login')
+                .set('content-type', 'application/json')
+                .send({
+                    'username': 'testuser2',
+                    'password': 'pass'
+                })
+                .end((err, res) => {
+                    res.should.have.status(403);
+                    res.body.should.be.a('object');
+                    res.body.userData.should.have.property('accessToken');
+                    if(err){
+                        console.log(err);
+                    } else {
+                        token = res.body.userData.accessToken;
+                        done();
+                    }
+                });
+        });
+
+        it('Should reject requests with wrong username', (done) => {
+            chai.request(server)
+                .post('/user/login')
+                .set('content-type', 'application/json')
+                .send({
+                    'username': 'testi',
+                    'password': 'pass123'
+                })
+                .end((err, res) => {
+                    res.should.have.status(403);
+                    res.body.should.be.a('object');
+                    res.body.userData.should.have.property('accessToken');
+                    if(err){
+                        console.log(err);
+                    } else {
+                        token = res.body.userData.accessToken;
+                        done();
+                    }
+                });
+        });
+
     });
     /** END Test login user */
 
@@ -98,6 +208,45 @@ describe('Test `user` endpoints', () =>{
                 .send(modifyData)
                 .end( (err, res) => {
                     res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('message');
+                    if(err){
+                        console.log(err);
+                    } else {
+                        done();
+                    }
+                });
+        });
+
+        it('Should reject request with missing datatypes', (done) => {
+            chai.request(server)
+                .put('/user')
+                .set('content-type', 'application/json')
+                .set('authorization', 'Bearer ' + token)
+                .send({
+                    address: 'modifiedAddress',
+                    phone: 'modifiedPhone123'
+                })
+                .end( (err, res) => {
+                    res.should.have.status(400);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('message');
+                    if(err){
+                        console.log(err);
+                    } else {
+                        done();
+                    }
+                });
+        });
+
+        it('Should reject empty request', (done) => {
+            chai.request(server)
+                .put('/user')
+                .set('content-type', 'application/json')
+                .set('authorization', 'Bearer ' + token)
+                .send({})
+                .end( (err, res) => {
+                    res.should.have.status(400);
                     res.body.should.be.a('object');
                     res.body.should.have.property('message');
                     if(err){
