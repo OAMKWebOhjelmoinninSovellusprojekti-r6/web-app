@@ -157,12 +157,9 @@ describe('Test `user` endpoints', () =>{
                 })
                 .end((err, res) => {
                     res.should.have.status(403);
-                    res.body.should.be.a('object');
-                    res.body.userData.should.have.property('accessToken');
                     if(err){
                         console.log(err);
                     } else {
-                        token = res.body.userData.accessToken;
                         done();
                     }
                 });
@@ -178,12 +175,9 @@ describe('Test `user` endpoints', () =>{
                 })
                 .end((err, res) => {
                     res.should.have.status(403);
-                    res.body.should.be.a('object');
-                    res.body.userData.should.have.property('accessToken');
                     if(err){
                         console.log(err);
                     } else {
-                        token = res.body.userData.accessToken;
                         done();
                     }
                 });
@@ -218,15 +212,12 @@ describe('Test `user` endpoints', () =>{
                 });
         });
 
-        it('Should reject request with missing datatypes', (done) => {
+        it('Should reject empty data request', (done) => {
             chai.request(server)
                 .put('/user')
                 .set('content-type', 'application/json')
                 .set('authorization', 'Bearer ' + token)
-                .send({
-                    address: 'modifiedAddress',
-                    phone: 'modifiedPhone123'
-                })
+                .send({})
                 .end( (err, res) => {
                     res.should.have.status(400);
                     res.body.should.be.a('object');
@@ -258,4 +249,42 @@ describe('Test `user` endpoints', () =>{
         });
     });
     /** END Test modify user */
+
+    /** Test DELETE user*/
+
+    describe('DELETE /user', () => {
+        it('Should delete user info', (done) => {
+            chai.request(server)
+                .delete('/user')
+                .set('content-type', 'application/json')
+                .set('authorization', 'Bearer ' + token)
+                .end( (err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('message');
+                    if(err){
+                        console.log(err);
+                    } else {
+                        done();
+                    }
+                });
+        });
+
+        it('Should reject request with invalid token', (done) => {
+            chai.request(server)
+                .delete('/user')
+                .set('content-type', 'application/json')
+                .set('authorization', 'Bearer ' + token + "qwdper")
+                .end( (err, res) => {
+                    res.should.have.status(401);
+                    res.body.should.be.a('object');
+                    if(err){
+                        console.log(err);
+                    } else {
+                        done();
+                    }
+                });
+        });
+    })
+    /**END test delete user */
 });

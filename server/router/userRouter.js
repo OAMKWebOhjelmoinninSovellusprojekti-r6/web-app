@@ -82,7 +82,7 @@ router.put('/', auth, async function(req, res){
 });
 
 router.delete('/', auth, async function(req, res){
-    let deleteData = await User.delete(req.tokenData.userData.id);
+    let deleteData = await User.delete(req.tokenData.userData.userId, req.tokenData.userData.shoppingCartId);
     if(
         deleteData.success == true
         && deleteData.errorCode == 0
