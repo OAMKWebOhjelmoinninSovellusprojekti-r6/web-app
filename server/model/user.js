@@ -54,7 +54,7 @@ module.exports = {
                 'SELECT a1.`iduser`, a1.`password`, a1.`firstname`, a1.`lastname`, a1.`is_owner`, a2.`idshopping_cart` FROM `user` a1 LEFT JOIN `shopping_cart` a2 ON a1.`iduser`=a2.`user_id` WHERE `username`=?',
                 [username]
             );
-            if(loginQuery.length == 1 && argon2.verify(loginQuery[0].password, password)){
+            if(loginQuery.length == 1 && await argon2.verify(loginQuery[0].password, password)){
                 const accessToken = ts.createAccessToken(
                     loginQuery[0].iduser,
                     loginQuery[0].idshopping_cart
@@ -209,23 +209,28 @@ module.exports = {
         return data;
     },
 
-    async delete(userId){
+    async delete(userId, shoppingCartId){
         /**
          * Error codes:
          * 0: User deleted succesfully
          * 1: User delete failed
          * 2: Unknown error
          */
+
         let data = {
             errorCode: 0,
             success: false
         }
         try {
+            const deleteQueryCart = await db.query(
+                'DELETE  FROM `shopping_cart` WHERE `idshopping_cart`=?',
+                [shoppingCartId]
+            )
             const deleteQuery = await db.query(
                 'DELETE FROM `user` WHERE `iduser`=?',
                 [userId]
             );
-            if(deleteQuery.affectedRows == 1){
+            if(deleteQuery.affectedRows == 1 && deleteQueryCart.affectedRows == 1){
                 data.success = true;
             } else {
                 data.errorCode = 1;
