@@ -1,11 +1,12 @@
 import React from 'react';
 import './Menu.css';
-import AuthService from "../../services/auth.service";
 import UserService from '../../services/user.service';
+import { useAuthState } from '../../context/context';
+import { Link } from 'react-router-dom';
 
 export function Menu (props) {
 
-        let currentUser = AuthService.getCurrentUser();
+        const currentUser = useAuthState();
 
         const postItem = (itemId) => {
                 const item = {
@@ -20,35 +21,85 @@ export function Menu (props) {
         let addToCartTemplate = '';
         if(currentUser){
                 if(currentUser.isOwner === 0){
-                        addToCartTemplate = <button type="button" onClick={ () => postItem(props.id) }>Add to cart</button>;
+                        addToCartTemplate = <button className="button-general" type="button" onClick={ () => postItem(props.id) }>Add to cart</button>;
                 }
         }
 
         return (
-                <div className="menuitem" key={props.iditem}>
-                        <img
-                                className="image"
-                                src={ process.env.REACT_APP_SERVER_HOST + props.image }
-                                alt="ItemImage"
-                                height="220px"
-                                width="250px"
-                        />
-                        <div className="title">Item: {props.name }</div>
-                        <div className="description">Description: {props.description }</div>
-                        <div className="description">Price: {props.price} €</div>
-                        { addToCartTemplate }           
+                <div className="menu-item" key={props.iditem}>
+                        <article className="restaurant-card">
+                                <section className="restaurant-card__image">
+                                        <img
+                                                className="image"
+                                                src={ process.env.REACT_APP_SERVER_HOST + props.image }
+                                                alt="No image available"
+                                                height="220px"
+                                                width="250px"
+                                        />
+                                </section>
+                                <section className="restaurant-card__info">
+                                        <h2>{props.name}</h2>
+                                        <span>{props.description}</span>
+                                        <span>{props.category}</span>
+                                        <span>{props.price} €</span>
+                                        { addToCartTemplate }
+                                </section>
+                        </article>  
                 </div> 
         )
 }
 
 export function RestaurantInfo (props) {
+
+        const currentUser = useAuthState();
+
+        // Parse restaurant type
+        let restaurantType = '-';
+        if(props.restaurantType == 1){
+        restaurantType = 'Buffet';
+        } else if (restaurantType == 2){
+        restaurantType = 'Fast food';
+        } else if (restaurantType == 3){
+        restaurantType = 'Fast casual';
+        } else if (restaurantType == 4){
+        restaurantType = 'Casual dining';
+        } else if (restaurantType == 5){
+        restaurantType = 'Fine dining';
+        }
+
+        // Parse price level
+        let priceLevel = '-';
+        if(props.priceLevel == 1){
+        priceLevel = '€';
+        } else if (props.priceLevel == 2){
+        priceLevel = '€€';
+        } else if (props.priceLevel == 3){
+        priceLevel = '€€€';
+        } else if (props.priceLevel == 4){
+        priceLevel = '€€€€';
+        }
+
+        let addToMenuTemplate = '';
+        if(currentUser){
+                if(currentUser.isOwner === 1){
+                        addToMenuTemplate = <Link to={"/user/add-item/" + props.id}>
+                                <button className="button-general" type="button">Add item to menu</button>
+                        </Link>
+                }
+        }
         return (    
-                <div className="restaurantInfo" key={props.id}>
-                        <img className="image" src={ process.env.REACT_APP_SERVER_HOST + props.image } alt="RestaurantImage" height="220px" width="220px"/>
-                        <div className="title">Restaurant: {props.name}</div>
-                        <div className="address">Address: {props.address}</div>
-                        <div className="address">Opening hours: {props.openingHours}</div>
-                        <div className="price">PriceLevel: { props.priceLevel }</div>
+                <div className="restaurant-info-card" key={props.id}>
+                        <section className="restaurant-info-card__image">
+                                <img src={ process.env.REACT_APP_SERVER_HOST + props.image } alt="No image available" />
+                        </section>
+                        <section className="restaurant-info-card__info">
+                                <h2>{props.name}</h2>
+                                <span>Address: {props.address}</span>
+                                <span>Open: {props.openingHours}</span>
+                                <span>Type: {restaurantType}</span>
+                                <span>Price level: { priceLevel }</span>
+                                { addToMenuTemplate }
+                        </section>
                 </div> 
         )       
 }

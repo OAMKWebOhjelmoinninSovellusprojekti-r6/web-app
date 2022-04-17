@@ -1,9 +1,7 @@
-.restaurantContainer {
+.restaurants-container {
     display: flex;
+    flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
+    width: 100%;
   }

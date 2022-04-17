@@ -1,4 +1,5 @@
 const db = require("../config/db.js");
+const { getByOwner } = require("./orderHistoryItem.js");
 const { testTruncate } = require("./user.js");
 
 module.exports = {
@@ -62,6 +63,37 @@ module.exports = {
                 data.errorCode = 1;
             }
         } catch (err) {
+            console.log(err);
+            data.errorCode = 2;
+        }
+        return data;
+    },
+
+    async getByOwnerId(userId){
+        /**
+         * Error codes:
+         * 0: Succesful
+         */
+        let data = {
+            errorCode: 0,
+            success: false,
+            restaurants: []
+        }
+        try {
+            const getQuery = await db.query(
+                'SELECT * FROM `restaurant` WHERE `user_iduser`=?',
+                [userId]
+            );
+            if(getQuery.length > 0){
+                for(let x=0; x<getQuery.length; x++){
+                    data.restaurants.push(
+                        // Convert rowDataPacket or whatever weird object query is returning to basic Object
+                        Object.assign({}, getQuery[x])
+                    )
+                }
+            }
+            data.success = true;
+        } catch (err){
             console.log(err);
             data.errorCode = 2;
         }
