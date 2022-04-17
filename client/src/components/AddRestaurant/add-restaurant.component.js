@@ -58,7 +58,7 @@ export default function AddRestaurant(){
         )
     } else {
         return (
-            <div className="restaurant-container">
+            <div className="add-restaurant-container">
                 <form
                     className="restaurant-form"
                     onSubmit={addRestaurant}
@@ -93,11 +93,11 @@ export default function AddRestaurant(){
                         required
                         onChange={inputEventRestaurantType}
                     >
-                        <option value="1">Fast food</option>
-                        <option value="2">Slow food</option>
-                        <option value="3">Food with intermediate interval</option>
-                        <option value="4">Timeless food</option>
-                        <option value="5">Food from future</option>
+                        <option value="1">Buffet</option>
+                        <option value="2">Fast food</option>
+                        <option value="3">Fast casual</option>
+                        <option value="4">Casual dining</option>
+                        <option value="5">Fine dining</option>
                     </select>
                     <label>Price level</label>
                     <select

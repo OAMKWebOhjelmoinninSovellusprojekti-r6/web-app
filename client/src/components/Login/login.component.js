@@ -1,20 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import AuthService from "../../services/auth.service";
 import './login.styles.css';
+import { useAuthDispatch, useAuthState } from "../../context/context.js";
 
 export default function Login(){
   AuthService.autoLogout();
 
+  const dispatch = useAuthDispatch()
+  const currentUser = useAuthState();
+
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const [authenticatingUser, setAuthenticatingUser] = useState();
-  const [errorMessage, setErrorMessage] = useState();
+  const [errorMessage, setErrorMessage] = useState('');
   const [UIMenuClass, setUIMenuClass] = useState('');
-  const [currentUser, setCurrentUser] = useState();
 
   useEffect(() => {
-    setCurrentUser(AuthService.getCurrentUser());
+    setAuthenticatingUser(false);
   }, []);
 
   const inputEventUsername = (e) => {
@@ -31,7 +34,8 @@ export default function Login(){
     setAuthenticatingUser(true);
     AuthService.login(username, password)
       .then( result => {
-        setCurrentUser(AuthService.getCurrentUser())
+        dispatch({ type: 'LOGIN', payload: result });
+        setAuthenticatingUser(false);
       },
       error => {
         const resMessage =
@@ -41,14 +45,14 @@ export default function Login(){
           error.message ||
           error.toString();
         setErrorMessage(resMessage);
-        setAuthenticatingUser(false );
+        setAuthenticatingUser(false);
       });
   }
 
   const userLogout = () => {
     setUsername('');
     setPassword('');
-    setCurrentUser(null);
+    dispatch({type:'LOGOUT', payload: null})
     AuthService.logout();
   }
 
@@ -68,12 +72,12 @@ export default function Login(){
     let addRestaurantTemplate = '';
     let browseRestaurantTemplate = (
       <li>
-        <Link to="/restaurants">Browse restaurant</Link>
+        <Link to="/">Browse restaurant</Link>
       </li>
     );
     let shoppingCartTemplate = (
       <li>
-        <Link to="/user/shopping-cart">Shopping cart</Link>
+        <Link to="/user/cart">Shopping cart</Link>
       </li>
     );
     // Templates if user type is restaurant owner
@@ -94,21 +98,14 @@ export default function Login(){
       <div className="user" onClick={UIToggleMenu}>
         <span className="user__name">{currentUser.firstName}</span>
         <ul className={'user__menu ' + UIMenuClass}>
-          <li>
-            <Link to="/cart">Shopping cart</Link>
-          </li>
-          <li>
-            <Link to="/user/profile">Profile</Link>
-          </li>
           {addRestaurantTemplate}
           {browseRestaurantTemplate}
           {shoppingCartTemplate}
           <li>
-            <Link to="/history">Order history</Link>
+            <Link to="/user/history">Order history</Link>
           </li>
           <li>
             <Link to="/" onClick={userLogout}>Logout</Link>
-         
           </li>
         </ul>
       </div>
@@ -121,7 +118,7 @@ export default function Login(){
         className="login"
         onSubmit={userLogin}
       >
-          {errorMessage && ( {errorMessage} )}
+          {errorMessage}
           <input
             type="text"
             className="login__form-item"

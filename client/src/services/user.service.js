@@ -7,6 +7,10 @@ class UserService {
   restaurantGetAll() {
     return axios.get(API_URL + 'restaurant');
   }
+  restaurantGetByOwnerId(userId){
+    console.log(userId);
+    return axios.get(API_URL + 'restaurant/owner/' + userId);
+  }
 
   restaurantGetById(restaurantId){
     return axios.get(API_URL + 'restaurant/' + restaurantId);

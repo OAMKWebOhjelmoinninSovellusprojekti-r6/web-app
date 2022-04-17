@@ -58,6 +58,29 @@ router.get('/:restaurantId', async (req, res) => {
     }
 });
 
+router.get('/owner/:userId', async (req, res) => {
+    console.log("jee", req.params.userId)
+    let ownerId = parser.parsePathInteger(req.params.userId);
+    if(ownerId != null){
+        let data = await restaurantModel.getByOwnerId(ownerId);
+        if(
+            data.success == true
+            && data.errorCode == 0
+        ) {
+            return res.status(200).send(
+                data.restaurants
+            )
+        }
+    } else {
+        return res.status(400).send({
+            'message': 'Invalid user id'
+        });
+    }
+    return res.status(500).send({
+        'message': 'Unknown error'
+    });
+});
+
 // POST method route for /restaurant, create new restaurant
 router.post('/', auth, async (req, res) => {
     console.log("POST, /restaurant");
