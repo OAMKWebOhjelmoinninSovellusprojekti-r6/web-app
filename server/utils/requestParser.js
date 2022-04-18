@@ -20,7 +20,7 @@ module.exports = {
                 && value > 0
                 && value <= 4
             ){
-                return true;
+                return value;
             }
         } catch (err) {
             console.log(err);

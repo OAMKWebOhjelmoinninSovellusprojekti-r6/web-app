@@ -74,10 +74,11 @@ export default function ShoppingCartView(){
   }
 
   // Post order data into order history and order histort item in database
-  const payOrder = () => {
+  const payOrder = (deliveryAddress) => {
     let postData = {
       restaurantId: cartItems[0].idrestaurant,
-      totalAmount: allItemsTotal
+      totalAmount: allItemsTotal,
+      deliveryAddress: deliveryAddress
     }
     // Create order history data and send request
     UserService.orderHistoryCreate(postData).then(results => {

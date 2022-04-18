@@ -84,6 +84,7 @@ router.post('/', auth, async(req, res) => {
   let userId = req.tokenData.userData.userId
   let restaurantId = req.body.restaurantId;
   let totalAmount = req.body.totalAmount;
+  let deliveryAddress = req.body.deliveryAddress;
 
   if(
     userId != null
@@ -92,7 +93,8 @@ router.post('/', auth, async(req, res) => {
     let data = await history.create(
       userId,
       restaurantId,
-      totalAmount
+      totalAmount,
+      deliveryAddress
     );
     if(
       data.errorCode == 0

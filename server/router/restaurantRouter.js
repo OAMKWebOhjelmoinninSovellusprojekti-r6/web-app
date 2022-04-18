@@ -104,6 +104,7 @@ router.post('/', auth, async (req, res) => {
     mData.restaurantType = parser.parseRestaurantType(req.body.restaurantType);
     mData.priceLevel = parser.parsePriceLevel(req.body.priceLevel);
     // Verify that all required values exists and are valid
+    console.log(mData);
     if(
         mData.name != null
         && mData.address != null
