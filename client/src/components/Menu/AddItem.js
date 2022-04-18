@@ -41,7 +41,7 @@ addItem(e){
     data.append('restaurantId', this.state.restaurantId);
     UserService.itemAdd(data).then(result => {
         this.setState({
-            redirect: result.data.itemId
+            redirect: this.state.restaurantId
         })
     });
 }
@@ -127,7 +127,7 @@ render() {
                     <input
                         className="item__form-element"
                         type="text"
-                        readonly = "readonly"
+                        readOnly = "readonly"
                         maxLength="20"
                         value={this.restaurantId}
                         required
@@ -141,7 +141,7 @@ render() {
                         onChange={this.inputEventImage}
                     />
                     <input
-                        className="item__form-element"
+                        className="item__form-element button-general"
                         type="submit"
                         value="Add item"
                     />

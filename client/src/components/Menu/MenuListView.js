@@ -54,6 +54,7 @@ export default function MenuListView() {
                         description={i.description}
                         category = {i.category}
                         price={i.price}
+                        restaurantId={i.restaurant_id}
                     />
                     )
                 )
@@ -73,7 +74,7 @@ export default function MenuListView() {
             restaurantTemplate = '';
             if(currentUser && currentUser.isOwner === 1){
                 restaurantTemplate += <Link to={`/restaurants/additem/${restaurant.id}`} key={restaurant.id}>
-                    <button className="btn">Add item to menu</button>
+                    <button className="button-general">Add item to menu</button>
                 </Link>
             }
             

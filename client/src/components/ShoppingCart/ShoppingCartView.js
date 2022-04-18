@@ -5,29 +5,24 @@ import Total from './Total';
 import styles from'./ShoppingCartView.module.css';
 import DeliveryAddress from './DeliveryAddress';
 import UserService from '../../services/user.service';
+import { useAuthState } from '../../context/context';
 
-export default function ShoppingCartView( {cartIndex, address, userIndex, restaurantIndex} ) {
+export default function ShoppingCartView(){
+
+  const currentUser = useAuthState();
 
   const [cartItems, setCartItems] = useState([]);
   const [itemTotalSum, setItemTotalSum] = useState([]);
   const [allItemsTotal, setAllItemsTotal] = useState(0);
   const [cartView, setCartView] = useState(false);
   const [syncCartView, setSyncCartView] = useState(false);
-
-  let cartId = cartIndex;
-  let userId = userIndex;
-  let restaurantId = restaurantIndex;
   
   useEffect(() => {
-    // GET shoppingcart items
-    UserService.getCartItems(cartId).then(results => {
+      // GET shoppingcart items
+    UserService.cartGetItems().then(results => {
       console.log("results", results);
-        setCartItems(results.data.shoppingCartInfo);
-        if(results.data.shoppingCartInfo[0].idItem === 0) {
-          setCartView(false);
-        } else {
-          setCartView(true);
-        }
+      setCartItems(results.data);
+      setCartView(true);
     });
 
   }, [syncCartView]);
@@ -88,42 +83,29 @@ export default function ShoppingCartView( {cartIndex, address, userIndex, restau
 
   // Post order data into order history and order histort item in database
   const payOrder = () => {
-    let historyId = 0;
-    const jsonData = `{
-      "total": ${allItemsTotal},
-      "restaurantId": ${restaurantId},
-      "userId": ${userId}
-    }`;
-
-    // Parse data into json file
-    const historyData = JSON.parse(jsonData);
-    console.log("historydata", historyData);
-    
+    let postData = {
+      restaurantId: cartItems[0].idrestaurant,
+      totalAmount: allItemsTotal
+    }
     // Create order history data and send request
-    UserService.orderHistoryCreate(historyData).then(results => {
-      historyId = results.data.idorder_history;
-      console.log("results", results.status);
-      console.log("cartItems" , cartItems);
-      // If accepted order history id is send as response and used on client side for making order history item request
-      if(results.status === 200) {
-        let tempObj = {
-          'name': 'empty',
-          'description': 'empty',
-          'price': 0,
-          'category': 'empty',
-          'order_history_id': 0,
-          'quantity': 0
-        }
+    UserService.orderHistoryCreate(postData).then(results => {
+      console.log(results);
+      let historyId = results.data.idorder_history || null;
+      if(historyId != null && results.status === 200){
+        // If accepted order history id is send as response and used on client side for making order history item request
         for(let i = 0; i < cartItems.length; i++) {
-          tempObj.name = cartItems[i].itemName;
-          tempObj.description = cartItems[i].description;
-          tempObj.price = cartItems[i].price;
-          tempObj.category = cartItems[i].category;
-          tempObj.order_history_id = historyId;
-          tempObj.quantity = cartItems[i].quantity;
-          tempObj = {...tempObj};
-          UserService.ordreHistoryItemCreate(tempObj);
-          UserService.deleteCartItem(cartItems[i].idItem);
+          let item = {};
+          item.name = cartItems[i].itemName || null;
+          item.description = cartItems[i].description || null;
+          item.price = cartItems[i].price || null;
+          item.category = cartItems[i].category || null;
+          item.order_history_id = historyId || null;
+          item.quantity = cartItems[i].quantity || null;
+          UserService.ordreHistoryItemCreate(item).then( response => {
+            return UserService.deleteCartItem(cartItems[i].idItem)
+          }).catch(err => {
+            console.log(err);
+          })
         }
         alert("Order confirmed");
       } else {
@@ -156,7 +138,7 @@ export default function ShoppingCartView( {cartIndex, address, userIndex, restau
     }
     <div className={styles.contentRight}>
       <div className={styles.deliveryBox}>
-        <DeliveryAddress deliveryAddress={address} payOrder={payOrder}/>
+        <DeliveryAddress deliveryAddress={currentUser.address} payOrder={payOrder}/>
       </div>
     </div>
   </div>
