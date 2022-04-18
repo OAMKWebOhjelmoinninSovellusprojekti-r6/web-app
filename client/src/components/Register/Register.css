@@ -1,31 +1,31 @@
-.add-restaurant-container {
+.register-container {
     width: 100%;
     display: flex;
     justify-content: center;
     padding-top: 16px;
 }
 
-.restaurant-form {
+.register-form {
     width: 100%;
     width: 100%;
     margin: 0 20%;
 }
 @media(max-width: 1200px){
-    .restaurant-form {
+    .register-form {
         margin: 0 10%;
     }
 }
 @media(max-width: 756px){
-    .restaurant-form {
+    .register-form {
         margin: 0;
     }
 }
 
-.restaurant-form label {
+.register-form label {
     font-size: 24px;
 }
 
-.restaurant__form-element {
+.register__form-element {
     appearance: none;
     display: block;
     width: 100%;

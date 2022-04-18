@@ -81,7 +81,7 @@ module.exports = {
         }
         try {
             const getQuery = await db.query(
-                'SELECT * FROM `restaurant` WHERE `user_iduser`=?',
+                'SELECT `idrestaurant` AS "id",`name`,`address`,`opening_hours`,`image_path`,`restaurant_type`,`price_level`,`user_iduser` FROM `restaurant` WHERE `user_iduser`=?',
                 [userId]
             );
             if(getQuery.length > 0){

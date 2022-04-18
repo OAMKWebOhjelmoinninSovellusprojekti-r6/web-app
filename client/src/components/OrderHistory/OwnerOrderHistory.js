@@ -25,7 +25,7 @@ console.log(orderedItem);
 
 return (
     <div  >
-         <Link to="/history"><button>Back to your restaurants</button></Link>
+         <Link to="/user/history"><button>Back to your restaurants</button></Link>
          <h3>Orders from restaurant </h3>
           <div className="singleOwnerHistoryContainer">
            { 

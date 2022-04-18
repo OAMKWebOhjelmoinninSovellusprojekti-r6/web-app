@@ -80,23 +80,37 @@ router.get('/', auth, async function(req, res) {
 });
 
 router.post('/', auth, async(req, res) => {
-  // Send create request
 
   let userId = req.tokenData.userData.userId
-  let data = await history.create(userId, req.body);
-  console.log("routerdata", data);
-  try {
-    if(data.affectedRows === 1) {
-        console.log(data.affectedRows);
-        res.json(data);
-    } else if(data.affectedRows === 0) {
-        res.sendStatus(400);
-    } else {
-        res.sendStatus(500);
+  let restaurantId = req.body.restaurantId;
+  let totalAmount = req.body.totalAmount;
+
+  if(
+    userId != null
+    && restaurantId != null
+  ){
+    let data = await history.create(
+      userId,
+      restaurantId,
+      totalAmount
+    );
+    if(
+      data.errorCode == 0
+      && data.success == true
+      && data.idorder_history != null
+    ) {
+      return res.status(200).send({
+        idorder_history: data.idorder_history
+      });
     }
-  } catch (err) {
-    res.send("ID does not match");
-  };
+  } else {
+    return res.status(400).send({
+      message: 'Invalid parameters'
+    });
+  }
+  return res.status(500).send({
+    message: 'Unknown error'
+  });
 });
 
   module.exports = router;

@@ -27,6 +27,8 @@
   touch-action: manipulation;
   vertical-align: baseline;
   white-space: nowrap;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 .button-general:hover,
 .button-general:focus {

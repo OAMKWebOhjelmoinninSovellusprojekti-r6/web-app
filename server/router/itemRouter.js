@@ -17,26 +17,26 @@ router.get('/:restaurantId', async function(req, res){
             return res.status(200).send({
                 'itemInfo': data.itemInfo
             });
-        } else {
-            return res.status(400).send({
-                'message': 'Invalid restaurant id'
-            });
         }
     } else {
-        return res.status(500).send({
-            'message': 'Unknown error'
+        return res.status(400).send({
+            'message': 'Invalid restaurant id'
         });
     }
+    return res.status(500).send({
+        'message': 'Unknown error'
+    });
 });
 
 // Create item
 router.post('/', auth, async (req, res) => {
     console.log('POST, /item');
+    console.log(req.body)
     // Initialize FileService if file is sent with request
     let fs = null;
-    if(req.files.imagePath){
+    if(req.files.image){
         fs = new FileService(
-            req.files.imagePath,
+            req.files.image,
             'item'
         );
     }
@@ -47,6 +47,8 @@ router.post('/', auth, async (req, res) => {
     requestData.price = parser.parsePrice(req.body.price);
     requestData.category = parser.parseString(req.body.category, 20);
     requestData.restaurantId = parser.parseId(req.body.restaurantId);
+    console.log(requestData)
+    console.log(fs);
     if(
         requestData.name != null
         && requestData.description != null

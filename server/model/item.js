@@ -17,13 +17,17 @@ module.exports = {
         try {
             // Get item info from database
             const getQuery = await db.query(
-                'SELECT `iditem`, `name`, `description`, `price`, `image_path`, `category` FROM `item` WHERE `restaurant_id`=?',
+                'SELECT `iditem`, `name`, `description`, `price`, `image_path`, `category`, `restaurant_id` FROM `item` WHERE `restaurant_id`=?',
                 [restaurantId]
             );
             // Result can be empty and still be correct
-            if(getQuery.length > 0){
-                // Get item info from query result
-                data.itemInfo = getQuery;
+            if(getQuery.length >= 0){
+                for(let x=0; x<getQuery.length; x++){
+                    data.itemInfo.push(
+                        // Convert rowDataPacket or whatever weird object query is returning to basic Object
+                        Object.assign({}, getQuery[x])
+                    )
+                }
                 data.success = true;
             } else {
                 data.errorCode = 1;

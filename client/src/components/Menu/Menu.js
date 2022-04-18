@@ -6,11 +6,16 @@ import { Link } from 'react-router-dom';
 
 export function Menu (props) {
 
+        console.log(props);
+
         const currentUser = useAuthState();
 
-        const postItem = (itemId) => {
+        const postItem = (itemId, restaurantId) => {
+                console.log("Jee")
+                console.log(restaurantId)
                 const item = {
-                    itemId: itemId 
+                    itemId: itemId,
+                    restaurantId: restaurantId
                 };
                 UserService.postCartItem(item).then( result => {
                         alert("Item added to shopping cart")
@@ -21,7 +26,7 @@ export function Menu (props) {
         let addToCartTemplate = '';
         if(currentUser){
                 if(currentUser.isOwner === 0){
-                        addToCartTemplate = <button className="button-general" type="button" onClick={ () => postItem(props.id) }>Add to cart</button>;
+                        addToCartTemplate = <button className="button-general" type="button" onClick={ () => postItem(props.id, props.restaurantId) }>Add to cart</button>;
                 }
         }
 

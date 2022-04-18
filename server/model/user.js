@@ -51,7 +51,7 @@ module.exports = {
         }
         try {
             const loginQuery = await db.query(
-                'SELECT a1.`iduser`, a1.`password`, a1.`firstname`, a1.`lastname`, a1.`is_owner`, a2.`idshopping_cart` FROM `user` a1 LEFT JOIN `shopping_cart` a2 ON a1.`iduser`=a2.`user_id` WHERE `username`=?',
+                'SELECT a1.`iduser`, a1.`password`, a1.`firstname`, a1.`lastname`, a1.`address`, a1.`is_owner`, a2.`idshopping_cart` FROM `user` a1 LEFT JOIN `shopping_cart` a2 ON a1.`iduser`=a2.`user_id` WHERE `username`=?',
                 [username]
             );
             if(loginQuery.length == 1 && await argon2.verify(loginQuery[0].password, password)){
@@ -79,6 +79,7 @@ module.exports = {
                     userData.refreshToken = refreshTokenData.token;
                     userData.firstName = loginQuery[0].firstname;
                     userData.lastName = loginQuery[0].lastname;
+                    userData.address = loginQuery[0].address;
                     userData.isOwner = loginQuery[0].is_owner;
                     data.userData = userData;
                     data.success = true;

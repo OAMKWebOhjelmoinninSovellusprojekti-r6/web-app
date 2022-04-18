@@ -1,8 +1,9 @@
 import axios from 'axios'
 import React from 'react'
 import { useState, useEffect } from 'react'
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import UserService from "../../services/user.service";
+import './Register.css';
 
 export default function Register() {
   // Object data initialization
@@ -24,7 +25,6 @@ export default function Register() {
   }
   // Make a create new user request
   const handleSubmit = (event) => {
-    console.log("newuser", newUser);
     event.preventDefault();
     let data = {};
     data.username=event.target.username.value;
@@ -34,33 +34,70 @@ export default function Register() {
     data.address=event.target.address.value;
     data.phone=event.target.phone.value;
     data.isOwner=parseInt(event.target.isOwner.value);
-
-    const add = async() => {
-        //let clone = [...newUser];
-        //console.log("clone", clone);
-          const results = await UserService.userCreate(data);
-        console.log("results", results);
-    }
-    add(); 
+    UserService.userCreate(data).then(response => {
+      console.log("mennenee");
+      return (<Navigate to={"/"}></Navigate>)
+    });
   }
   return (
-    <div>
-        <Link to="/"><button>Return to main page</button></Link>
-        <div>
-          <form onSubmit={handleSubmit}>
-            <div>User Name<input type='text' name="username" value={newUser.username} onChange={changeHandler}></input></div>
-            <div>Password<input type="password" name="password" value={newUser.password} onChange={changeHandler}></input></div>
-            <div>First Name<input type='text' name="firstName" value={newUser.firstName} onChange={changeHandler}></input></div>
-            <div>Last Name<input type='text' name="lastName" value={newUser.lastName} onChange={changeHandler}></input></div>
-            <div>Address<input type='text' name="address" value={newUser.address} onChange={changeHandler}></input></div>
-            <div>Phone Number<input type='text' name="phone" value={newUser.phone} onChange={changeHandler}></input></div>
-            <div>Owner of a restaurant
-              <div>Yes<input type="radio" name="isOwner" value={'1'} onChange={changeHandler}></input></div>
-              <div>No<input type="radio" name="isOwner" value={'0'} onChange={changeHandler}></input></div>
-            </div>
-            <input type="submit" value="Create Account" />
-          </form>
-        </div>
+    <div className="register-container">
+      <form 
+        className="register-form"
+        onSubmit={handleSubmit}
+      >
+        <label>Username</label>
+        <input 
+          type='text'
+          className="register__form-element"
+          name="username" 
+          onChange={changeHandler} 
+        />
+        <label>Password</label>
+        <input 
+          type="password"
+          className="register__form-element"
+          name="password" 
+          onChange={changeHandler} 
+        />
+        <label>First Name</label>
+        <input 
+          type='text' 
+          className="register__form-element"
+          name="firstName" 
+          onChange={changeHandler} 
+        />
+        <label>Last Name</label>
+        <input 
+          type='text' 
+          className="register__form-element"
+          name="lastName" 
+          onChange={changeHandler} 
+        />
+        <label>Address</label>
+        <input 
+          type='text' 
+          className="register__form-element"
+          name="address" 
+          onChange={changeHandler} 
+        />
+        <label>Phone Number</label>
+        <input 
+          type='text' 
+          className="register__form-element"
+          name="phone" 
+          onChange={changeHandler} 
+        />
+        <label>Account type</label>
+        <select 
+          name="isOwner" 
+          className="register__form-element"
+          onChange={changeHandler}
+        >
+          <option value="0">Customer</option>
+          <option value="1">Restaurant owner</option>
+        </select>
+        <input className="button-general" type="submit" value="Create Account" />
+      </form>
     </div>
   )
 }

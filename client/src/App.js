@@ -15,12 +15,6 @@ import authService from './services/auth.service';
 import { AuthProvider } from './context/context';
 
 function App() {
-
-  const cartId = 2; // Dummydata
-  const userAddress = 'street 15'; // Dummydata
-  const restaurantId = 6; // Dummydata
-  const userId = 4 // Dummydata
-  
   return (
     <AuthProvider>
       <div className="page-container">
@@ -31,7 +25,7 @@ function App() {
             <Route element={<ProtectedRoute user={ () => authService.getCurrentUser() } />}>
               <Route path="/user/add-restaurant" element={<AddRestaurant />} />
               <Route path="/user/add-item/:restaurantId" element = {<AddItem />} />
-              <Route path="/user/cart" element={<Cart address={userAddress} userIndex={userId} restaurantIndex={restaurantId} cartIndex={cartId}/>} />
+              <Route path="/user/cart" element={<Cart />} />
               <Route  path="/user/history" element={ <OrderHistoryListView /> } >
                 <Route path=":orderId" element= {<SingleOrderHistory/>} />
               </Route>

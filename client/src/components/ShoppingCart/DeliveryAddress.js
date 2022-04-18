@@ -21,10 +21,10 @@ export default function DeliveryAddress( {deliveryAddress, payOrder} ) {
       }
       </div>
         <div>
-          <button onClick={() => setTernaryTrigger(!ternaryTrigger)}>Change Delivery Address</button>
+          <button className="button-general" onClick={() => setTernaryTrigger(!ternaryTrigger)}>Change Delivery Address</button>
         </div>
         <div className={styles.contentRight}>
-            <Link to="/restaurants"><button onClick={() => payOrder()}>Pay the order</button></Link> 
+            <Link to="/"><button className="button-general" onClick={() => payOrder()}>Pay the order</button></Link> 
         </div>
     </div>
   )

@@ -58,7 +58,7 @@ if(currentUser.isOwner === 0) {
              { output }
                 { 
                   orderedItems.map(o => 
-                    <Link to={`/history/${o.idorder_history}`} key={o.idorder_history}>
+                    <Link to={`/user/history/${o.idorder_history}`} key={o.idorder_history}>
                       <OrderHistoryItem id={ o.idorder_history } time={ o.timestamp } total={ o.total } />
                    </Link>
                 )}
@@ -74,10 +74,8 @@ if(currentUser.isOwner === 0) {
       <div className="restaurantContainer" >
         
               {restaurants.filter(restaurant =>restaurant.user_iduser.toString().includes(currentUserId.toString())).map(r => 
-                  <Link to={`/history/owner/${r.id}`} key={r.id}>
                 <Restaurant image={r.image_path} name={r.name} address={r.address} openingHours={r.opening_hours} 
-                 type={r.restaurant_type} priceLevel={r.price_level}/>
-                 </Link>
+                 type={r.restaurant_type} priceLevel={r.price_level} altLink={`/user/history/owner/${r.id}`} />
               )}
       </div>
       </div>

@@ -118,7 +118,7 @@ export default function AddRestaurant(){
                         onChange={inputEventImage}
                     />
                     <input
-                        className="restaurant__form-element"
+                        className="restaurant__form-element button-general"
                         type="submit"
                         value="Add restaurant"
                     />

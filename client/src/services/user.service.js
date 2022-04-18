@@ -45,11 +45,11 @@ class UserService {
   }
 
   postCartItem(item){
-    return axios.post(API_URL + 'cart/', item, { headers: authHeader()});
+    return api.post(API_URL + 'cart/', item);
   }
 
   orderHistoryCreate(historyData){
-    return axios.post(API_URL + 'history', historyData, { headers: authHeader() })
+    return api.post(API_URL + 'history', historyData)
   }
 
   ordreHistoryItemCreate(itemData){
@@ -65,6 +65,14 @@ class UserService {
     return axios.get(API_URL + 'history/owner/' + restaurantId, { headers: authHeader() } );
   }
 
+  /** Cart router actions */
+
+  cartGetItems(){
+    return api.get(API_URL + 'cart');
+  }
+
+  /** / Cart router actions */
+
 
   /** Item router actions */
   
@@ -75,7 +83,7 @@ class UserService {
 
   // Adds new item to restaurant
   itemAdd(data){
-    return axios.post(API_URL + 'item', data, { headers: authHeader() });
+    return api.post(API_URL + 'item', data);
   }
 
   itemDelete(itemId){

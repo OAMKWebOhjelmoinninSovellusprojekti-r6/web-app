@@ -89,7 +89,7 @@ export default function Login(){
       );
       browseRestaurantTemplate = (
         <li>
-          <Link to="/restaurants">Edit restaurant</Link>
+          <Link to="/">Edit restaurant</Link>
         </li>
       )
       shoppingCartTemplate = '';

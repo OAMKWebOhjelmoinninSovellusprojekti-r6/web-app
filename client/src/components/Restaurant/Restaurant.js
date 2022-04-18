@@ -29,11 +29,16 @@ export default function Restaurant(props) {
     priceLevel = '€€€€';
   }
 
+  let linkUrl = `/restaurants/${props.id}`;
+  if(props.altLink){
+    linkUrl = props.altLink;
+  }
+
   return (
     <div className="restaurant-item" key={props.id}>
       <article className="restaurant-card">
           <section className="restaurant-card__image">
-            <Link className="restaurant-item" to={`/restaurants/${props.id}`}>
+            <Link className="restaurant-item" to={linkUrl}>
               <img src={ process.env.REACT_APP_SERVER_HOST + props.image } alt="No image available" />
             </Link>
           </section>
