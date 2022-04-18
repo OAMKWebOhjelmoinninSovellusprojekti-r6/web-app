@@ -15,7 +15,19 @@ const itemRouter = require('./router/itemRouter');
 const authRouter  = require('./router/authRouter.js');
 const itemHistory = require('./router/historyItemRouter');
 
-app.use(cors());
+const whitelist = ["http://localhost:3001", "http://localhost:3000", "http://foodmaster.live"]
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error("Not allowed by CORS"))
+    }
+  },
+  credentials: true,
+}
+app.use(cors(corsOptions));
+
 
 // File uploads, static files folder
 app.use("/static", express.static("static"));
