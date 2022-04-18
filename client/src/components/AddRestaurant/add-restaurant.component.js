@@ -26,6 +26,7 @@ export default function AddRestaurant(){
         setRestaurantOpeningHours(e.target.value)
     }
     const inputEventPriceLevel = (e) => {
+        console.log(e.target.value)
         setRestaurantPriceLevel(e.target.value)
     }
     const inputEventRestaurantType = (e) => {

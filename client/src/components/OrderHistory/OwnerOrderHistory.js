@@ -15,7 +15,7 @@ export default function OwnerOrderHistory() {
   useEffect(() => {
    const getData = async () => {
      const results = await UserService.ownerOrderHistoryGet(restaurantId);
-     //console.log(results.data.orderInfo);
+     console.log(results.data.orderInfo);
          setOrderedItem(results.data.orderInfo);
      }
    getData();
@@ -30,7 +30,7 @@ return (
           <div className="singleOwnerHistoryContainer">
            { 
              orderedItem.map(o => 
-                 <OwnerOrderHistoryItem key={o.idorder} id={ o.order_history_id } time={ o.timestamp } firstName={o.firstname} lastName={o.lastname} address={ o.address } name={ o.name } price={ o.price } quantity={ o.quantity }/>
+                 <OwnerOrderHistoryItem key={o.idorder} id={ o.order_history_id } time={ o.timestamp } firstName={o.firstname} lastName={o.lastname} address={ o.delivery_address ? o.delivery_address : o.address } name={ o.name } price={ o.price } quantity={ o.quantity }/>
            )}
            </div>
   </div>

@@ -47,7 +47,7 @@ module.exports = {
         return data;
     },
 
-    async create(userId, restaurantId, totalAmount){
+    async create(userId, restaurantId, totalAmount, address){
         let data = {
             errorCode: 0,
             success: false,
@@ -56,11 +56,12 @@ module.exports = {
         try {
             // Insert row into database
             const createQuery = await db.query(
-                `INSERT INTO order_history(total,restaurant_id,user_id) VALUES(?,?,?);`,
+                `INSERT INTO order_history(total,restaurant_id,user_id,delivery_address) VALUES(?,?,?,?);`,
                 [
                     totalAmount,
                     restaurantId,
-                    userId
+                    userId,
+                    address
                 ]
             );
             console.log(createQuery);

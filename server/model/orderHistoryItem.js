@@ -11,7 +11,7 @@ module.exports = {
         try {
             // Get order row from database
             const getQuery = await db.query(
-                `SELECT \`order_history_id\`,\ \`idorder\`,\ \`timestamp\`,\ \`total\`,\ \`restaurant\`.\`idrestaurant\`,\ \`restaurant\`.\`name\`,\ \`order_history_item\`.\`name\`,\ \`order_history_item\`.\`description\`,\ \`order_history_item\`.\`price\`,\ \`order_history_item\`.\`category\`,\ \`order_history_item\`.\`quantity\`,\ \`user\`.\`firstname\`,\ \`user\`.\`lastname\`,\ \`user\`.\`address\` FROM \`order_history\` INNER JOIN \`restaurant\` ON \`order_history\`.\`restaurant_id\` =\ \`restaurant\`.\`idrestaurant\` INNER JOIN \`order_history_item\` ON \`order_history\`.\`idorder_history\` = \`order_history_item\`.\`order_history_id\` INNER JOIN \`user\` ON \`order_history\`.\`user_id\` = \`user\`.\`iduser\`  WHERE \`restaurant\`.\`idrestaurant\` =? `,
+                `SELECT delivery_address,\`order_history_id\`,\ \`idorder\`,\ \`timestamp\`,\ \`total\`,\ \`restaurant\`.\`idrestaurant\`,\ \`restaurant\`.\`name\`,\ \`order_history_item\`.\`name\`,\ \`order_history_item\`.\`description\`,\ \`order_history_item\`.\`price\`,\ \`order_history_item\`.\`category\`,\ \`order_history_item\`.\`quantity\`,\ \`user\`.\`firstname\`,\ \`user\`.\`lastname\`,\ \`user\`.\`address\` FROM \`order_history\` INNER JOIN \`restaurant\` ON \`order_history\`.\`restaurant_id\` =\ \`restaurant\`.\`idrestaurant\` INNER JOIN \`order_history_item\` ON \`order_history\`.\`idorder_history\` = \`order_history_item\`.\`order_history_id\` INNER JOIN \`user\` ON \`order_history\`.\`user_id\` = \`user\`.\`iduser\`  WHERE \`restaurant\`.\`idrestaurant\` =? `,
                 [restaurantId]
             );
             console.log(getQuery);
