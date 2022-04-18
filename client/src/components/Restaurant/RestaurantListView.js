@@ -37,7 +37,7 @@ export default function RestaurantListView() {
     }
   }
 
-    function parseRestaurantType(value){
+  function parseRestaurantType(value){
     let restaurantType = '-';
     if(value == 1){
       restaurantType = 'buffet';
