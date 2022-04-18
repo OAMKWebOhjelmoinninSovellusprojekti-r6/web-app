@@ -6,7 +6,7 @@ import UserService from "../../services/user.service";
 import './Register.css';
 
 export default function Register() {
-  // Object data initialization
+  // Object data initialization¨
   const [newUser, setNewUser] = useState({
     username: "",
     password: "",
@@ -35,8 +35,7 @@ export default function Register() {
     data.phone=event.target.phone.value;
     data.isOwner=parseInt(event.target.isOwner.value);
     UserService.userCreate(data).then(response => {
-      console.log("mennenee");
-      return (<Navigate to={"/"}></Navigate>)
+      alert('User created succesfully, you can now log in');
     });
   }
   return (
