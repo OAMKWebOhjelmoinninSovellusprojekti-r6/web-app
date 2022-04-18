@@ -7,13 +7,13 @@ export default function Restaurant(props) {
   let restaurantType = '-';
   if(props.type == 1){
     restaurantType = 'Buffet';
-  } else if (restaurantType == 2){
+  } else if (props.type == 2){
     restaurantType = 'Fast food';
-  } else if (restaurantType == 3){
+  } else if (props.type == 3){
     restaurantType = 'Fast casual';
-  } else if (restaurantType == 4){
+  } else if (props.type == 4){
     restaurantType = 'Casual dining';
-  } else if (restaurantType == 5){
+  } else if (props.type == 5){
     restaurantType = 'Fine dining';
   }
 
