@@ -16,7 +16,7 @@
 
 ## Tietoa projektista
 
-Tämä dokumentti kertoo keväällä 2022 Oulun ammattikorkeakoulussa ryhmän 6 tekemästä pro-jektityöstä, jonka tarkoituksena oli saada aikaan toimiva ruuantilaussovellus. Työn tavoitteena oli saada toimiva nettisivu, johon käyttäjä voisi tehdä tunnukset, selata sovelluksessa olevia ravinto-loita, sekä tehdä kuvitteellinen ruokatilaus valitsemalla ravintolan ruokalistalta haluamiansa ruo-kia. Lisäksi korkean arvosanan saavuttamiseksi vaatimuksina oli myös erilliset toiminnallisuudet ravintolan omistajalle, joka pystyisi luomaan palveluun uusia ravintoloita ja lisäämään niiden ruo-kalistoille artikkeleita.
+Tämä dokumentti kertoo keväällä 2022 Oulun ammattikorkeakoulussa ryhmän 6 tekemästä projektityöstä, jonka tarkoituksena oli saada aikaan toimiva ruuantilaussovellus. Työn tavoitteena oli saada toimiva nettisivu, johon käyttäjä voisi tehdä tunnukset, selata sovelluksessa olevia ravintoloita, sekä tehdä kuvitteellinen ruokatilaus valitsemalla ravintolan ruokalistalta haluamiansa ruokia. Lisäksi korkean arvosanan saavuttamiseksi vaatimuksina oli myös erilliset toiminnallisuudet ravintolan omistajalle, joka pystyisi luomaan palveluun uusia ravintoloita ja lisäämään tuotteita omien ravintoloiden ruokalistoille.
 
 ### Käytetyt teknologiat
 
