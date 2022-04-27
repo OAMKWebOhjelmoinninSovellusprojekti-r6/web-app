@@ -8,7 +8,9 @@
   <p align="center">
     Jokaisen herkkusuun ykkösvalinta
     <br />
-    <a href="http://foodmaster.live">Katso demo</a>
+    <a href="http://foodmaster.live">Live</a>
+    -
+    <a href="https://www.youtube.com/watch?v=vPiY7l5pA0w">Esittelyvideo</a>
   </p>
 </div>
 
@@ -16,17 +18,9 @@
 
 Tämä dokumentti kertoo keväällä 2022 Oulun ammattikorkeakoulussa ryhmän 6 tekemästä pro-jektityöstä, jonka tarkoituksena oli saada aikaan toimiva ruuantilaussovellus. Työn tavoitteena oli saada toimiva nettisivu, johon käyttäjä voisi tehdä tunnukset, selata sovelluksessa olevia ravinto-loita, sekä tehdä kuvitteellinen ruokatilaus valitsemalla ravintolan ruokalistalta haluamiansa ruo-kia. Lisäksi korkean arvosanan saavuttamiseksi vaatimuksina oli myös erilliset toiminnallisuudet ravintolan omistajalle, joka pystyisi luomaan palveluun uusia ravintoloita ja lisäämään niiden ruo-kalistoille artikkeleita.
 
-<p align="right">(<a href="#top">takaisin alkuun</a>)</p>
-
-
-
 ### Käytetyt teknologiat
 
 * [React.js](https://reactjs.org/)
-
-<p align="right">(<a href="#top">takaisin alkuun</a>)</p>
-
-
 
 ## Projektin käyttöönotto ja esittely
 
@@ -80,27 +74,13 @@ _Alta löydät ohjeet sovelluksen käyttöönottoon paikallisessa kehitysympäri
     REACT_APP_SERVER_HOST=http://localhost:3000
    ```
 
-<p align="right">(<a href="#top">takaisin alkuun</a>)</p>
-
-
-
-
 ## Sovelluksen käyttö
 
 Tähän esimerkkejä sovelluksen toiminnasta, kuvina, koodina tms.
 
-<p align="right">(<a href="#top">takaisin alkuun</a>)</p>
-
-
-
 ## Lisenssi
 
 Jaettu MIT lisenssin alaisena.
-
-<p align="right">(<a href="#top">takaisin alkuun</a>)</p>
-
-
-
 
 ## Projektin tekijät
 
@@ -110,22 +90,3 @@ Jaettu MIT lisenssin alaisena.
 - Henry Väisänen
 
 Linkki projektiin: [https://github.com/OAMKWebOhjelmoinninSovellusprojekti-r6](https://github.com/OAMKWebOhjelmoinninSovellusprojekti-r6)
-
-<p align="right">(<a href="#top">takaisin alkuun</a>)</p>
-
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
-[contributors-url]: https://github.com/othneildrew/Best-README-Template/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
-[forks-url]: https://github.com/othneildrew/Best-README-Template/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
-[stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
-[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
-[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
-[product-screenshot]: images/screenshot.png
