@@ -90,7 +90,6 @@ Sovelluksessa käyttäjä voi tehdä ravintoloista ruokatilauksia. Sovelluksen p
 
 ![etusivu](https://user-images.githubusercontent.com/92326664/165806410-f2cca2f6-ee4a-4436-aa2f-d76104d20829.PNG)
 
-Sovelluksen etusivu
 
 Rekisteröitynyt asiakas voi lisätä ravintoloiden tuotteita ostoskoriin ja muokata tuotemääriä ja poistaa tuotteita ostoskorista. Toimitusosoitteen muuttaminen onnistuu ostoskorinäkymästä. Tilauksen tehtyä tästä tallentuu tiedot tilaushistoriaan, joita asiakas voi myöhemmin selailla.
 
