@@ -47,7 +47,7 @@ _Alta löydät ohjeet sovelluksen käyttöönottoon paikallisessa kehitysympäri
 
 1. Kloonaa repository
    ```sh
-   git clone https://github.com/your_username_/Project-Name.git
+   git clone https://github.com/OAMKWebOhjelmoinninSovellusprojekti-r6/web-app.git
    ```
 2. Asenna tarvittavat NodeJS-kirjastot palvelinohjelmalle `./server`
    ```sh
