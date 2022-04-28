@@ -76,6 +76,7 @@ _Alta löydät ohjeet sovelluksen käyttöönottoon paikallisessa kehitysympäri
 
 ## Sovelluksen käyttö
 ![Sieppaa](https://user-images.githubusercontent.com/92326664/165797346-eddbe238-050d-494d-aec1-a68412a46f79.PNG)
+Sovelluksen etusivu
 
 Tähän esimerkkejä sovelluksen toiminnasta, kuvina, koodina tms.
 
