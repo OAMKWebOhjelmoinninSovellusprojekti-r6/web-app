@@ -80,7 +80,10 @@ _Alta löydät ohjeet sovelluksen käyttöönottoon paikallisessa kehitysympäri
 ![Sieppaa](https://user-images.githubusercontent.com/92326664/165797346-eddbe238-050d-494d-aec1-a68412a46f79.PNG)
 Sovelluksen etusivu
 
-Tähän esimerkkejä sovelluksen toiminnasta, kuvina, koodina tms.
+Rekisteröitynyt asiakas voi lisätä ravintoloiden tuotteita ostoskoriin ja muokata tuotemääriä ja poistaa tuotteita ostoskorista. Toimitusosoitteen muuttaminen onnistuu ostoskorinäkymästä. Tilauksen tehtyä tästä tallentuu tiedot tilaushistoriaan, joita asiakas voi myöhemmin selailla.
+
+Ravintolan omistaja voi luoda omalla käyttäjätunnuksella ravintoloita ja lisätä tuotteita ravintolan näkymään. Lisäksi omistaja voi selata ravintolakohtaisesti tehtyjä tilauksia.
+
 
 ## Lisenssi
 
