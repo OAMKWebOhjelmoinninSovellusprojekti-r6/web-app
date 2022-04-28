@@ -21,6 +21,8 @@ Tämä dokumentti kertoo keväällä 2022 Oulun ammattikorkeakoulussa ryhmän 6 
 ### Käytetyt teknologiat
 
 * [React.js](https://reactjs.org/)
+* [Node.js](https://nodejs.org)
+* [Express.js](https://expressjs.com/)
 
 ## Projektin käyttöönotto ja esittely
 
