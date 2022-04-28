@@ -80,7 +80,7 @@ _Alta löydät ohjeet sovelluksen käyttöönottoon paikallisessa kehitysympäri
 
 Sovelluksessa käyttäjä voi tehdä ravintoloista ruokatilauksia. Sovelluksen päänäkymässä käyttäjä voi selata ravintoloita rekisteröitymättä. Päänäkymässä on myös mahdollista kirjautua sisään tai luoda uusi käyttäjätunnus.
 
-![Sieppaa](https://user-images.githubusercontent.com/92326664/165797346-eddbe238-050d-494d-aec1-a68412a46f79.PNG)
+![etusivu](https://user-images.githubusercontent.com/92326664/165806123-9a053ade-453e-40cf-b0a8-eb2fd0cbb6bd.PNG)
 Sovelluksen etusivu
 
 Rekisteröitynyt asiakas voi lisätä ravintoloiden tuotteita ostoskoriin ja muokata tuotemääriä ja poistaa tuotteita ostoskorista. Toimitusosoitteen muuttaminen onnistuu ostoskorinäkymästä. Tilauksen tehtyä tästä tallentuu tiedot tilaushistoriaan, joita asiakas voi myöhemmin selailla.
