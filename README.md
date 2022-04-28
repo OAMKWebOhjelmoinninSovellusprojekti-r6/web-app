@@ -10,7 +10,7 @@
     <br />
     <a href="http://foodmaster.live">Live</a>
     -
-    <a href="https://www.youtube.com/watch?v=vPiY7l5pA0w">Esittelyvideo</a>
+    <a href="https://www.youtube.com/watch?v=srrM4zYZCyc">Esittelyvideo</a>
   </p>
 </div>
 
