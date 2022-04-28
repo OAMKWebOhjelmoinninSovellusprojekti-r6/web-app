@@ -30,7 +30,7 @@ Projektin saat käyttöön seuraamalla alla olevia ohjeita.
 
 ### Esivaatimukset
 
-Projektia varten tarvittavat paketit
+Projektin esimerkkiohjeissa on käytetty Ubuntu-käyttöjärjestelmää. Projektia varten tarvittavat paketit
 * Mysql
   ```sh
   sudo apt install mysql-server
